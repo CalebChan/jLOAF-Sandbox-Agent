@@ -17,7 +17,7 @@ import sandbox.MovementAction;
 public class BackForthAgent {
 	
 	public static void main(String args[]){
-		BackForthAgent agent = new BackForthAgent("GGGG");
+		BackForthAgent agent = new BackForthAgent("Test.trace");
 		if (agent.parseFile()){
 			agent.saveCaseBase();
 			System.out.println("DONE");
@@ -38,6 +38,7 @@ public class BackForthAgent {
 		try {
 			ip  = new BufferedReader (new FileReader(filename));
 			String line = ip.readLine();
+			Case c = null;
 			while(line != null){
 				if (line.isEmpty()){
 					continue;
@@ -57,10 +58,9 @@ public class BackForthAgent {
 				input.add(new AtomicInput("Sound", new Feature(sound)));
 				
 				MovementAction action = MovementAction.valueOf(tokens[3]);
-				SandboxAction a = new SandboxAction();
-				a.addFeature(new Feature(action.ordinal()));
-				
-				casebase.add(new Case(input, a));
+				SandboxAction a = new SandboxAction(action);
+				c = new Case(input, a, c);
+				casebase.add(c);
 				
 				line = ip.readLine();
 			}

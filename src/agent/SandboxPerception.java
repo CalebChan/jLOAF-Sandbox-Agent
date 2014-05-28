@@ -1,6 +1,5 @@
 package agent;
 import org.jLOAF.Perception;
-import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
@@ -10,7 +9,7 @@ import sandbox.Creature;
 
 public class SandboxPerception implements Perception{
 
-	public Input sense(CaseRun currentRun, Creature creature) {
+	public Input sense(Creature creature) {
 		SandboxInput input = new SandboxInput();
 		
 		boolean hasTouched = creature.isHasTouched();

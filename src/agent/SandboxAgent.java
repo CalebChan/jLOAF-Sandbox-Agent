@@ -6,8 +6,14 @@ import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
+import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
+import org.jLOAF.performance.ClassificationStatisticsWrapper;
+import org.jLOAF.performance.StatisticsBundle;
+import org.jLOAF.performance.StatisticsWrapper;
+import org.jLOAF.performance.actionestimation.LastActionEstimate;
 import org.jLOAF.reasoning.SequentialReasoning;
+import org.jLOAF.reasoning.SimpleKNN;
 import org.jLOAF.sim.atomic.Equality;
 import org.jLOAF.sim.complex.Mean;
 import org.jLOAF.tools.CaseBaseIO;
@@ -20,31 +26,41 @@ import sandbox.Sandbox;
 
 public class SandboxAgent extends Agent{
 
-	private static final int DEFAULT_WORLD_SIZE = 20;
+	private static final int DEFAULT_WORLD_SIZE = 10;
 	
 	public static void main(String args[]){
 		Sandbox sandbox = new Sandbox(DEFAULT_WORLD_SIZE);
-		int id = sandbox.addCreature(new Creature(2, 2, Direction.NORTH));
+		int id = sandbox.addCreature(new Creature(1, 1, Direction.NORTH));
+		
+		ActionBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE);
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		
 		SandboxAgent agent = new SandboxAgent(cb);
-		ActionBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE);
-		
-		int right = 0;
 		sandbox.init();
-		for (int i = 0; i < 20; i++){
-			String action = agent.senseEnvironment(sandbox.getCreature().get(id));
-			MovementAction a = MovementAction.valueOf(action);
-			MovementAction realAction = testAgent.testAction(sandbox.getCreature().get(id));
-			if (a.equals(realAction)){
-				right++;
-			}else{
-				System.out.println("Different Result : " + a.toString() + " Real : " + realAction.toString());
-			}
-			sandbox.takeAction(id, a);
+		
+		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
+		SandboxPerception percept = new SandboxPerception();
+		for (int i = 0; i < 100; i++){
+			Input in = percept.sense(sandbox.getCreature().get(id));
+			MovementAction action = testAgent.testAction(sandbox.getCreature().get(id));
+			SandboxAction a = new SandboxAction(action);
+			Action act = stat.senseEnvironment(new Case(in, a, null));
+			SandboxAction sa = (SandboxAction)act;
+			MovementAction move = MovementAction.values()[(int) sa.getFeatures().get(0).getValue()];
+			Creature c = sandbox.getCreature().get(id);
+			String data = c.isHasTouched() + "|" + c.getSonar() + "|" + c.getSound();
+			System.out.println("Creature : " + data + " Actual Action : " + action + " Agent Action : " + move);
+			sandbox.takeAction(id, move);
 		}
-		System.out.println("Correct : " + right);
+		StatisticsBundle bundle = stat.getStatisticsBundle();
+		String[] labels = bundle.getLabels();
+		for (int i = 0; i < labels.length; i++){
+			System.out.println(labels[i] + " : " + bundle.getAllStatistics()[i]);
+			if (labels[i].contains("Recall") || labels[i].contains("Classification Accuracy")){
+				System.out.println("");
+			}
+		}
 	}
 	
 	private CaseRun curRun;
@@ -60,24 +76,23 @@ public class SandboxAgent extends Agent{
 		this.mc = new SandboxMotorControl();
 		this.p = new SandboxPerception();
 		
-		//this.r = new SimpleKNN(1, cb);
-		this.r = new SequentialReasoning(cb, curRun);
+		this.r = new SimpleKNN(1, cb);
+		//this.r = new SequentialReasoning(cb, curRun);
 		this.cb = cb;
 	}
 
 	public String senseEnvironment(Creature creature) {
-		Input in = ((SandboxPerception)this.p).sense(curRun, creature);
-		Case curCase = new Case(in, null);
-		curRun.addCaseToRun(curCase);
-		Action a = this.r.selectAction(in);
-		curCase.setAction(a);
-		return this.mc.control(a);
+		Input in = ((SandboxPerception)this.p).sense(creature);
+		return this.mc.control(senseEnvironment(in));
 	}
 
 	@Override
 	public Action senseEnvironment(Input input) {
-		// TODO Auto-generated method stub
-		return null;
+		Case curCase = new Case(input, null, curRun.getCurrentCase());
+		curRun.addCaseToRun(curCase);
+		Action a = this.r.selectAction(input);
+		curCase.setAction(a);
+		return a;
 	}
 
 }

@@ -13,7 +13,6 @@ public class SandboxMotorControl extends MotorControl{
 		if (a instanceof SandboxAction){
 			Feature f = ((SandboxAction)a).getFeatures().get(0);
 			MovementAction action = MovementAction.values()[(int)f.getValue()];
-			System.out.println("Action : " + action);
 			return action.name();
 		}
 		return null;

@@ -1,5 +1,8 @@
 package agent;
 import org.jLOAF.action.AtomicAction;
+import org.jLOAF.inputs.Feature;
+
+import sandbox.MovementAction;
 
 
 public class SandboxAction extends AtomicAction{
@@ -9,8 +12,9 @@ public class SandboxAction extends AtomicAction{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public SandboxAction() {
-		super("Sandbox Action");
+	public SandboxAction(MovementAction action) {
+		super(action.name());
+		this.addFeature(new Feature(action.ordinal()));
 	}
 
 }
