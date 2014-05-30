@@ -16,8 +16,6 @@ import org.jLOAF.reasoning.SimpleKNN;
 import org.jLOAF.sim.atomic.Equality;
 import org.jLOAF.sim.complex.Mean;
 import org.jLOAF.tools.CaseBaseIO;
-import org.jLOAF.util.CaseLogger;
-
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.MovementAction;
@@ -27,30 +25,23 @@ import sandbox.Sandbox;
 public class SandboxAgent extends Agent{
 
 	private static final int DEFAULT_WORLD_SIZE = 10;
+	private static final int DEFAULT_K = 100;
 	
 	public static void main(String args[]){
 		//CaseLogger.createLogger(true, "");
 		Sandbox sandbox = new Sandbox(DEFAULT_WORLD_SIZE);
 		int id = sandbox.addCreature(new Creature(2, 2, Direction.NORTH));
 		
-		int world[][] = new int[DEFAULT_WORLD_SIZE][DEFAULT_WORLD_SIZE];
-		for (int i = 0; i < DEFAULT_WORLD_SIZE; i++){
-			world[0][i] = 1;
-			world[i][0] = 1;
-			world[DEFAULT_WORLD_SIZE - 1][i] = 1;
-			world[i][DEFAULT_WORLD_SIZE - 1] = 1;
-		}
-		sandbox.setWorld(world);
-		
 		ActionBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE);
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		
-		SandboxAgent agent = new SandboxAgent(cb);
+		SandboxAgent agent = new SandboxAgent(cb, false);
 		sandbox.init();
 		
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		SandboxPerception percept = new SandboxPerception();
+		
 		for (int i = 0; i < 100; i++){
 			Input in = percept.sense(sandbox.getCreature().get(id));
 			MovementAction action = testAgent.testAction(sandbox.getCreature().get(id));
@@ -76,7 +67,7 @@ public class SandboxAgent extends Agent{
 	
 	private CaseRun curRun;
 	
-	public SandboxAgent(CaseBase cb) {
+	public SandboxAgent(CaseBase cb, boolean useSequential) {
 		super(null, null, null, cb);
 		
 		this.curRun = new CaseRun();
@@ -87,8 +78,12 @@ public class SandboxAgent extends Agent{
 		this.mc = new SandboxMotorControl();
 		this.p = new SandboxPerception();
 		
-		//this.r = new SimpleKNN(3, cb);
-		this.r = new SequentialReasoning(cb, curRun);
+		if (useSequential){
+			this.r = new SequentialReasoning(cb, curRun, DEFAULT_K);
+		}else{
+			this.r = new SimpleKNN(DEFAULT_K, cb);
+		}
+		
 		this.cb = cb;
 	}
 

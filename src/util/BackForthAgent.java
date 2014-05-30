@@ -15,17 +15,8 @@ import agent.SandboxInput;
 import sandbox.MovementAction;
 
 public class BackForthAgent {
-	
-	public static void main(String args[]){
-		BackForthAgent agent = new BackForthAgent("Test.trace");
-		if (agent.parseFile()){
-			agent.saveCaseBase();
-			System.out.println("DONE");
-		}
-	}
-	
+
 	private String filename;
-	
 	private CaseBase casebase;
 	
 	public BackForthAgent(String traceFile){
@@ -43,9 +34,7 @@ public class BackForthAgent {
 				if (line.isEmpty()){
 					continue;
 				}
-				//System.out.println("LINE : " + line);
 				String tokens[] = line.split("\\|");
-				//System.out.println("TOKEN : " + Arrays.toString(tokens) + " " + tokens.length);
 				int touch = Integer.parseInt(tokens[0]);
 				double sonar = Double.parseDouble(tokens[1]);
 				
@@ -74,9 +63,9 @@ public class BackForthAgent {
 		return true;
 	}
 	
-	public void saveCaseBase(){
+	public void saveCaseBase(String filename){
 		try {
-			CaseBaseIO.saveCaseBase(casebase, "casebase.cb");
+			CaseBaseIO.saveCaseBase(casebase, filename);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
