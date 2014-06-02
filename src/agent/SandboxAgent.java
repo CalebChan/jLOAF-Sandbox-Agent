@@ -25,7 +25,7 @@ import sandbox.Sandbox;
 public class SandboxAgent extends Agent{
 
 	private static final int DEFAULT_WORLD_SIZE = 10;
-	private static final int DEFAULT_K = 100;
+	private static final int DEFAULT_K = 4;
 	
 	public static void main(String args[]){
 		//CaseLogger.createLogger(true, "");
@@ -36,7 +36,7 @@ public class SandboxAgent extends Agent{
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		
-		SandboxAgent agent = new SandboxAgent(cb, false);
+		SandboxAgent agent = new SandboxAgent(cb, true);
 		sandbox.init();
 		
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
@@ -74,6 +74,7 @@ public class SandboxAgent extends Agent{
 		
 		ComplexInput.setClassStrategy(new Mean());
 		AtomicInput.setClassStrategy(new Equality());
+		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
 		
 		this.mc = new SandboxMotorControl();
 		this.p = new SandboxPerception();

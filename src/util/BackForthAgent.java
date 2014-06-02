@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
-import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.tools.CaseBaseIO;
 
 import agent.SandboxAction;
+import agent.SandboxFeatureInput;
 import agent.SandboxInput;
 import sandbox.MovementAction;
 
@@ -42,9 +42,9 @@ public class BackForthAgent {
 								
 				SandboxInput input = new SandboxInput();
 				
-				input.add(new AtomicInput("Touch", new Feature(touch)));
-				input.add(new AtomicInput("Sonar", new Feature(sonar)));
-				input.add(new AtomicInput("Sound", new Feature(sound)));
+				input.add(new SandboxFeatureInput("Touch", new Feature(touch)));
+				input.add(new SandboxFeatureInput("Sonar", new Feature(sonar)));
+				input.add(new SandboxFeatureInput("Sound", new Feature(sound)));
 				
 				MovementAction action = MovementAction.valueOf(tokens[3]);
 				SandboxAction a = new SandboxAction(action);
