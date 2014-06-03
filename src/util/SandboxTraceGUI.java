@@ -3,6 +3,7 @@ package util;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,7 +15,7 @@ import javax.swing.SpringLayout;
 import agent.ActionBasedAgent;
 import agent.InputBasedAgent;
 import agent.StateBasedAgent;
-
+import sandbox.Creature;
 import sandbox.Direction;
 
 public class SandboxTraceGUI {
@@ -36,7 +37,7 @@ public class SandboxTraceGUI {
 	private JComboBox<String> agentSelect;
 	private JTextArea iterArea;
 	
-	public static final int MAX_SIZE = 9;
+	public static final int MAX_SIZE = 99;
 	public static final int DEFAULT_PADDING = 5;
 	public static final int DEFAULT_X_Y = 5;
 	public static final String DEFAULT_DELIMITER = "|";
@@ -62,14 +63,20 @@ public class SandboxTraceGUI {
 	}
 
 	private void run(){
+		int x = Integer.parseInt(this.xArea.getText());
+		int y = Integer.parseInt(this.yArea.getText());
+		Direction d = this.dirArea.getItemAt(this.dirArea.getSelectedIndex());
+		
+		Creature c = new Creature(x, y, d);
+		
 		int size = this.gridSize.getItemAt(this.gridSize.getSelectedIndex()).intValue();
 		String agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());
 		int iterations = Integer.parseInt(this.iterArea.getText());
 		StateBasedAgent a = null;
 		if (agent.equals(ActionBasedAgent.class.getSimpleName())){
-			a = new ActionBasedAgent(size);
+			a = new ActionBasedAgent(size, c);
 		}else if (agent.equals(InputBasedAgent.class.getSimpleName())){
-			a = new InputBasedAgent(size);
+			a = new InputBasedAgent(size, c);
 		}
 		if (a == null){
 			return;

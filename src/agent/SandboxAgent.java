@@ -24,15 +24,16 @@ import sandbox.Sandbox;
 
 public class SandboxAgent extends Agent{
 
-	private static final int DEFAULT_WORLD_SIZE = 10;
+	private static final int DEFAULT_WORLD_SIZE = 40;
 	private static final int DEFAULT_K = 4;
 	
 	public static void main(String args[]){
 		//CaseLogger.createLogger(true, "");
 		Sandbox sandbox = new Sandbox(DEFAULT_WORLD_SIZE);
-		int id = sandbox.addCreature(new Creature(2, 2, Direction.NORTH));
+		Creature creature = new Creature(2, 2, Direction.NORTH);
+		int id = sandbox.addCreature(new Creature(creature));
 		
-		ActionBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE);
+		ActionBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new Creature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		
