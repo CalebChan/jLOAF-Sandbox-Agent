@@ -24,20 +24,20 @@ import sandbox.Sandbox;
 
 public class SandboxAgent extends Agent{
 
-	private static final int DEFAULT_WORLD_SIZE = 40;
-	private static final int DEFAULT_K = 4;
+	private static final int DEFAULT_WORLD_SIZE = 10;
+	private static final int DEFAULT_K = 9999;
 	
 	public static void main(String args[]){
 		//CaseLogger.createLogger(true, "");
 		Sandbox sandbox = new Sandbox(DEFAULT_WORLD_SIZE);
-		Creature creature = new Creature(2, 2, Direction.NORTH);
+		Creature creature = new Creature(6, 6, Direction.SOUTH);
 		int id = sandbox.addCreature(new Creature(creature));
 		
-		ActionBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new Creature(creature));
+		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new Creature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		
-		SandboxAgent agent = new SandboxAgent(cb, true);
+		SandboxAgent agent = new SandboxAgent(cb, true, DEFAULT_K);
 		sandbox.init();
 		
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
@@ -47,13 +47,22 @@ public class SandboxAgent extends Agent{
 			Input in = percept.sense(sandbox.getCreature().get(id));
 			MovementAction action = testAgent.testAction(sandbox.getCreature().get(id));
 			SandboxAction a = new SandboxAction(action);
-			Action act = stat.senseEnvironment(new Case(in, a, null));
+			
+			Case correctCase = new Case(in, a, null);
+			
+			Action act = stat.senseEnvironment(correctCase);
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeatures().get(0).getValue()];
 			Creature c = sandbox.getCreature().get(id);
 			String data = c.isHasTouched() + "|" + c.getSonar() + "|" + c.getSound();
 			String local = c.getX() + "|" + c.getY() + "|" + c.getDir();
 			System.out.println("Creature : " + data + " Actual Action : " + action + " Agent Action : " + move + " Local : " + local);
+			
+			if (!action.equals(move)){
+				agent.learn(correctCase);
+				move = action;
+			}
+			
 			sandbox.takeAction(id, move);
 		}
 		StatisticsBundle bundle = stat.getStatisticsBundle();
@@ -68,7 +77,7 @@ public class SandboxAgent extends Agent{
 	
 	private CaseRun curRun;
 	
-	public SandboxAgent(CaseBase cb, boolean useSequential) {
+	public SandboxAgent(CaseBase cb, boolean useSequential, int kValue) {
 		super(null, null, null, cb);
 		
 		this.curRun = new CaseRun();
@@ -81,9 +90,9 @@ public class SandboxAgent extends Agent{
 		this.p = new SandboxPerception();
 		
 		if (useSequential){
-			this.r = new SequentialReasoning(cb, curRun, DEFAULT_K);
+			this.r = new SequentialReasoning(cb, curRun, kValue);
 		}else{
-			this.r = new SimpleKNN(DEFAULT_K, cb);
+			this.r = new SimpleKNN(kValue, cb);
 		}
 		
 		this.cb = cb;
@@ -101,6 +110,13 @@ public class SandboxAgent extends Agent{
 		Action a = this.r.selectAction(input);
 		curCase.setAction(a);
 		return a;
+	}
+	
+	@Override
+	public void learn(Case newCase){
+		Case c = new Case(newCase.getInput(), newCase.getAction(), this.curRun.getCurrentCase().getPreviousCase());
+		this.curRun.amendCurrentCase(c);
+		super.learn(c);
 	}
 
 }
