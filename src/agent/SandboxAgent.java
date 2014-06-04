@@ -17,8 +17,13 @@ import org.jLOAF.sim.atomic.Equality;
 import org.jLOAF.sim.complex.Mean;
 import org.jLOAF.tools.CaseBaseIO;
 
-import agent.state.ActionBasedAgent;
-import agent.state.StateBasedAgentSenseConfig;
+import agent.backtracking.ActionBasedAgent;
+import agent.backtracking.SandboxAction;
+import agent.backtracking.SandboxFeatureInput;
+import agent.backtracking.SandboxMotorControl;
+import agent.backtracking.SandboxPerception;
+import agent.backtracking.SandboxSimilarity;
+import agent.backtracking.StateBasedAgentSenseConfig;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.MovementAction;

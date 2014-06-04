@@ -1,4 +1,4 @@
-package agent;
+package agent.backtracking;
 
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.Feature;

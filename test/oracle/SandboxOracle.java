@@ -10,9 +10,9 @@ import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
 
 import agent.AbstractSandboxAgent;
-import agent.SandboxAction;
-import agent.SandboxPerception;
-import agent.state.StateBasedAgentSenseConfig;
+import agent.backtracking.SandboxAction;
+import agent.backtracking.SandboxPerception;
+import agent.backtracking.StateBasedAgentSenseConfig;
 import sandbox.Creature;
 import sandbox.MovementAction;
 import sandbox.Sandbox;

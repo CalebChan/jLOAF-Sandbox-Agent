@@ -1,4 +1,4 @@
-package agent;
+package agent.backtracking;
 
 import org.jLOAF.inputs.Input;
 import org.jLOAF.sim.SimilarityMetricStrategy;

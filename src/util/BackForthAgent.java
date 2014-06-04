@@ -9,9 +9,9 @@ import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.tools.CaseBaseIO;
 
-import agent.SandboxAction;
-import agent.SandboxFeatureInput;
-import agent.SandboxInput;
+import agent.backtracking.SandboxAction;
+import agent.backtracking.SandboxFeatureInput;
+import agent.backtracking.SandboxInput;
 import sandbox.MovementAction;
 
 public class BackForthAgent {

@@ -13,8 +13,8 @@ import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 
 import agent.AbstractSandboxAgent;
-import agent.state.ActionBasedAgent;
-import agent.state.InputBasedAgent;
+import agent.backtracking.ActionBasedAgent;
+import agent.backtracking.InputBasedAgent;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;

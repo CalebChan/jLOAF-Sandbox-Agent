@@ -1,9 +1,9 @@
-package agent;
+package agent.backtracking;
 import org.jLOAF.Perception;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
 
-import agent.state.StateBasedAgentSenseConfig;
+import agent.backtracking.StateBasedAgentSenseConfig;
 
 import sandbox.Creature;
 

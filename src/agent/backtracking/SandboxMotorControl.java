@@ -1,4 +1,4 @@
-package agent;
+package agent.backtracking;
 import org.jLOAF.MotorControl;
 import org.jLOAF.action.Action;
 import org.jLOAF.inputs.Feature;

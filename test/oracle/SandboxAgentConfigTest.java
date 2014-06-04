@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
-import agent.state.ActionBasedAgent;
+import agent.backtracking.ActionBasedAgent;
 
 import sandbox.Creature;
 import sandbox.Direction;
