@@ -1,4 +1,7 @@
-package oracle;
+package oracle.backtracking;
+
+import oracle.Config;
+import oracle.SandboxOracle;
 
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.CaseBaseIO;
@@ -13,22 +16,19 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
 
-public class SandboxAgentConfigTest {
+public class BacktrackingConfigTest {
 
-	private static final int DEFAULT_WORLD_SIZE = 10;
-	private static final int DEFAULT_K = 4;
-	
 	private SandboxOracle oracle;
 	
 	@Before
 	public void setup(){
 		Creature creature = new StateBasedCreature(2, 2, Direction.NORTH);
-		AbstractSandboxAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
+		AbstractSandboxAgent testAgent = new ActionBasedAgent(Config.DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
-		SandboxAgent agent = new SandboxAgent(cb, true, DEFAULT_K);
+		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
 		
-		oracle = new SandboxOracle(DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature);
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature);
 	}
 	
 	@Test

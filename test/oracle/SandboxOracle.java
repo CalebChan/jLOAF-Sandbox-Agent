@@ -12,7 +12,6 @@ import org.jLOAF.performance.actionestimation.LastActionEstimate;
 import agent.AbstractSandboxAgent;
 import agent.backtracking.SandboxAction;
 import agent.backtracking.SandboxPerception;
-import agent.backtracking.StateBasedAgentSenseConfig;
 import sandbox.Creature;
 import sandbox.MovementAction;
 import sandbox.Sandbox;
@@ -20,8 +19,6 @@ import sandbox.creature.StateBasedCreature;
 
 public class SandboxOracle {
 
-	private static final int DEFAULT_WORLD_SIZE = 10;
-	
 	private Sandbox sandbox;
 	private int creatureId;
 	
@@ -33,7 +30,7 @@ public class SandboxOracle {
 	
 	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature){
 		if (worldSize == -1){
-			worldSize = DEFAULT_WORLD_SIZE;
+			worldSize = Config.DEFAULT_WORLD_SIZE;
 		}
 		this.sandbox = new Sandbox(worldSize);
 		this.creatureId = sandbox.addCreature(new StateBasedCreature(creature));
@@ -60,15 +57,15 @@ public class SandboxOracle {
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeatures().get(0).getValue()];
 			
-			Creature c = sandbox.getCreature().get(creatureId);
-			
-			boolean hasTouched = (boolean)c.getSensor().getSense(StateBasedAgentSenseConfig.TOUCH).getValue();
-			double sonar = (double)c.getSensor().getSense(StateBasedAgentSenseConfig.SONAR).getValue();
-			int sound = (int)c.getSensor().getSense(StateBasedAgentSenseConfig.SOUND).getValue();
-			
-			String data = hasTouched + "|" + sonar + "|" + sound;
-			String local = c.getX() + "|" + c.getY() + "|" + c.getDir();
-			System.out.println("Creature : " + data + " Actual Action : " + action + " Agent Action : " + move + " Local : " + local);
+//			Creature c = sandbox.getCreature().get(creatureId);
+//			
+//			boolean hasTouched = (boolean)c.getSensor().getSense(StateBasedAgentSenseConfig.TOUCH).getValue();
+//			double sonar = (double)c.getSensor().getSense(StateBasedAgentSenseConfig.SONAR).getValue();
+//			int sound = (int)c.getSensor().getSense(StateBasedAgentSenseConfig.SOUND).getValue();
+//			
+//			String data = hasTouched + "|" + sonar + "|" + sound;
+//			String local = c.getX() + "|" + c.getY() + "|" + c.getDir();
+//			System.out.println("Creature : " + data + " Actual Action : " + action + " Agent Action : " + move + " Local : " + local);
 			
 			if (toLearn){
 				if (!action.equals(move)){
