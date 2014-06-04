@@ -17,6 +17,7 @@ import agent.InputBasedAgent;
 import agent.StateBasedAgent;
 import sandbox.Creature;
 import sandbox.Direction;
+import sandbox.creature.StateBasedCreature;
 
 public class SandboxTraceGUI {
 	
@@ -67,7 +68,7 @@ public class SandboxTraceGUI {
 		int y = Integer.parseInt(this.yArea.getText());
 		Direction d = this.dirArea.getItemAt(this.dirArea.getSelectedIndex());
 		
-		Creature c = new Creature(x, y, d);
+		Creature c = new StateBasedCreature(x, y, d);
 		
 		int size = this.gridSize.getItemAt(this.gridSize.getSelectedIndex()).intValue();
 		String agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());

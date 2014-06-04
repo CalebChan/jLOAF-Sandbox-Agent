@@ -20,6 +20,7 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.MovementAction;
 import sandbox.Sandbox;
+import sandbox.creature.StateBasedCreature;
 
 
 public class SandboxAgent extends Agent{
@@ -30,10 +31,10 @@ public class SandboxAgent extends Agent{
 	public static void main(String args[]){
 		//CaseLogger.createLogger(true, "");
 		Sandbox sandbox = new Sandbox(DEFAULT_WORLD_SIZE);
-		Creature creature = new Creature(6, 6, Direction.SOUTH);
-		int id = sandbox.addCreature(new Creature(creature));
+		Creature creature = new StateBasedCreature(2, 2, Direction.NORTH);
+		int id = sandbox.addCreature(new StateBasedCreature(creature));
 		
-		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new Creature(creature));
+		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		
@@ -54,7 +55,12 @@ public class SandboxAgent extends Agent{
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeatures().get(0).getValue()];
 			Creature c = sandbox.getCreature().get(id);
-			String data = c.isHasTouched() + "|" + c.getSonar() + "|" + c.getSound();
+			
+			boolean hasTouched = (boolean)c.getSensor().getSense(StateBasedAgentSenseConfig.TOUCH).getValue();
+			double sonar = (double)c.getSensor().getSense(StateBasedAgentSenseConfig.SONAR).getValue();
+			int sound = (int)c.getSensor().getSense(StateBasedAgentSenseConfig.SOUND).getValue();
+			
+			String data = hasTouched + "|" + sonar + "|" + sound;
 			String local = c.getX() + "|" + c.getY() + "|" + c.getDir();
 			System.out.println("Creature : " + data + " Actual Action : " + action + " Agent Action : " + move + " Local : " + local);
 			

@@ -1,7 +1,5 @@
 package oracle;
 
-import static org.junit.Assert.*;
-
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.CaseBaseIO;
 import org.junit.Before;
@@ -13,6 +11,7 @@ import agent.StateBasedAgent;
 
 import sandbox.Creature;
 import sandbox.Direction;
+import sandbox.creature.StateBasedCreature;
 
 public class SandboxAgentConfigTest {
 
@@ -23,8 +22,8 @@ public class SandboxAgentConfigTest {
 	
 	@Before
 	public void setup(){
-		Creature creature = new Creature(6, 6, Direction.SOUTH);
-		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new Creature(creature));
+		Creature creature = new StateBasedCreature(2, 2, Direction.NORTH);
+		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		SandboxAgent agent = new SandboxAgent(cb, true, DEFAULT_K);
