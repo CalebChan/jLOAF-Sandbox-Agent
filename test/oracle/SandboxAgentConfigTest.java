@@ -5,9 +5,9 @@ import org.jLOAF.tools.CaseBaseIO;
 import org.junit.Before;
 import org.junit.Test;
 
-import agent.ActionBasedAgent;
+import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
-import agent.StateBasedAgent;
+import agent.state.ActionBasedAgent;
 
 import sandbox.Creature;
 import sandbox.Direction;
@@ -23,7 +23,7 @@ public class SandboxAgentConfigTest {
 	@Before
 	public void setup(){
 		Creature creature = new StateBasedCreature(2, 2, Direction.NORTH);
-		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
+		AbstractSandboxAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		SandboxAgent agent = new SandboxAgent(cb, true, DEFAULT_K);

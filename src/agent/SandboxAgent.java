@@ -16,6 +16,9 @@ import org.jLOAF.reasoning.SimpleKNN;
 import org.jLOAF.sim.atomic.Equality;
 import org.jLOAF.sim.complex.Mean;
 import org.jLOAF.tools.CaseBaseIO;
+
+import agent.state.ActionBasedAgent;
+import agent.state.StateBasedAgentSenseConfig;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.MovementAction;
@@ -34,7 +37,7 @@ public class SandboxAgent extends Agent{
 		Creature creature = new StateBasedCreature(2, 2, Direction.NORTH);
 		int id = sandbox.addCreature(new StateBasedCreature(creature));
 		
-		StateBasedAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
+		AbstractSandboxAgent testAgent = new ActionBasedAgent(DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		

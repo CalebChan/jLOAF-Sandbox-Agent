@@ -8,10 +8,11 @@ import org.jLOAF.performance.ClassificationStatisticsWrapper;
 import org.jLOAF.performance.StatisticsBundle;
 import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
+
+import agent.AbstractSandboxAgent;
 import agent.SandboxAction;
 import agent.SandboxPerception;
-import agent.StateBasedAgent;
-import agent.StateBasedAgentSenseConfig;
+import agent.state.StateBasedAgentSenseConfig;
 import sandbox.Creature;
 import sandbox.MovementAction;
 import sandbox.Sandbox;
@@ -26,11 +27,11 @@ public class SandboxOracle {
 	
 	private int iterations;
 	
-	private StateBasedAgent testAgent;
+	private AbstractSandboxAgent testAgent;
 	
 	private Agent agent;
 	
-	public SandboxOracle(int worldSize, StateBasedAgent testAgent, int iterations, Agent agent, Creature creature){
+	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature){
 		if (worldSize == -1){
 			worldSize = DEFAULT_WORLD_SIZE;
 		}

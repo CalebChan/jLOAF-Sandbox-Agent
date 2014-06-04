@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 
-import agent.ActionBasedAgent;
-import agent.InputBasedAgent;
-import agent.StateBasedAgent;
+import agent.AbstractSandboxAgent;
+import agent.state.ActionBasedAgent;
+import agent.state.InputBasedAgent;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
@@ -73,7 +73,7 @@ public class SandboxTraceGUI {
 		int size = this.gridSize.getItemAt(this.gridSize.getSelectedIndex()).intValue();
 		String agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());
 		int iterations = Integer.parseInt(this.iterArea.getText());
-		StateBasedAgent a = null;
+		AbstractSandboxAgent a = null;
 		if (agent.equals(ActionBasedAgent.class.getSimpleName())){
 			a = new ActionBasedAgent(size, c);
 		}else if (agent.equals(InputBasedAgent.class.getSimpleName())){
