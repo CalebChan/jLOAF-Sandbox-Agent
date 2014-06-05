@@ -3,8 +3,16 @@ package util;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,9 +44,12 @@ public class SandboxTraceGUI {
 	private JComboBox<Direction> dirArea;
 	private JComboBox<Integer> gridSize;
 	private JComboBox<String> agentSelect;
-	private JTextArea iterArea;
+	private JTextArea cycleArea;
 	
-	public static final int MAX_SIZE = 99;
+	private JTextArea iterArea;
+	private JCheckBox randomBox;
+	
+	public static final int MAX_SIZE = 39;
 	public static final int DEFAULT_PADDING = 5;
 	public static final int DEFAULT_X_Y = 5;
 	public static final String DEFAULT_DELIMITER = "|";
@@ -48,6 +59,9 @@ public class SandboxTraceGUI {
 	
 	private static final String DEFAULT_TRACE_EXTENSION = ".trace";
 	private static final String DEFAULT_CASEBASE_EXTENSION = ".cb";
+	
+	private static final String DEFAULT_TRACE_NAME = "Test1";
+	private static final String DEFAULT_CASEBASE_NAME = "casebase1";
 	
 	public SandboxTraceGUI(){
 		frame = new JFrame("");
@@ -63,16 +77,12 @@ public class SandboxTraceGUI {
 		frame.setVisible(true);
 	}
 
-	private void run(){
-		int x = Integer.parseInt(this.xArea.getText());
-		int y = Integer.parseInt(this.yArea.getText());
-		Direction d = this.dirArea.getItemAt(this.dirArea.getSelectedIndex());
-		
+	private void run(int x, int y, Direction d, String saveFile){
 		Creature c = new StateBasedCreature(x, y, d);
 		
 		int size = this.gridSize.getItemAt(this.gridSize.getSelectedIndex()).intValue();
 		String agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());
-		int iterations = Integer.parseInt(this.iterArea.getText());
+		int iterations = Integer.parseInt(this.cycleArea.getText());
 		AbstractSandboxAgent a = null;
 		if (agent.equals(ActionBasedAgent.class.getSimpleName())){
 			a = new ActionBasedAgent(size, c);
@@ -82,7 +92,7 @@ public class SandboxTraceGUI {
 		if (a == null){
 			return;
 		}
-		String saveFile = this.saveLocal.getText();
+		
 		if (saveFile == null || saveFile.isEmpty()){
 			return;
 		}
@@ -94,15 +104,48 @@ public class SandboxTraceGUI {
 	private JPanel confimPanel(){
 		JPanel panel = new JPanel();
 		
-		saveLocal = new JTextArea();
-		convertLocal = new JTextArea();
+		saveLocal = new JTextArea(DEFAULT_TRACE_NAME);
+		convertLocal = new JTextArea(DEFAULT_CASEBASE_NAME);
 		
 		JButton runButton = new JButton("Run");
 		runButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (saveLocal.getText() != null && !saveLocal.getText().equals("")){
-					run();
+					int x = Integer.parseInt(xArea.getText());
+					int y = Integer.parseInt(yArea.getText());
+					Direction d = dirArea.getItemAt(dirArea.getSelectedIndex());
+					String saveFile = saveLocal.getText();
+					if (iterArea.getText() == null || iterArea.getText().isEmpty()){
+						run(x, y, d, saveFile);
+					}else{
+						int iter = Integer.parseInt(iterArea.getText());
+						int size = gridSize.getItemAt(gridSize.getSelectedIndex()).intValue();
+						Random r = new Random(0);
+						try {
+							BufferedWriter writer = new BufferedWriter(new FileWriter(saveFile + DEFAULT_TRACE_EXTENSION));
+							for (int i = 0; i < iter; i++){
+								run(x, y, d, "TMP");
+								if (randomBox.isSelected()){
+									x = r.nextInt(size - 2) + 1;
+									y = r.nextInt(size - 2) + 1;
+									d = Direction.values()[r.nextInt(Direction.values().length)];
+								}
+								BufferedReader reader = new BufferedReader(new FileReader("TMP" + DEFAULT_TRACE_EXTENSION));
+								String line = reader.readLine();
+								while(line != null){
+									writer.append(line + "\n");
+									line = reader.readLine();
+								}
+								reader.close();
+							}
+							writer.close();
+							File f = new File("TMP" + DEFAULT_TRACE_EXTENSION);
+							f.delete();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}					
 				}
 			}
 		});
@@ -168,10 +211,18 @@ public class SandboxTraceGUI {
 		panel.add(agentSelect);
 		
 		panel.add(new JLabel("Cycles:"));
-		iterArea = new JTextArea("" + DEFAULT_CYCLES);
+		cycleArea = new JTextArea("" + DEFAULT_CYCLES);
+		panel.add(cycleArea);
+		
+		panel.add(new JLabel("Iterations:"));
+		iterArea = new JTextArea();
 		panel.add(iterArea);
 		
-		SpringUtilities.makeGrid(panel, 6, 2, DEFAULT_X_Y, DEFAULT_X_Y, DEFAULT_PADDING, DEFAULT_PADDING);
+		panel.add(new JLabel("Random Start Pos:"));
+		randomBox = new JCheckBox();
+		panel.add(randomBox);
+		
+		SpringUtilities.makeGrid(panel, 8, 2, DEFAULT_X_Y, DEFAULT_X_Y, DEFAULT_PADDING, DEFAULT_PADDING);
 		return panel;
 	}
 }
