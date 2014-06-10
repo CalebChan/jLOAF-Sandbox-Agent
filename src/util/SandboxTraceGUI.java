@@ -22,9 +22,13 @@ import javax.swing.SpringLayout;
 
 import agent.AbstractSandboxAgent;
 import agent.backtracking.ActionBasedAgent;
+import agent.backtracking.BackForthAgent;
 import agent.backtracking.InputBasedAgent;
+import agent.lfo.SmartRandomExpert;
+import agent.lfo.SmartStrightLineExpert;
 import sandbox.Creature;
 import sandbox.Direction;
+import sandbox.creature.DirtBasedCreature;
 import sandbox.creature.StateBasedCreature;
 
 public class SandboxTraceGUI {
@@ -80,6 +84,8 @@ public class SandboxTraceGUI {
 	private void run(int x, int y, Direction d, String saveFile){
 		Creature c = new StateBasedCreature(x, y, d);
 		
+		Creature dc = new DirtBasedCreature(x, y, d);
+		
 		int size = this.gridSize.getItemAt(this.gridSize.getSelectedIndex()).intValue();
 		String agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());
 		int iterations = Integer.parseInt(this.cycleArea.getText());
@@ -88,6 +94,10 @@ public class SandboxTraceGUI {
 			a = new ActionBasedAgent(size, c);
 		}else if (agent.equals(InputBasedAgent.class.getSimpleName())){
 			a = new InputBasedAgent(size, c);
+		}else if (agent.equals(SmartRandomExpert.class.getSimpleName())){
+			a = new SmartRandomExpert(size, dc);
+		}else if (agent.equals(SmartStrightLineExpert.class.getSimpleName())){
+			a = new SmartStrightLineExpert(size, dc);
 		}
 		if (a == null){
 			return;
@@ -205,7 +215,7 @@ public class SandboxTraceGUI {
 		panel.add(new JLabel("Grid Size:"));
 		panel.add(gridSize);
 		
-		String agents[] = {ActionBasedAgent.class.getSimpleName(), InputBasedAgent.class.getSimpleName()};
+		String agents[] = {ActionBasedAgent.class.getSimpleName(), InputBasedAgent.class.getSimpleName(), SmartRandomExpert.class.getSimpleName(), SmartStrightLineExpert.class.getSimpleName()};
 		agentSelect = new JComboBox<String>(agents);
 		panel.add(new JLabel("Agent:"));
 		panel.add(agentSelect);

@@ -18,9 +18,7 @@ import org.jLOAF.sim.complex.Mean;
 import org.jLOAF.tools.CaseBaseIO;
 
 import agent.backtracking.ActionBasedAgent;
-import agent.backtracking.SandboxAction;
 import agent.backtracking.SandboxFeatureInput;
-import agent.backtracking.SandboxMotorControl;
 import agent.backtracking.SandboxPerception;
 import agent.backtracking.SandboxSimilarity;
 import agent.backtracking.StateBasedAgentSenseConfig;

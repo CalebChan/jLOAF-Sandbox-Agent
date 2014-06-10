@@ -1,4 +1,4 @@
-package util;
+package agent.backtracking;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,9 +9,7 @@ import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.tools.CaseBaseIO;
 
-import agent.backtracking.SandboxAction;
-import agent.backtracking.SandboxFeatureInput;
-import agent.backtracking.SandboxInput;
+import agent.SandboxAction;
 import sandbox.MovementAction;
 
 public class BackForthAgent {

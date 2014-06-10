@@ -1,4 +1,4 @@
-package agent.backtracking;
+package agent;
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.inputs.Feature;
 

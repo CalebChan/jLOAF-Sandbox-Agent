@@ -10,7 +10,7 @@ import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
 
 import agent.AbstractSandboxAgent;
-import agent.backtracking.SandboxAction;
+import agent.SandboxAction;
 import agent.backtracking.SandboxPerception;
 import sandbox.Creature;
 import sandbox.MovementAction;
