@@ -1,16 +1,17 @@
 package agent.lfo;
 
-import org.jLOAF.Perception;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
 
+import agent.SandboxPerception;
+
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.sensor.Sensor;
 
-public class LfoPerception implements Perception{
+public class LfOPerception implements SandboxPerception{
 
 	public Input sense(Creature creature){
 		ComplexInput ci = new ComplexInput("LfoInput");

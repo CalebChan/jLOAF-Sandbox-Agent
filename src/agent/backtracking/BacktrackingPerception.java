@@ -1,14 +1,14 @@
 package agent.backtracking;
-import org.jLOAF.Perception;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
 
+import agent.SandboxPerception;
 import agent.backtracking.StateBasedAgentSenseConfig;
 
 import sandbox.Creature;
 
 
-public class SandboxPerception implements Perception{
+public class BacktrackingPerception implements SandboxPerception{
 
 	public Input sense(Creature creature) {
 		SandboxInput input = new SandboxInput();

@@ -20,6 +20,7 @@ import sandbox.creature.StateBasedCreature;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.backtracking.ActionBasedAgent;
+import agent.backtracking.BacktrackingPerception;
 
 @RunWith(Parameterized.class)
 public class KNNConfigTest {
@@ -49,7 +50,7 @@ public class KNNConfigTest {
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
 		SandboxAgent agent = new SandboxAgent(cb, false, k);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature);
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception());
 	}
 	
 	@Test

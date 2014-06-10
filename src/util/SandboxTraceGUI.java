@@ -24,6 +24,7 @@ import agent.AbstractSandboxAgent;
 import agent.backtracking.ActionBasedAgent;
 import agent.backtracking.BackForthAgent;
 import agent.backtracking.InputBasedAgent;
+import agent.lfo.LfOTraceParser;
 import agent.lfo.SmartRandomExpert;
 import agent.lfo.SmartStrightLineExpert;
 import sandbox.Creature;
@@ -53,7 +54,7 @@ public class SandboxTraceGUI {
 	private JTextArea iterArea;
 	private JCheckBox randomBox;
 	
-	public static final int MAX_SIZE = 39;
+	public static final int MAX_SIZE = 9;
 	public static final int DEFAULT_PADDING = 5;
 	public static final int DEFAULT_X_Y = 5;
 	public static final String DEFAULT_DELIMITER = "|";
@@ -171,8 +172,9 @@ public class SandboxTraceGUI {
 			public void actionPerformed(ActionEvent e) {
 				if (convertLocal.getText() != null && !convertLocal.getText().equals("") && saveLocal.getText() != null && !saveLocal.getText().equals("")){
 					BackForthAgent bf = new BackForthAgent(saveLocal.getText() + DEFAULT_TRACE_EXTENSION);
-					if (bf.parseFile()){
-						bf.saveCaseBase(convertLocal.getText() + DEFAULT_CASEBASE_EXTENSION);
+					LfOTraceParser tp = new LfOTraceParser(saveLocal.getText() + DEFAULT_TRACE_EXTENSION);
+					if (tp.parseFile()){
+						tp.saveCaseBase(convertLocal.getText() + DEFAULT_CASEBASE_EXTENSION);
 						System.out.println("DONE");
 					}
 				}

@@ -11,11 +11,10 @@ import org.jLOAF.performance.actionestimation.LastActionEstimate;
 
 import agent.AbstractSandboxAgent;
 import agent.SandboxAction;
-import agent.backtracking.SandboxPerception;
+import agent.SandboxPerception;
 import sandbox.Creature;
 import sandbox.MovementAction;
 import sandbox.Sandbox;
-import sandbox.creature.StateBasedCreature;
 
 public class SandboxOracle {
 
@@ -28,26 +27,29 @@ public class SandboxOracle {
 	
 	private Agent agent;
 	
-	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature){
+	private SandboxPerception perception;
+	
+	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature, SandboxPerception perception){
 		if (worldSize == -1){
 			worldSize = Config.DEFAULT_WORLD_SIZE;
 		}
 		this.sandbox = new Sandbox(worldSize);
-		this.creatureId = sandbox.addCreature(new StateBasedCreature(creature));
+		this.creatureId = sandbox.addCreature(creature);
 		
 		this.iterations = iterations;
 		this.testAgent = testAgent;
 		this.agent = agent;
 		
+		this.perception = perception;
+		
 		sandbox.init();
 	}
 	
 	public void runSimulation(boolean toLearn, boolean printStats){
-		SandboxPerception percept = new SandboxPerception();
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		
 		for (int i = 0; i < this.iterations; i++){
-			Input in = percept.sense(sandbox.getCreature().get(creatureId));
+			Input in = perception.sense(sandbox.getCreature().get(creatureId));
 			MovementAction action = testAgent.testAction(sandbox.getCreature().get(creatureId));
 			SandboxAction a = new SandboxAction(action);
 			

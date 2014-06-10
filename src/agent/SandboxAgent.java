@@ -19,7 +19,7 @@ import org.jLOAF.tools.CaseBaseIO;
 
 import agent.backtracking.ActionBasedAgent;
 import agent.backtracking.SandboxFeatureInput;
-import agent.backtracking.SandboxPerception;
+import agent.backtracking.BacktrackingPerception;
 import agent.backtracking.SandboxSimilarity;
 import agent.backtracking.StateBasedAgentSenseConfig;
 import sandbox.Creature;
@@ -48,7 +48,7 @@ public class SandboxAgent extends Agent{
 		sandbox.init();
 		
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
-		SandboxPerception percept = new SandboxPerception();
+		BacktrackingPerception percept = new BacktrackingPerception();
 		
 		for (int i = 0; i < 100; i++){
 			Input in = percept.sense(sandbox.getCreature().get(id));
@@ -99,7 +99,7 @@ public class SandboxAgent extends Agent{
 		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
 		
 		this.mc = new SandboxMotorControl();
-		this.p = new SandboxPerception();
+		this.p = new BacktrackingPerception();
 		
 		if (useSequential){
 			this.r = new SequentialReasoning(cb, curRun, kValue);
@@ -111,7 +111,7 @@ public class SandboxAgent extends Agent{
 	}
 
 	public String senseEnvironment(Creature creature) {
-		Input in = ((SandboxPerception)this.p).sense(creature);
+		Input in = ((BacktrackingPerception)this.p).sense(creature);
 		return this.mc.control(senseEnvironment(in));
 	}
 

@@ -1,4 +1,4 @@
-package oracle.backtracking;
+package oracle.lfo;
 
 import oracle.Config;
 import oracle.SandboxOracle;
@@ -8,30 +8,29 @@ import org.jLOAF.tools.CaseBaseIO;
 import org.junit.Before;
 import org.junit.Test;
 
-import agent.AbstractSandboxAgent;
-import agent.SandboxAgent;
-import agent.backtracking.ActionBasedAgent;
-import agent.backtracking.BacktrackingPerception;
-
 import sandbox.Creature;
 import sandbox.Direction;
-import sandbox.creature.StateBasedCreature;
+import sandbox.creature.DirtBasedCreature;
+import agent.AbstractSandboxAgent;
+import agent.SandboxAgent;
+import agent.lfo.LfOPerception;
+import agent.lfo.SmartRandomExpert;
 
-public class BacktrackingConfigTest {
-
-	private SandboxOracle oracle;
+public class LfOConfigTest {
 	
+	private SandboxOracle oracle;
+
 	@Before
-	public void setup(){
-		Creature creature = new StateBasedCreature(2, 2, Direction.NORTH);
-		AbstractSandboxAgent testAgent = new ActionBasedAgent(Config.DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
+	public void setUp() throws Exception {
+		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
+		AbstractSandboxAgent testAgent = new SmartRandomExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
 		
-		CaseBase cb = CaseBaseIO.loadCaseBase("casebase.cb");
+		CaseBase cb = CaseBaseIO.loadCaseBase("casebase1.cb");
 		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception());
 	}
-	
+
 	@Test
 	public void testSimuation() {
 		System.out.println("+++++++++++++++Test Vanilla Simulation+++++++++++++++");
