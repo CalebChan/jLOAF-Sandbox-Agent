@@ -1,6 +1,7 @@
 package util;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -16,21 +17,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
 import javax.swing.SpringLayout;
 
 import agent.AbstractSandboxAgent;
-import agent.backtracking.ActionBasedAgent;
-import agent.backtracking.BackForthAgent;
-import agent.backtracking.InputBasedAgent;
-import agent.lfo.LfOTraceParser;
-import agent.lfo.SmartRandomExpert;
-import agent.lfo.SmartStrightLineExpert;
-import sandbox.Creature;
 import sandbox.Direction;
-import sandbox.creature.DirtBasedCreature;
-import sandbox.creature.StateBasedCreature;
+import util.expert.ExpertConfig;
+import util.expert.ExpertStrategy;
 
 public class SandboxTraceGUI {
 	
@@ -48,7 +44,7 @@ public class SandboxTraceGUI {
 	private JTextArea yArea;
 	private JComboBox<Direction> dirArea;
 	private JComboBox<Integer> gridSize;
-	private JComboBox<String> agentSelect;
+	private JComboBox<ExpertStrategy> agentSelect;
 	private JTextArea cycleArea;
 	
 	private JTextArea iterArea;
@@ -62,8 +58,8 @@ public class SandboxTraceGUI {
 	public static final int DEFAULT_X_Y_COOR = 2;
 	public static final int DEFAULT_CYCLES = 100;
 	
-	private static final String DEFAULT_TRACE_EXTENSION = ".trace";
-	private static final String DEFAULT_CASEBASE_EXTENSION = ".cb";
+	public static final String DEFAULT_TRACE_EXTENSION = ".trace";
+	public static final String DEFAULT_CASEBASE_EXTENSION = ".cb";
 	
 	private static final String DEFAULT_TRACE_NAME = "Test1";
 	private static final String DEFAULT_CASEBASE_NAME = "casebase1";
@@ -83,23 +79,11 @@ public class SandboxTraceGUI {
 	}
 
 	private void run(int x, int y, Direction d, String saveFile){
-		Creature c = new StateBasedCreature(x, y, d);
-		
-		Creature dc = new DirtBasedCreature(x, y, d);
-		
 		int size = this.gridSize.getItemAt(this.gridSize.getSelectedIndex()).intValue();
-		String agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());
+		ExpertStrategy agent = this.agentSelect.getItemAt(this.agentSelect.getSelectedIndex());
 		int iterations = Integer.parseInt(this.cycleArea.getText());
-		AbstractSandboxAgent a = null;
-		if (agent.equals(ActionBasedAgent.class.getSimpleName())){
-			a = new ActionBasedAgent(size, c);
-		}else if (agent.equals(InputBasedAgent.class.getSimpleName())){
-			a = new InputBasedAgent(size, c);
-		}else if (agent.equals(SmartRandomExpert.class.getSimpleName())){
-			a = new SmartRandomExpert(size, dc);
-		}else if (agent.equals(SmartStrightLineExpert.class.getSimpleName())){
-			a = new SmartStrightLineExpert(size, dc);
-		}
+		AbstractSandboxAgent a = agent.getAgent(size, x, y, d);
+
 		if (a == null){
 			return;
 		}
@@ -171,12 +155,8 @@ public class SandboxTraceGUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (convertLocal.getText() != null && !convertLocal.getText().equals("") && saveLocal.getText() != null && !saveLocal.getText().equals("")){
-					BackForthAgent bf = new BackForthAgent(saveLocal.getText() + DEFAULT_TRACE_EXTENSION);
-					LfOTraceParser tp = new LfOTraceParser(saveLocal.getText() + DEFAULT_TRACE_EXTENSION);
-					if (tp.parseFile()){
-						tp.saveCaseBase(convertLocal.getText() + DEFAULT_CASEBASE_EXTENSION);
-						System.out.println("DONE");
-					}
+					ExpertStrategy agent = agentSelect.getItemAt(agentSelect.getSelectedIndex());
+					agent.parseFile(saveLocal.getText(), convertLocal.getText());
 				}
 			}
 		});
@@ -217,8 +197,8 @@ public class SandboxTraceGUI {
 		panel.add(new JLabel("Grid Size:"));
 		panel.add(gridSize);
 		
-		String agents[] = {ActionBasedAgent.class.getSimpleName(), InputBasedAgent.class.getSimpleName(), SmartRandomExpert.class.getSimpleName(), SmartStrightLineExpert.class.getSimpleName()};
-		agentSelect = new JComboBox<String>(agents);
+		agentSelect = new JComboBox<ExpertStrategy>(ExpertConfig.STRATEGY);
+		agentSelect.setRenderer(new ComboBoxRenderer());
 		panel.add(new JLabel("Agent:"));
 		panel.add(agentSelect);
 		
@@ -237,4 +217,20 @@ public class SandboxTraceGUI {
 		SpringUtilities.makeGrid(panel, 8, 2, DEFAULT_X_Y, DEFAULT_X_Y, DEFAULT_PADDING, DEFAULT_PADDING);
 		return panel;
 	}
+}
+
+class ComboBoxRenderer extends JLabel implements ListCellRenderer<ExpertStrategy> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public Component getListCellRendererComponent(JList<? extends ExpertStrategy> list, ExpertStrategy value, int index, boolean isSelected, boolean cellHasFocus) {
+		this.setText(value.getAgentName());
+		return this;
+	}
+
+
 }

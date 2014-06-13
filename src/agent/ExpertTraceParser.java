@@ -6,13 +6,7 @@ import java.io.IOException;
 
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
-import org.jLOAF.inputs.Feature;
-import org.jLOAF.inputs.Input;
 import org.jLOAF.tools.CaseBaseIO;
-
-import sandbox.MovementAction;
-import agent.backtracking.SandboxFeatureInput;
-import agent.backtracking.SandboxInput;
 
 public abstract class ExpertTraceParser {
 
