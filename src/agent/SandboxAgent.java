@@ -1,5 +1,6 @@
 package agent;
 import org.jLOAF.Agent;
+import org.jLOAF.Reasoning;
 import org.jLOAF.action.Action;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
@@ -89,7 +90,7 @@ public class SandboxAgent extends Agent{
 	
 	private CaseRun curRun;
 	
-	public SandboxAgent(CaseBase cb, boolean useSequential, int kValue) {
+	public SandboxAgent(CaseBase cb, Reasoning reasoning, int kValue){
 		super(null, null, null, cb);
 		
 		this.curRun = new CaseRun();
@@ -98,16 +99,23 @@ public class SandboxAgent extends Agent{
 		AtomicInput.setClassStrategy(new Equality());
 		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
 		
+		this.r = reasoning;
 		this.mc = new SandboxMotorControl();
 		this.p = new BacktrackingPerception();
 		
+		this.cb = cb;
+	}	
+	public SandboxAgent(CaseBase cb, boolean useSequential, int kValue) {
+		this(cb, null, kValue);
 		if (useSequential){
 			this.r = new SequentialReasoning(cb, curRun, kValue);
 		}else{
 			this.r = new SimpleKNN(kValue, cb);
 		}
-		
-		this.cb = cb;
+	}
+	
+	public CaseRun getCaseRun(){
+		return this.curRun;
 	}
 
 	public String senseEnvironment(Creature creature) {

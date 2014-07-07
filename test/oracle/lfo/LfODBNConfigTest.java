@@ -4,6 +4,7 @@ import oracle.Config;
 import oracle.SandboxOracle;
 
 import org.jLOAF.casebase.CaseBase;
+import org.jLOAF.reasoning.DBNReasoning;
 import org.jLOAF.tools.CaseBaseIO;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +17,8 @@ import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
 import agent.lfo.SmartRandomExpert;
 
-public class LfOConfigTest {
-	
+public class LfODBNConfigTest {
+
 	private SandboxOracle oracle;
 
 	@Before
@@ -26,11 +27,13 @@ public class LfOConfigTest {
 		AbstractSandboxAgent testAgent = new SmartRandomExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase3.cb");
-		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
+		DBNReasoning r = new DBNReasoning(cb, 20, null, 4);
+		SandboxAgent agent = new SandboxAgent(cb, r, Config.DEFAULT_K);
+		r.setCaseRun(agent.getCaseRun());
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception());
 	}
-
+	
 	@Test
 	public void testSimuation() {
 		System.out.println("+++++++++++++++Test Vanilla Simulation+++++++++++++++");

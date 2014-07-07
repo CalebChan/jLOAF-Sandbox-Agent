@@ -14,7 +14,7 @@ public class SandboxAction extends AtomicAction{
 
 	public SandboxAction(MovementAction action) {
 		super(action.name());
-		this.addFeature(new Feature(action.ordinal()));
+		super.addFeature(new Feature(action.ordinal()));
 	}
 
 }
