@@ -1,5 +1,5 @@
 
-package util.expert;
+package util.expert.lfo;
 
 import util.SandboxTraceGUI;
 import util.expert.LfOExpertStrategy;
