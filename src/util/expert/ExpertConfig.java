@@ -2,9 +2,10 @@ package util.expert;
 
 import util.expert.backtracking.ActonBasedExpertStrategy;
 import util.expert.backtracking.InputBasedExpertStrategy;
-import util.expert.lfo.SmartRandomExpertStrategy;
 import util.expert.lfo.SmartStraightLineExpertStrategy;
 import util.expert.lfo.ZigZagExpertStrategy;
+import util.expert.lfo.EqualFixedSequenceExpertStrategy;
+import util.expert.lfo.FixedSequenceExpertStrategy;
 
 public class ExpertConfig {
 
