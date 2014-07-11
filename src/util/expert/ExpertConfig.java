@@ -2,7 +2,7 @@ package util.expert;
 
 import util.expert.backtracking.ActonBasedExpertStrategy;
 import util.expert.backtracking.InputBasedExpertStrategy;
-import util.expert.lfo.SimpleRandomExpertStrategy;
+import util.expert.lfo.SmartRandomExpertStrategy;
 import util.expert.lfo.SmartStraightLineExpertStrategy;
 
 public class ExpertConfig {
@@ -18,7 +18,7 @@ public class ExpertConfig {
 		STRATEGY[count++] = new ActonBasedExpertStrategy();
 		STRATEGY[count++] = new InputBasedExpertStrategy();
 		
-		STRATEGY[count++] = new SimpleRandomExpertStrategy();
+		STRATEGY[count++] = new SmartRandomExpertStrategy();
 		STRATEGY[count++] = new SmartStraightLineExpertStrategy();
 	}
 

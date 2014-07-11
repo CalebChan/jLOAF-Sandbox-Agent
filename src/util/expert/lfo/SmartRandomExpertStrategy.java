@@ -6,7 +6,7 @@ import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import util.expert.LfOExpertStrategy;
 
-public class SimpleRandomExpertStrategy extends LfOExpertStrategy {
+public class SmartRandomExpertStrategy extends LfOExpertStrategy {
 
 	@Override
 	public AbstractSandboxAgent getAgent(int size, int x, int y, Direction dir) {
