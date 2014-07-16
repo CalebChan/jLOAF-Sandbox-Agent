@@ -57,7 +57,7 @@ public class SandboxOracle {
 			
 			Action act = stat.senseEnvironment(correctCase);
 			SandboxAction sa = (SandboxAction)act;
-			MovementAction move = MovementAction.values()[(int) sa.getFeatures().get(0).getValue()];
+			MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
 			
 //			Creature c = sandbox.getCreature().get(creatureId);
 //			

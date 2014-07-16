@@ -11,7 +11,7 @@ public class SandboxMotorControl extends MotorControl{
 	@Override
 	public String control(Action a) {
 		if (a instanceof SandboxAction){
-			Feature f = ((SandboxAction)a).getFeatures().get(0);
+			Feature f = ((SandboxAction)a).getFeature();
 			MovementAction action = MovementAction.values()[(int)f.getValue()];
 			return action.name();
 		}
