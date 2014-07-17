@@ -91,6 +91,7 @@ public class SandboxOracle {
 		this.simulationCount++;
 		
 		if (printStats){
+			System.out.println("Creature : " + sandbox.getCreature().get(creatureId).toString());
 			StatisticsBundle bundle = stat.getStatisticsBundle();
 			String[] labels = bundle.getLabels();
 			for (int i = 0; i < labels.length; i++){
