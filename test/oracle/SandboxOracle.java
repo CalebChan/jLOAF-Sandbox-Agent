@@ -29,10 +29,16 @@ public class SandboxOracle {
 	
 	private SandboxPerception perception;
 	
+	private int simulationCount;
+	private double globalAccuracy;
+	
+	private int worldSize;
+	
 	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature, SandboxPerception perception){
 		if (worldSize == -1){
 			worldSize = Config.DEFAULT_WORLD_SIZE;
 		}
+		this.worldSize = worldSize;
 		this.sandbox = new Sandbox(worldSize);
 		this.creatureId = sandbox.addCreature(creature);
 		
@@ -43,6 +49,19 @@ public class SandboxOracle {
 		this.perception = perception;
 		
 		sandbox.init();
+		
+		this.simulationCount = 0;
+		this.globalAccuracy = 0;
+	}
+	
+	public void setCreature(Creature c){
+		this.sandbox = new Sandbox(worldSize);
+		this.creatureId = sandbox.addCreature(c);
+		sandbox.init();
+	}
+	
+	public double getGlobalAccuracyAvg(){
+		return this.globalAccuracy / (this.simulationCount * 1.0);
 	}
 	
 	public void runSimulation(boolean toLearn, boolean printStats){
@@ -59,16 +78,6 @@ public class SandboxOracle {
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
 			
-//			Creature c = sandbox.getCreature().get(creatureId);
-//			
-//			boolean hasTouched = (boolean)c.getSensor().getSense(StateBasedAgentSenseConfig.TOUCH).getValue();
-//			double sonar = (double)c.getSensor().getSense(StateBasedAgentSenseConfig.SONAR).getValue();
-//			int sound = (int)c.getSensor().getSense(StateBasedAgentSenseConfig.SOUND).getValue();
-//			
-//			String data = hasTouched + "|" + sonar + "|" + sound;
-//			String local = c.getX() + "|" + c.getY() + "|" + c.getDir();
-//			System.out.println("Creature : " + data + " Actual Action : " + action + " Agent Action : " + move + " Local : " + local);
-			
 			if (toLearn){
 				if (!action.equals(move)){
 					agent.learn(correctCase);
@@ -77,6 +86,9 @@ public class SandboxOracle {
 			}
 			sandbox.takeAction(creatureId, move);
 		}
+		
+		this.globalAccuracy += stat.getClassificationAccuracy();
+		this.simulationCount++;
 		
 		if (printStats){
 			StatisticsBundle bundle = stat.getStatisticsBundle();

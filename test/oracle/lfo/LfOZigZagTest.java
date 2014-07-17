@@ -1,6 +1,7 @@
 package oracle.lfo;
 
 import java.io.File;
+import java.util.Random;
 
 import oracle.Config;
 import oracle.SandboxOracle;
@@ -12,16 +13,17 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import util.expert.ExpertStrategy;
-import util.expert.lfo.SmartRandomExpertStrategy;
+import util.expert.lfo.ZigZagExpertStrategy;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
-import agent.lfo.SmartRandomExpert;
+import agent.lfo.ZigZagExpert;
 
 public class LfOZigZagTest {
 
@@ -30,9 +32,9 @@ public class LfOZigZagTest {
 	@BeforeClass 
 	public static void init() throws Exception{
 		Creature c = new DirtBasedCreature(7, 2, Direction.NORTH);
-		//ExpertStrategy expert = new SmartRandomExpertStrategy();
-		//TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
-		//expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
+		ExpertStrategy expert = new ZigZagExpertStrategy();
+		TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
+		expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
 	}
 
 	@AfterClass
@@ -47,13 +49,30 @@ public class LfOZigZagTest {
 	@Before
 	public void setUp() throws Exception {
 		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
-		//AbstractSandboxAgent testAgent = new SmartRandomExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
+		AbstractSandboxAgent testAgent = new ZigZagExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT);
 		Assert.assertFalse(cb == null);
 		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
 		
-		//oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 11, agent, creature, new LfOPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 11, agent, creature, new LfOPerception());
+	}
+	
+	@Test
+	public void testExpert(){
+		System.out.println("+++++++++++++++Test Zig Zag Simulation+++++++++++++++");
+		Random r = new Random(0);
+		System.out.println("Creature : X:7,Y:2,D:NORTH");
+		for (int i = 0; i < 4; i++){
+			oracle.runSimulation(true, true);
+			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
+			oracle.setCreature(creature);
+			System.out.println("-----------------------------------------------");
+			System.out.println("Creature : " + creature.toString());
+		}
+		oracle.runSimulation(true, true);
+		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+		System.out.println("+++++++++++++++End Test Zig Zag Simulation+++++++++++++++\n\n");
 	}
 
 }

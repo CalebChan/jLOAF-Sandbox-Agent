@@ -19,20 +19,20 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import util.expert.ExpertStrategy;
-import util.expert.lfo.FixedSequenceExpertStrategy;
+import util.expert.lfo.EqualFixedSequenceExpertStrategy;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
-import agent.lfo.FixedSequenceExpert;
+import agent.lfo.EqualFixedSequenceExpert;
 import agent.lfo.LfOPerception;
 
-public class LfOFixedSequenceTest {
+public class LfOEqualFixedSequenceTest {
 
-	private SandboxOracle oracle;
+private SandboxOracle oracle;
 	
 	@BeforeClass 
 	public static void init() throws Exception{
 		Creature c = new DirtBasedCreature(7, 2, Direction.NORTH);
-		ExpertStrategy expert = new FixedSequenceExpertStrategy();
+		ExpertStrategy expert = new EqualFixedSequenceExpertStrategy();
 		TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
 		expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
 	}
@@ -49,7 +49,7 @@ public class LfOFixedSequenceTest {
 	@Before
 	public void setUp() throws Exception {
 		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
-		AbstractSandboxAgent testAgent = new FixedSequenceExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
+		AbstractSandboxAgent testAgent = new EqualFixedSequenceExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT);
 		Assert.assertFalse(cb == null);
@@ -60,7 +60,7 @@ public class LfOFixedSequenceTest {
 	
 	@Test
 	public void testExpert(){
-		System.out.println("+++++++++++++++Test Fixed Sequence Simulation+++++++++++++++");
+		System.out.println("+++++++++++++++Test Equal Fixed Sequence Simulation+++++++++++++++");
 		Random r = new Random(0);
 		System.out.println("Creature : X:7,Y:2,D:NORTH");
 		for (int i = 0; i < 4; i++){
@@ -72,7 +72,7 @@ public class LfOFixedSequenceTest {
 		}
 		oracle.runSimulation(true, true);
 		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
-		System.out.println("+++++++++++++++End Test Fixed Sequence Simulation+++++++++++++++\n\n");
+		System.out.println("+++++++++++++++End Test Equal Fixed Sequence Simulation+++++++++++++++\n\n");
 	}
 
 }

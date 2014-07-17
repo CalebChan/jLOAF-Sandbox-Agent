@@ -1,6 +1,7 @@
 package oracle.lfo;
 
 import java.io.File;
+import java.util.Random;
 
 import oracle.Config;
 import oracle.SandboxOracle;
@@ -60,7 +61,17 @@ public class LfOSmartStraightLineTest {
 	@Test
 	public void testExpert(){
 		System.out.println("+++++++++++++++Test Smart Straight Line Simulation+++++++++++++++");
+		Random r = new Random(0);
+		System.out.println("Creature : X:7,Y:2,D:NORTH");
+		for (int i = 0; i < 4; i++){
+			oracle.runSimulation(true, true);
+			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
+			oracle.setCreature(creature);
+			System.out.println("-----------------------------------------------");
+			System.out.println("Creature : " + creature.toString());
+		}
 		oracle.runSimulation(true, true);
+		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Smart Straight Line Simulation+++++++++++++++\n\n");
 	}
 }

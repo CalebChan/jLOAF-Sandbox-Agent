@@ -1,13 +1,16 @@
 package oracle.lfo;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({ 
+	LfOEqualFixedSequenceTest.class, 
+	LfOFixedSequenceTest.class,
+	LfOSmartRandomTest.class,
+	LfOSmartStraightLineTest.class,
+	LfOZigZagTest.class })
 public class LfOTestSuite {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

@@ -1,6 +1,7 @@
 package oracle.lfo;
 
 import java.io.File;
+import java.util.Random;
 
 import org.junit.Assert;
 import oracle.Config;
@@ -60,7 +61,17 @@ public class LfOSmartRandomTest {
 	@Test
 	public void testExpert(){
 		System.out.println("+++++++++++++++Test Smart Random Simulation+++++++++++++++");
+		Random r = new Random(0);
+		System.out.println("Creature : X:7,Y:2,D:NORTH");
+		for (int i = 0; i < 4; i++){
+			oracle.runSimulation(true, true);
+			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
+			oracle.setCreature(creature);
+			System.out.println("-----------------------------------------------");
+			System.out.println("Creature : " + creature.toString());
+		}
 		oracle.runSimulation(true, true);
+		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Smart Random Simulation+++++++++++++++\n\n");
 	}
 }
