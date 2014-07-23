@@ -9,6 +9,7 @@ import sandbox.Direction;
 import sandbox.MovementAction;
 import agent.ExpertTraceParser;
 import agent.SandboxAction;
+import agent.backtracking.SandboxFeatureInput;
 
 public class LfOTraceParser extends ExpertTraceParser{
 
@@ -25,8 +26,8 @@ public class LfOTraceParser extends ExpertTraceParser{
 			index++;
 			int type = Integer.parseInt(tokens[index]);
 			index++;
-			AtomicInput ait = new AtomicInput(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX, new Feature(type));
-			AtomicInput aid = new AtomicInput(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX, new Feature(dist));
+			AtomicInput ait = new SandboxFeatureInput(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX, new Feature(type));
+			AtomicInput aid = new SandboxFeatureInput(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX, new Feature(dist));
 			ci.add(ait);
 			ci.add(aid);
 		}

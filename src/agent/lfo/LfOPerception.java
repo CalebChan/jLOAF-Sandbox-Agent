@@ -6,7 +6,7 @@ import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
 
 import agent.SandboxPerception;
-
+import agent.backtracking.SandboxFeatureInput;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.sensor.Sensor;
@@ -19,8 +19,8 @@ public class LfOPerception implements SandboxPerception{
 		for (Direction d : Direction.values()){
 			int type = (int) s.getSense(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX).getValue();
 			int dist = (int) s.getSense(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX).getValue();
-			AtomicInput ait = new AtomicInput(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX, new Feature(type));
-			AtomicInput aid = new AtomicInput(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX, new Feature(dist));
+			AtomicInput ait = new SandboxFeatureInput(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX, new Feature(type));
+			AtomicInput aid = new SandboxFeatureInput(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX, new Feature(dist));
 			ci.add(ait);
 			ci.add(aid);
 		}

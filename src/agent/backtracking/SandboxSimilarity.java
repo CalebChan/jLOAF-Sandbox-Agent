@@ -15,17 +15,25 @@ public class SandboxSimilarity implements SimilarityMetricStrategy{
 		SandboxFeatureInput s2 = (SandboxFeatureInput)i2;
 		double feature1 = -1;
 		double feature2 = -2;
+		
 		if (s1.getName().equals("Sonar")){
 			feature1 = getRange(s1.getFeature().getValue());
 			feature2 = getRange(s2.getFeature().getValue());
 		}else{
-			feature1 = s1.getFeature().getValue();
-			feature2 = s2.getFeature().getValue();
+			feature1 = getDist(s1.getFeature().getValue());
+			feature2 = getDist(s2.getFeature().getValue());
 		}
 		if(feature1 == feature2){
 			return 1.0;
 		}
 		
+		return 0;
+	}
+	
+	private int getDist(double dist){
+		if (dist < 2){
+			return 1;
+		}
 		return 0;
 	}
 	
