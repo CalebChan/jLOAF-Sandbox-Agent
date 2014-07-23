@@ -1,6 +1,7 @@
 package oracle.lfo;
 
 import java.io.File;
+import java.util.List;
 import java.util.Random;
 
 import oracle.Config;
@@ -8,7 +9,8 @@ import oracle.SandboxOracle;
 import oracle.TraceGenerator;
 
 import org.jLOAF.casebase.CaseBase;
-import org.jLOAF.tools.CaseBaseIO;
+import org.jLOAF.tools.LeaveOneOut;
+import org.jLOAF.tools.TestingTrainingPair;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +29,10 @@ import agent.lfo.LfOPerception;
 
 public class LfOEqualFixedSequenceTest {
 
-private SandboxOracle oracle;
+	private SandboxOracle oracle;
+	
+	private static List<TestingTrainingPair> loo;
+	private static int testNo;
 	
 	@BeforeClass 
 	public static void init() throws Exception{
@@ -35,6 +40,10 @@ private SandboxOracle oracle;
 		ExpertStrategy expert = new EqualFixedSequenceExpertStrategy();
 		TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
 		expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
+		
+		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
+		loo = l.getTestingAndTrainingSets();
+		testNo = 0;
 	}
 
 	@AfterClass
@@ -51,11 +60,12 @@ private SandboxOracle oracle;
 		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
 		AbstractSandboxAgent testAgent = new EqualFixedSequenceExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
 		
-		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT);
+		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
 		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 11, agent, creature, new LfOPerception());
+		oracle.setTestData(loo.get(testNo).getTesting());
 	}
 	
 	@Test
@@ -66,6 +76,13 @@ private SandboxOracle oracle;
 			oracle.runSimulation(true, true);
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
 			oracle.setCreature(creature);
+			
+			CaseBase cb = loo.get(testNo).getTraining();
+			SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
+			oracle.setAgent(agent);
+			testNo++;
+			
+			oracle.setTestData(loo.get(testNo).getTesting());
 			System.out.println("-----------------------------------------------");
 		}
 		oracle.runSimulation(true, true);

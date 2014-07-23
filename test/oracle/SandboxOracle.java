@@ -3,6 +3,7 @@ package oracle;
 import org.jLOAF.Agent;
 import org.jLOAF.action.Action;
 import org.jLOAF.casebase.Case;
+import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.Input;
 import org.jLOAF.performance.ClassificationStatisticsWrapper;
 import org.jLOAF.performance.StatisticsBundle;
@@ -34,6 +35,8 @@ public class SandboxOracle {
 	
 	private int worldSize;
 	
+	private CaseRun testingData;
+	
 	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature, SandboxPerception perception){
 		if (worldSize == -1){
 			worldSize = Config.DEFAULT_WORLD_SIZE;
@@ -60,6 +63,14 @@ public class SandboxOracle {
 		sandbox.init();
 	}
 	
+	public void setAgent(Agent agent){
+		this.agent = agent;
+	}
+	
+	public void setTestData(CaseRun testing){
+		this.testingData = testing;
+	}
+	
 	public double getGlobalAccuracyAvg(){
 		return this.globalAccuracy / (this.simulationCount * 1.0);
 	}
@@ -68,11 +79,18 @@ public class SandboxOracle {
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		
 		for (int i = 0; i < this.iterations; i++){
-			Input in = perception.sense(sandbox.getCreature().get(creatureId));
-			MovementAction action = testAgent.testAction(sandbox.getCreature().get(creatureId));
-			SandboxAction a = new SandboxAction(action);
+			Case correctCase = null;
+			MovementAction action = null;
+			if (this.testingData == null){
+				Input in = perception.sense(sandbox.getCreature().get(creatureId));
+				action = testAgent.testAction(sandbox.getCreature().get(creatureId));
+				SandboxAction a = new SandboxAction(action);
+				correctCase = new Case(in, a, null);
+			}else{
+				correctCase = this.testingData.getCase(i);
+				action = MovementAction.values()[(int) ((SandboxAction)correctCase.getAction()).getFeature().getValue()];
+			}
 			
-			Case correctCase = new Case(in, a, null);
 			
 			Action act = stat.senseEnvironment(correctCase);
 			SandboxAction sa = (SandboxAction)act;
@@ -101,5 +119,6 @@ public class SandboxOracle {
 				}
 			}
 		}
+		this.testingData = null;
 	}
 }
