@@ -1,6 +1,5 @@
 package util.expert.lfo;
 
-import util.SandboxTraceGUI;
 import util.expert.LfOExpertStrategy;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
