@@ -13,6 +13,7 @@ import oracle.TraceGenerator;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
+import org.jLOAF.util.CaseLogger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -36,7 +37,7 @@ public class LfOSmartRandomTest {
 	private static int testNo;
 	
 	@BeforeClass 
-	public static void init() throws Exception{
+	public static void init() throws Exception{		
 		Creature c = new DirtBasedCreature(7, 2, Direction.NORTH);
 		ExpertStrategy expert = new SmartRandomExpertStrategy();
 		TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
@@ -72,8 +73,9 @@ public class LfOSmartRandomTest {
 	@Test
 	public void testExpert(){
 		System.out.println("+++++++++++++++Test Smart Random Simulation+++++++++++++++");
-		Random r = new Random(0);
+		Random r = new Random();
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
+			CaseLogger.createLogger(true, "LOG_" + (i + 1) + ".xml");
 			oracle.runSimulation(true, true);
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
 			oracle.setCreature(creature);
