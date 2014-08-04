@@ -21,9 +21,7 @@ public class SandboxOracle {
 
 	private Sandbox sandbox;
 	private int creatureId;
-	
-	private int iterations;
-	
+		
 	private AbstractSandboxAgent testAgent;
 	
 	private Agent agent;
@@ -37,7 +35,11 @@ public class SandboxOracle {
 	
 	private CaseRun testingData;
 	
-	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iterations, Agent agent, Creature creature, SandboxPerception perception){
+	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, Agent agent, Creature creature, SandboxPerception perception){
+		this(worldSize, testAgent, -1, agent, creature, perception);
+	}
+	
+	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iter, Agent agent, Creature creature, SandboxPerception perception){
 		if (worldSize == -1){
 			worldSize = Config.DEFAULT_WORLD_SIZE;
 		}
@@ -45,7 +47,6 @@ public class SandboxOracle {
 		this.sandbox = new Sandbox(worldSize);
 		this.creatureId = sandbox.addCreature(creature);
 		
-		this.iterations = iterations;
 		this.testAgent = testAgent;
 		this.agent = agent;
 		
@@ -75,10 +76,15 @@ public class SandboxOracle {
 		return this.globalAccuracy / (this.simulationCount * 1.0);
 	}
 	
+	public void resetOracleStats(){
+		this.globalAccuracy = 0;
+		this.simulationCount = 0;
+	}
+	
 	public void runSimulation(boolean toLearn, boolean printStats){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		
-		for (int i = 0; i < this.iterations; i++){
+		for (int i = 0; i < this.testingData.getRunLength(); i++){
 			Case correctCase = null;
 			MovementAction action = null;
 			if (this.testingData == null){
@@ -95,7 +101,7 @@ public class SandboxOracle {
 			Action act = stat.senseEnvironment(correctCase);
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
-			
+			//System.out.println("Correct Action : " + action.name() + " , Returned Action : " + move.name());
 			if (toLearn){
 				if (!action.equals(move)){
 					agent.learn(correctCase);

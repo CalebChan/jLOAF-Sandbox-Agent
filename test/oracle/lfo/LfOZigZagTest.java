@@ -64,7 +64,7 @@ public class LfOZigZagTest {
 		Assert.assertFalse(cb == null);
 		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 11, agent, creature, new LfOPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception());
 		oracle.setTestData(loo.get(testNo).getTesting());
 	}
 	
@@ -73,7 +73,7 @@ public class LfOZigZagTest {
 		System.out.println("+++++++++++++++Test Zig Zag Simulation+++++++++++++++");
 		Random r = new Random(0);
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
-			oracle.runSimulation(true, true);
+			oracle.runSimulation(true, Config.DEBUG_PRINT_STATS);
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
 			oracle.setCreature(creature);
 			
@@ -83,9 +83,11 @@ public class LfOZigZagTest {
 			testNo++;
 			
 			oracle.setTestData(loo.get(testNo).getTesting());
-			System.out.println("-----------------------------------------------");
+			if (Config.DEBUG_PRINT_STATS){
+				System.out.println("-----------------------------------------------");
+			}
 		}
-		oracle.runSimulation(true, true);
+		oracle.runSimulation(true, Config.DEBUG_PRINT_STATS);
 		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Zig Zag Simulation+++++++++++++++\n\n");
 	}
