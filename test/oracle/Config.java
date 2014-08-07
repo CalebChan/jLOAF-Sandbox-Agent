@@ -3,7 +3,7 @@ package oracle;
 public class Config {
 
 	public static final int DEFAULT_WORLD_SIZE = 10;
-	public static final int DEFAULT_K = 4;
+	public static final int DEFAULT_K = 20;
 	
 	public static final int DEFAULT_MAX_K = 5;
 	
@@ -18,7 +18,7 @@ public class Config {
 	public static final String CASEBASE_EXT = ".cb";
 	public static final String TRACE_EXT = ".trace";
 	
-	public static final int DEFAULT_NUM_OF_SIMULATIONS = 6;
+	public static final int DEFAULT_NUM_OF_SIMULATIONS = 7;
 	
 	public static final boolean DEBUG_PRINT_STATS = false;
 }

@@ -83,7 +83,7 @@ public class SandboxOracle {
 	
 	public void runSimulation(boolean toLearn, boolean printStats){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
-		
+		System.out.println("Running : " + this.testingData.getRunLength() + " test");
 		for (int i = 0; i < this.testingData.getRunLength(); i++){
 			Case correctCase = null;
 			MovementAction action = null;
@@ -101,7 +101,6 @@ public class SandboxOracle {
 			Action act = stat.senseEnvironment(correctCase);
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
-			//System.out.println("Correct Action : " + action.name() + " , Returned Action : " + move.name());
 			if (toLearn){
 				if (!action.equals(move)){
 					agent.learn(correctCase);
