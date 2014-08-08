@@ -21,4 +21,6 @@ public class Config {
 	public static final int DEFAULT_NUM_OF_SIMULATIONS = 7;
 	
 	public static final boolean DEBUG_PRINT_STATS = false;
+	
+	public static final boolean DELETE_TRACE = true;
 }

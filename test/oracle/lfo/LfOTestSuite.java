@@ -6,11 +6,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	LfOEqualFixedSequenceTest.class, 
-	LfOFixedSequenceTest.class,
 	LfOSmartRandomTest.class,
 	LfOSmartStraightLineTest.class,
 	LfOZigZagTest.class, 
+	LfOEqualFixedSequenceTest.class, 
+	LfOFixedSequenceTest.class,
 	LfOSmartExplorerTest.class })
 public class LfOTestSuite {
 
