@@ -30,6 +30,11 @@ public class SandboxFeatureInput extends AtomicInput{
 			return super.similarity(i);
 		}
 	}
+	
+	@Override
+	public String toString(){
+		return this.name + " -> " + this.feat.toString();
+	}
 
 	private static double similarity(Input complexInput, Input i) {
 		return SandboxFeatureInput.simMet.similarity(complexInput, i);
