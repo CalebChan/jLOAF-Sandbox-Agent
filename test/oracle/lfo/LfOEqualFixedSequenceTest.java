@@ -3,6 +3,7 @@ package oracle.lfo;
 import java.util.Random;
 
 import oracle.Config;
+
 import org.jLOAF.casebase.CaseBase;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,7 +22,7 @@ public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
 	
 	@BeforeClass 
 	public static void init() throws Exception{
-		LfOAbstractTest.init(new EqualFixedSequenceExpertStrategy());
+		LfOAbstractTest.init(new EqualFixedSequenceExpertStrategy(), getPreGenTestName());
 	}
 
 	@AfterClass
@@ -59,6 +60,10 @@ public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
 		oracle.runSimulation(true, Config.DEBUG_PRINT_STATS);
 		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Equal Fixed Sequence Simulation+++++++++++++++\n\n");
+	}
+
+	protected static String getPreGenTestName() {
+		return "FixedSequenceAgent";
 	}
 
 }

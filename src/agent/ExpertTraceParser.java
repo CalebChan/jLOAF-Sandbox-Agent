@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+import oracle.Config;
+
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.CaseBaseIO;
@@ -30,7 +32,7 @@ public abstract class ExpertTraceParser {
 				if (line.isEmpty()){
 					continue;
 				}
-				String tokens[] = line.split("\\|");
+				String tokens[] = line.split(Config.DEFAULT_DELIMITER);
 				
 				c = parseLine(tokens, c);
 				casebase.add(c);
@@ -41,7 +43,7 @@ public abstract class ExpertTraceParser {
 				ip.close();
 			}
 		} catch (IOException e) {
-			
+			e.printStackTrace();
 			return false;
 		}
 		return true;

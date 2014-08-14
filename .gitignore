@@ -4,3 +4,4 @@
 *.xml
 *.arff
 LOG*.txt
+/trace

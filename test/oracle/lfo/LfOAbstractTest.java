@@ -27,10 +27,14 @@ public abstract class LfOAbstractTest {
 	protected static List<TestingTrainingPair> loo;
 	protected static int testNo;
 	
-	protected static void init(ExpertStrategy expert) throws Exception{
+	protected static void init(ExpertStrategy expert, String testName) throws Exception{
 		Creature c = new DirtBasedCreature(7, 2, Direction.NORTH);
-		TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
-		expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
+		if (!Config.USE_PREGEN_TRACE){
+			TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
+			expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
+		}else{
+			expert.parseFile("trace\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
+		}
 		
 		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
 		loo = l.getTestingAndTrainingSets();

@@ -22,16 +22,17 @@ public class LfOTraceParser extends ExpertTraceParser{
 		ComplexInput ci = new ComplexInput("LfoInput");
 		int index = 0;
 		for (Direction d : Direction.values()){
-			int dist = Integer.parseInt(tokens[index]);
+			int dist = (int) Double.parseDouble(tokens[index]);
 			index++;
-			int type = Integer.parseInt(tokens[index]);
+			int type = (int) Double.parseDouble(tokens[index]);
 			index++;
 			AtomicInput ait = new SandboxFeatureInput(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX, new Feature(type));
 			AtomicInput aid = new SandboxFeatureInput(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX, new Feature(dist));
 			ci.add(ait);
 			ci.add(aid);
 		}
-		MovementAction action = MovementAction.valueOf(tokens[index]);
+		int actionIndex = (int) Double.parseDouble(tokens[index]);
+		MovementAction action = MovementAction.values()[actionIndex];
 		SandboxAction a = new SandboxAction(action);
 		return new Case(ci, a, c);
 	}

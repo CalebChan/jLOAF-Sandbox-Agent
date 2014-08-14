@@ -3,6 +3,7 @@ package oracle.lfo;
 import java.util.Random;
 
 import oracle.Config;
+
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.util.CaseLogger;
 import org.junit.AfterClass;
@@ -22,7 +23,7 @@ public class LfOSmartRandomTest extends LfOAbstractTest{
 	
 	@BeforeClass 
 	public static void init() throws Exception{		
-		LfOAbstractTest.init(new SmartRandomExpertStrategy());
+		LfOAbstractTest.init(new SmartRandomExpertStrategy(), getPreGenTestName());
 	}
 
 	@AfterClass
@@ -61,5 +62,9 @@ public class LfOSmartRandomTest extends LfOAbstractTest{
 		oracle.runSimulation(true, Config.DEBUG_PRINT_STATS);
 		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Smart Random Simulation+++++++++++++++\n\n");
+	}
+
+	protected static String getPreGenTestName() {
+		return "SmartRandomAgent";
 	}
 }
