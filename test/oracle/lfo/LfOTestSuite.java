@@ -9,7 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	LfOSmartRandomTest.class,
 	LfOSmartStraightLineTest.class,
 	LfOZigZagTest.class, 
-	LfOEqualFixedSequenceTest.class, 
+	//LfOEqualFixedSequenceTest.class, 
 	LfOFixedSequenceTest.class,
 	LfOSmartExplorerTest.class })
 public class LfOTestSuite {

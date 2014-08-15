@@ -3,7 +3,7 @@ package oracle;
 public class Config {
 
 	public static final int DEFAULT_WORLD_SIZE = 10;
-	public static final int DEFAULT_K = 1000;
+	public static final int DEFAULT_K = 4;
 	
 	public static final int DEFAULT_MAX_K = 5;
 	
@@ -24,6 +24,9 @@ public class Config {
 	
 	public static final boolean DEBUG_PRINT_STATS = false;
 	
-	public static final boolean DELETE_TRACE = false;
+	public static final boolean DELETE_TRACE = true;
 	public static final boolean USE_PREGEN_TRACE = true;
+	
+	// The learn flag should always be set to false when using leave-one-out
+	public static final boolean AGENT_LEARN = false;
 }

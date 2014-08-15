@@ -19,16 +19,19 @@ public class SandboxSimilarity implements SimilarityMetricStrategy{
 			return 0;
 		}
 		
-		if (s1.getName().equals("Sonar")){
-			feature1 = getRange(s1.getFeature().getValue());
-			feature2 = getRange(s2.getFeature().getValue());
-		}else if (s1.getName().contains("DIST")){
-			feature1 = getDist(s1.getFeature().getValue());
-			feature2 = getDist(s2.getFeature().getValue());
-		}else if (s1.getName().contains("TYPE")){
-			feature1 = s1.getFeature().getValue();
-			feature2 = s2.getFeature().getValue();
-		}
+		feature1 = s1.getFeature().getValue();
+		feature2 = s2.getFeature().getValue();
+		
+//		if (s1.getName().equals("Sonar")){
+//			feature1 = getRange(s1.getFeature().getValue());
+//			feature2 = getRange(s2.getFeature().getValue());
+//		}else if (s1.getName().contains("DIST")){
+//			feature1 = getDist(s1.getFeature().getValue());
+//			feature2 = getDist(s2.getFeature().getValue());
+//		}else if (s1.getName().contains("TYPE")){
+//			feature1 = s1.getFeature().getValue();
+//			feature2 = s2.getFeature().getValue();
+//		}
 		if(feature1 == feature2){
 			return 1.0;
 		}
