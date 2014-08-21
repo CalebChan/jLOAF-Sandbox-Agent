@@ -36,7 +36,6 @@ public abstract class ExpertTraceParser {
 				
 				c = parseLine(tokens, c);
 				casebase.add(c);
-				
 				line = ip.readLine();
 			}
 			if (ip != null){

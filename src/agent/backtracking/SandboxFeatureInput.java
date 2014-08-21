@@ -33,7 +33,7 @@ public class SandboxFeatureInput extends AtomicInput{
 	
 	@Override
 	public String toString(){
-		return this.name + " -> " + this.feat.toString();
+		return this.name + " : " + this.feat.toString();
 	}
 
 	private static double similarity(Input complexInput, Input i) {
