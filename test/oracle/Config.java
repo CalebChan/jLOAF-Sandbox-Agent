@@ -27,6 +27,8 @@ public class Config {
 	public static final boolean DELETE_TRACE = true;
 	public static final boolean USE_PREGEN_TRACE = true;
 	
+	public static final boolean LOG_RUN = true;
+	
 	// The learn flag should always be set to false when using leave-one-out
 	public static final boolean AGENT_LEARN = true;
 }

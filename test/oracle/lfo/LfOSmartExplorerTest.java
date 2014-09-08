@@ -5,6 +5,7 @@ import java.util.Random;
 import oracle.Config;
 
 import org.jLOAF.casebase.CaseBase;
+import org.jLOAF.util.CaseLogger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,8 +41,12 @@ public class LfOSmartExplorerTest extends LfOAbstractTest {
 	@Test
 	public void testExpert(){
 		System.out.println("+++++++++++++++Test Smart Explorer Simulation+++++++++++++++");
-		Random r = new Random(0);
+		Random r = new Random();
+		oracle.resetOracleStats();
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
+			if (Config.LOG_RUN){
+				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + Config.DEFAULT_K + ".txt");
+			}
 			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS);
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
 			oracle.setCreature(creature);
@@ -56,6 +61,10 @@ public class LfOSmartExplorerTest extends LfOAbstractTest {
 				System.out.println("-----------------------------------------------");
 			}
 		}
+		if (Config.LOG_RUN){
+			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + Config.DEFAULT_K + ".txt");
+		}
+		
 		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS);
 		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Smart Explorer Simulation+++++++++++++++\n\n");
