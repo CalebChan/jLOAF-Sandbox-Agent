@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.jLOAF.action.Action;
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseRun;
