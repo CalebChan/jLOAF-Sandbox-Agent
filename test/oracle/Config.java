@@ -3,7 +3,9 @@ package oracle;
 public class Config {
 
 	public static final int DEFAULT_WORLD_SIZE = 10;
-	public static final int DEFAULT_K = 100;
+	public static final int DEFAULT_K = 4;
+	
+	public static final boolean USE_RANDOM_KNN = true;
 	
 	public static final int DEFAULT_MAX_K = 5;
 	
@@ -16,7 +18,7 @@ public class Config {
 	public static final int DEFAULT_LENGTH = 1000;
 	
 	public static final String CASEBASE_EXT = ".cb";
-	public static final String TRACE_EXT = ".txt";
+	public static final String TRACE_EXT = ".trace";
 	
 	public static final String DEFAULT_DELIMITER = " ";
 	
@@ -27,7 +29,7 @@ public class Config {
 	public static final boolean DELETE_TRACE = true;
 	public static final boolean USE_PREGEN_TRACE = true;
 	
-	public static final boolean LOG_RUN = true;
+	public static final boolean LOG_RUN = false;
 	
 	// The learn flag should always be set to false when using leave-one-out
 	public static final boolean AGENT_LEARN = true;

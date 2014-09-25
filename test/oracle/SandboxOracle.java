@@ -68,6 +68,10 @@ public class SandboxOracle {
 		this.agent = agent;
 	}
 	
+	public Agent getAgent(){
+		return agent;
+	}
+	
 	public void setTestData(CaseRun testing){
 		this.testingData = testing;
 	}
