@@ -20,6 +20,11 @@ public class Config {
 	public static final String CASEBASE_EXT = ".cb";
 	public static final String TRACE_EXT = ".trace";
 	
+	public static final String DEFAULT_TRACE_FOLDER = "trace";
+	
+	public static final boolean EXPORT_RUN = true;
+	public static final String DEFAULT_EXPORT_RUN_FOLDER = "run";
+	
 	public static final String DEFAULT_DELIMITER = " ";
 	
 	public static final int DEFAULT_NUM_OF_SIMULATIONS = 7;

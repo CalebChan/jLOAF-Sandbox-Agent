@@ -1,19 +1,30 @@
 package oracle;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Timestamp;
+
 import org.jLOAF.Agent;
 import org.jLOAF.action.Action;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseRun;
+import org.jLOAF.inputs.AtomicInput;
+import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Input;
 import org.jLOAF.performance.ClassificationStatisticsWrapper;
 import org.jLOAF.performance.StatisticsBundle;
 import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
+import org.junit.Assert;
 
 import agent.AbstractSandboxAgent;
 import agent.SandboxAction;
 import agent.SandboxPerception;
+import agent.lfo.DirtBasedAgentSenseConfig;
 import sandbox.Creature;
+import sandbox.Direction;
 import sandbox.MovementAction;
 import sandbox.Sandbox;
 
@@ -85,9 +96,23 @@ public class SandboxOracle {
 		this.simulationCount = 0;
 	}
 	
-	public void runSimulation(boolean toLearn, boolean printStats){
+	public void runSimulation(boolean toLearn, boolean printStats, int runNumber, String agentName){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
-		System.out.println("Running : " + this.testingData.getRunLength() + " test");
+		System.out.println("Running : " + this.testingData.getRunLength() + " test. Start Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
+		
+		BufferedWriter writer = null;
+		if (Config.EXPORT_RUN) {
+				File f = new File(Config.DEFAULT_EXPORT_RUN_FOLDER);
+				if (!f.exists()){
+					f.mkdirs();
+				}
+				try {
+					writer = new BufferedWriter(new FileWriter(Config.DEFAULT_EXPORT_RUN_FOLDER + "\\" + agentName + "_" + runNumber + ".txt"));
+				} catch (IOException e) {
+					Assert.fail();
+				}
+		}
+		
 		for (int i = 0; i < this.testingData.getRunLength(); i++){
 			Case correctCase = null;
 			MovementAction action = null;
@@ -105,6 +130,16 @@ public class SandboxOracle {
 			Action act = stat.senseEnvironment(correctCase);
 			SandboxAction sa = (SandboxAction)act;
 			MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
+			
+			if (Config.EXPORT_RUN) {
+				String s = buildPerceptionString((ComplexInput) correctCase.getInput());
+				try {
+					writer.write(s + move.ordinal() + "\n");
+				} catch (IOException e) {
+					Assert.fail();
+				}
+			}
+			
 			if (toLearn){
 				if (!action.equals(move)){
 					agent.learn(correctCase);
@@ -129,5 +164,29 @@ public class SandboxOracle {
 			}
 		}
 		this.testingData = null;
+		if (Config.EXPORT_RUN){
+			try {
+				writer.close();
+			} catch (IOException e) {
+				Assert.fail();
+			}
+		}
+		System.out.println("End of Test. End Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
+	}
+	
+	private String buildPerceptionString(ComplexInput input){
+		String s = "";
+		
+		for (Direction d : Direction.values()){
+			int type = (int) ((AtomicInput)input.get(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX)).getFeature().getValue();
+			int dist = (int) ((AtomicInput)input.get(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX)).getFeature().getValue();
+			s += type + " " + dist + " ";
+		}
+		
+		return s;
+	}
+	
+	public void runSimulation(boolean toLearn, boolean printStats){
+		runSimulation(toLearn, printStats, 0, "");
 	}
 }

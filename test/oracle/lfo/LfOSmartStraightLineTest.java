@@ -47,7 +47,7 @@ public class LfOSmartStraightLineTest extends LfOAbstractTest{
 			if (Config.LOG_RUN){
 				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + Config.DEFAULT_K + ".txt");
 			}
-			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS);
+			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, i + 1, getPreGenTestName());
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
 			oracle.setCreature(creature);
 			
@@ -64,7 +64,7 @@ public class LfOSmartStraightLineTest extends LfOAbstractTest{
 		if (Config.LOG_RUN){
 			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + Config.DEFAULT_K + ".txt");
 		}
-		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS);
+		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, Config.DEFAULT_NUM_OF_SIMULATIONS, getPreGenTestName());
 		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		System.out.println("+++++++++++++++End Test Smart Straight Line Simulation+++++++++++++++\n\n");
 	}

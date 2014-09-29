@@ -33,9 +33,9 @@ public abstract class LfOAbstractTest {
 			TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
 			expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}else{
-			expert.parseFile("trace\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
+			expert.parseFile(Config.DEFAULT_TRACE_FOLDER + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}
-		
+		System.out.println("Done Reading");
 		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
 		loo = l.getTestingAndTrainingSets();
 		testNo = 0;
