@@ -107,7 +107,7 @@ public class SandboxOracle {
 					f.mkdirs();
 				}
 				try {
-					writer = new BufferedWriter(new FileWriter(Config.DEFAULT_EXPORT_RUN_FOLDER + "\\" + agentName + "_" + runNumber + ".txt"));
+					writer = new BufferedWriter(new FileWriter(Config.DEFAULT_EXPORT_RUN_FOLDER + "\\" + agentName + "_" + runNumber + "_k_" + Config.DEFAULT_K + ".txt"));
 				} catch (IOException e) {
 					Assert.fail();
 				}

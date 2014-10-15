@@ -1,0 +1,26 @@
+import os
+
+files = os.listdir("M:/git/jLOAF-Sandbox-Agent/trace/")
+
+TEST = "trace-m0-"
+
+types = set()
+
+for f in files:
+    if TEST in f:
+        name = f[len(TEST):]
+        types.add(name[:len(name) - 4])
+
+        
+for t in types:
+    print(t)
+    readData = ""
+    with open(t + ".trace", 'a') as newFile:
+        for file in files:
+            m = file[len(TEST):len(file)-4]
+            if t == m and ".txt" in file:
+                with open(file, 'r') as oldFile:
+                    readData = oldFile.read()
+                oldFile.close()
+                newFile.write(readData)
+    newFile.close()
