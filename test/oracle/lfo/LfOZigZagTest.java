@@ -40,19 +40,21 @@ public class LfOZigZagTest extends LfOAbstractTest{
 	
 	@Test
 	public void testExpert(){
-		System.out.println("+++++++++++++++Test Zig Zag Simulation+++++++++++++++");
+		if (Config.PRINT_TEST_HEADERS){
+			System.out.println("+++++++++++++++Test Zig Zag Simulation+++++++++++++++");
+		}
 		Random r = new Random();
 		oracle.resetOracleStats();
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
 			if (Config.LOG_RUN){
-				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + Config.DEFAULT_K + ".txt");
+				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + Config.K_VALUE + ".txt");
 			}
 			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, i + 1, getPreGenTestName());
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
 			oracle.setCreature(creature);
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
+			SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
 			oracle.setAgent(agent);
 			testNo++;
 			
@@ -62,11 +64,15 @@ public class LfOZigZagTest extends LfOAbstractTest{
 			}
 		}
 		if (Config.LOG_RUN){
-			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + Config.DEFAULT_K + ".txt");
+			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + Config.K_VALUE + ".txt");
 		}
 		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, Config.DEFAULT_NUM_OF_SIMULATIONS, getPreGenTestName());
-		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
-		System.out.println("+++++++++++++++End Test Zig Zag Simulation+++++++++++++++\n\n");
+		if (Config.PRINT_TEST_HEADERS){
+			System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			System.out.println("+++++++++++++++End Test Zig Zag Simulation+++++++++++++++");
+		}else{
+			System.out.println("Zig Zag Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+		}
 	}
 
 	protected static String getPreGenTestName() {

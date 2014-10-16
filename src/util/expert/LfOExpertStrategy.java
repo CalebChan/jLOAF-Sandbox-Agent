@@ -9,7 +9,7 @@ public abstract class LfOExpertStrategy implements ExpertStrategy{
 		LfOTraceParser lfo = new LfOTraceParser(saveLocation + Config.TRACE_EXT);
 		if (lfo.parseFile()){
 			lfo.saveCaseBase(filename + Config.CASEBASE_EXT);
-			System.out.println("DONE CONVERSION");
+			//System.out.println("DONE CONVERSION");
 		}
 	}
 }

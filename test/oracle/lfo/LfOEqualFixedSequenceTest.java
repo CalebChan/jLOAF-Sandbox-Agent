@@ -47,7 +47,7 @@ public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
 			oracle.setCreature(creature);
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
+			SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
 			oracle.setAgent(agent);
 			testNo++;
 			

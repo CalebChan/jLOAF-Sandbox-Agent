@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Timestamp;
-
 import org.jLOAF.Agent;
 import org.jLOAF.action.Action;
 import org.jLOAF.casebase.Case;
@@ -98,7 +96,7 @@ public class SandboxOracle {
 	
 	public void runSimulation(boolean toLearn, boolean printStats, int runNumber, String agentName){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
-		System.out.println("Running : " + this.testingData.getRunLength() + " test. Start Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
+		//System.out.println("Running : " + this.testingData.getRunLength() + " test. Start Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
 		
 		BufferedWriter writer = null;
 		if (Config.EXPORT_RUN) {
@@ -107,7 +105,7 @@ public class SandboxOracle {
 					f.mkdirs();
 				}
 				try {
-					writer = new BufferedWriter(new FileWriter(Config.DEFAULT_EXPORT_RUN_FOLDER + "\\" + agentName + "_" + runNumber + "_k_" + Config.DEFAULT_K + ".txt"));
+					writer = new BufferedWriter(new FileWriter(Config.DEFAULT_EXPORT_RUN_FOLDER + "\\" + agentName + "_" + runNumber + "_k_" + Config.K_VALUE + ".txt"));
 				} catch (IOException e) {
 					Assert.fail();
 				}
@@ -171,7 +169,7 @@ public class SandboxOracle {
 				Assert.fail();
 			}
 		}
-		System.out.println("End of Test. End Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
+		//System.out.println("End of Test. End Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
 	}
 	
 	private String buildPerceptionString(ComplexInput input){

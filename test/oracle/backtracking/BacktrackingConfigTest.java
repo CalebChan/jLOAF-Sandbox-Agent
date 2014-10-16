@@ -27,7 +27,7 @@ public class BacktrackingConfigTest {
 		AbstractSandboxAgent testAgent = new ActionBasedAgent(Config.DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_CASEBASE_NAME);
-		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
+		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception());
 	}

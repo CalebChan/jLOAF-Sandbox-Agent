@@ -40,7 +40,9 @@ public class LfOSmartRandomTest extends LfOAbstractTest{
 	
 	@Test
 	public void testExpert(){
-		System.out.println("+++++++++++++++Test Smart Random Simulation+++++++++++++++");
+		if (Config.PRINT_TEST_HEADERS){
+			System.out.println("+++++++++++++++Test Smart Random Simulation+++++++++++++++");
+		}
 		Random r = new Random();
 		oracle.resetOracleStats();
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
@@ -66,8 +68,12 @@ public class LfOSmartRandomTest extends LfOAbstractTest{
 		}
 		
 		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, Config.DEFAULT_NUM_OF_SIMULATIONS, getPreGenTestName());
-		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
-		System.out.println("+++++++++++++++End Test Smart Random Simulation+++++++++++++++\n\n");
+		if (Config.PRINT_TEST_HEADERS){
+			System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			System.out.println("+++++++++++++++End Test Smart Random Simulation+++++++++++++++");
+		}else{
+			System.out.println("Smart Random Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+		}
 	}
 
 	protected static String getPreGenTestName() {

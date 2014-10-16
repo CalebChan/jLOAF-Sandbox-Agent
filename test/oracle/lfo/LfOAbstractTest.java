@@ -35,7 +35,7 @@ public abstract class LfOAbstractTest {
 		}else{
 			expert.parseFile(Config.DEFAULT_TRACE_FOLDER + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}
-		System.out.println("Done Reading");
+		//System.out.println("Done Reading");
 		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
 		loo = l.getTestingAndTrainingSets();
 		testNo = 0;
@@ -55,7 +55,7 @@ public abstract class LfOAbstractTest {
 	protected void setUp(AbstractSandboxAgent testAgent, Creature creature) throws Exception {
 		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
-		SandboxAgent agent = new SandboxAgent(cb, true, Config.DEFAULT_K);
+		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception());
 		oracle.setTestData(loo.get(testNo).getTesting());
