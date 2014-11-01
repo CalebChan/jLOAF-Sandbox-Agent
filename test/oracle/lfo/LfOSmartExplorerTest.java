@@ -77,6 +77,7 @@ public class LfOSmartExplorerTest extends LfOAbstractTest {
 			System.out.println("+++++++++++++++End Test Smart Explorer Simulation+++++++++++++++");
 		}else{
 			System.out.println("Smart Explorer Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			oracle.printStats("Smart Explorer Simulation");
 		}
 	}
 

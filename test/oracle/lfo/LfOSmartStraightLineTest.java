@@ -72,6 +72,7 @@ public class LfOSmartStraightLineTest extends LfOAbstractTest{
 			System.out.println("+++++++++++++++End Test Smart Straight Line Simulation+++++++++++++++");
 		}else{
 			System.out.println("Straight Line Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			oracle.printStats("Straight Line Simulation");
 		}
 	}
 

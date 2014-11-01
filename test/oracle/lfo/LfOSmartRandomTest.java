@@ -73,6 +73,7 @@ public class LfOSmartRandomTest extends LfOAbstractTest{
 			System.out.println("+++++++++++++++End Test Smart Random Simulation+++++++++++++++");
 		}else{
 			System.out.println("Smart Random Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			oracle.printStats("Smart Random Simulation");
 		}
 	}
 

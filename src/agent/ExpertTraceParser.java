@@ -32,6 +32,7 @@ public abstract class ExpertTraceParser {
 				if (line.isEmpty()){
 					continue;
 				}
+
 				String tokens[] = line.split(Config.DEFAULT_DELIMITER);
 				
 				c = parseLine(tokens, c);

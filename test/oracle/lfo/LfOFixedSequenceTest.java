@@ -73,6 +73,7 @@ public class LfOFixedSequenceTest extends LfOAbstractTest{
 			System.out.println("+++++++++++++++End Test Fixed Sequence Simulation+++++++++++++++");
 		}else{
 			System.out.println("Fixed Sequence Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			oracle.printStats("Fixed Sequence Simulation");
 		}
 	}
 

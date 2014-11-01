@@ -4,6 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jLOAF.Agent;
 import org.jLOAF.action.Action;
 import org.jLOAF.casebase.Case;
@@ -44,6 +47,8 @@ public class SandboxOracle {
 	
 	private CaseRun testingData;
 	
+	private Map<String, Map<String, Integer>> confusionMatrix;
+	
 	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, Agent agent, Creature creature, SandboxPerception perception){
 		this(worldSize, testAgent, -1, agent, creature, perception);
 	}
@@ -65,6 +70,8 @@ public class SandboxOracle {
 		
 		this.simulationCount = 0;
 		this.globalAccuracy = 0;
+		
+		this.confusionMatrix = new HashMap<String, Map<String, Integer>>();
 	}
 	
 	public void setCreature(Creature c){
@@ -92,6 +99,46 @@ public class SandboxOracle {
 	public void resetOracleStats(){
 		this.globalAccuracy = 0;
 		this.simulationCount = 0;
+		this.confusionMatrix.clear();
+	}
+	
+	private void collectStats(StatisticsWrapper stat){
+		this.globalAccuracy += stat.getClassificationAccuracy();
+		this.simulationCount++;
+		
+		mergeConfusionMatrix(stat.getConfusionMatrix());
+	}
+	
+	public void printStats(String agentName){
+		if (!Config.PRINT_BATCH_INFO){
+			return;
+		}
+		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
+		System.out.println(agentName + " Expected Actions : " + wrapper.getAllExpectedActions().size());
+		for (String actions : wrapper.getAllExpectedActions()){
+			System.out.println(agentName + " " + actions + " Percision : " + wrapper.getPrecision(actions));
+			System.out.println(agentName + " " + actions + " Recall : " + wrapper.getRecall(actions));
+			System.out.println(agentName + " " + actions + " F1 : " + wrapper.getF1(actions));
+		}
+		System.out.println(agentName + " Matrix Accuracy : " + wrapper.getClassificationAccuracy());
+		System.out.println(agentName + " Global F1 : " + wrapper.getGlobalF1());
+	}
+	
+	private void mergeConfusionMatrix(Map<String, Map<String, Integer>> map1){
+		for (String s1 : map1.keySet()){
+			if (!this.confusionMatrix.containsKey(s1)){
+				this.confusionMatrix.put(s1, new HashMap<String, Integer>());
+			}
+			for (String s2 : map1.get(s1).keySet()){
+				if (this.confusionMatrix.get(s1).containsKey(s2)){
+					int i = this.confusionMatrix.get(s1).get(s2).intValue();
+					i += map1.get(s1).get(s2).intValue();
+					this.confusionMatrix.get(s1).put(s2, new Integer(i));
+				}else{
+					this.confusionMatrix.get(s1).put(s2, new Integer(1));
+				}
+			}
+		}
 	}
 	
 	public void runSimulation(boolean toLearn, boolean printStats, int runNumber, String agentName){
@@ -147,8 +194,7 @@ public class SandboxOracle {
 			sandbox.takeAction(creatureId, move);
 		}
 		
-		this.globalAccuracy += stat.getClassificationAccuracy();
-		this.simulationCount++;
+		collectStats(stat);
 		
 		if (printStats){
 			System.out.println("Creature : " + sandbox.getCreature().get(creatureId).toString());

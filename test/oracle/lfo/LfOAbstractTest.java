@@ -10,6 +10,7 @@ import oracle.TraceGenerator;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
+import org.junit.After;
 import org.junit.Assert;
 
 import agent.AbstractSandboxAgent;

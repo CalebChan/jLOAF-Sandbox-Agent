@@ -72,6 +72,7 @@ public class LfOZigZagTest extends LfOAbstractTest{
 			System.out.println("+++++++++++++++End Test Zig Zag Simulation+++++++++++++++");
 		}else{
 			System.out.println("Zig Zag Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			oracle.printStats("Zig Zag Simulation");
 		}
 	}
 
