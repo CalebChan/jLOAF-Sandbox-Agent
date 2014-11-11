@@ -26,8 +26,8 @@ import util.ParameterList;
 @SuiteClasses(LfOTestSuite.class)
 public class LfOTestSuite {
 	
-	//private static final int[] K_VALUES = {4, 10, 20, 100};
-	private static final int[] K_VALUES = {4};
+	private static final int[] K_VALUES = {4, 10, 20, 100};
+	//private static final int[] K_VALUES = {4};
 	private static final int MAX_RUNS = 6;
 	
 	private static final int PARAMETERS = 4;
