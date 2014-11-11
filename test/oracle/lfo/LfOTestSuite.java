@@ -89,7 +89,8 @@ public class LfOTestSuite {
 				new LfOSmartStraightLineTest(), 
 				new LfOZigZagTest(), 
 				new LfOFixedSequenceTest(), 
-				new LfOSmartExplorerTest()};
+				new LfOSmartExplorerTest()
+				};
 		
 		for (LfOAbstractTest t : test){
 			LfOAbstractTest.setParamters(LfOTestSuite.list);

@@ -2,8 +2,10 @@ package logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-public class TestLogger {
+public class TestLogger implements Observer{
 	private HashMap<String, ArrayList<TestLoggerHandlerIf>> handlerMap;
 	
 	
@@ -36,8 +38,17 @@ public class TestLogger {
 	public void logMessage(String tag, String message){
 		if (this.handlerMap.containsKey(tag)){
 			for (TestLoggerHandlerIf handler : this.handlerMap.get(tag)){
-				handler.logMessage(message);
+				handler.handleMessage(message);
 			}
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg instanceof TestLoggerUpdateBundle){
+			TestLoggerUpdateBundle bundle = (TestLoggerUpdateBundle)arg;
+			
+			logMessage(bundle.getTag(), bundle.getMessage());
 		}
 	}
 }

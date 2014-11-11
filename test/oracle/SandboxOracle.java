@@ -136,9 +136,24 @@ public class SandboxOracle {
 					i += map1.get(s1).get(s2).intValue();
 					this.confusionMatrix.get(s1).put(s2, new Integer(i));
 				}else{
-					this.confusionMatrix.get(s1).put(s2, new Integer(1));
+					this.confusionMatrix.get(s1).put(s2, map1.get(s1).get(s2));
 				}
 			}
+		}
+//		System.out.println("Map 1 ::");
+//		printConfusionMatrix(map1);
+//		System.out.println("Confusion Matrix :: ");
+//		printConfusionMatrix(this.confusionMatrix);
+//		System.out.println("");
+	}
+	
+	protected void printConfusionMatrix(Map<String, Map<String, Integer>> matrix){
+		for (String s1 : matrix.keySet()){
+			System.out.printf("%-20s", s1);
+			for (String s2 : matrix.get(s1).keySet()){
+				System.out.printf("%-20s", matrix.get(s1).get(s2).intValue());
+			}
+			System.out.println("");
 		}
 	}
 	
