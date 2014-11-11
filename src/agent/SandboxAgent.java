@@ -1,6 +1,4 @@
 package agent;
-import oracle.Config;
-
 import org.jLOAF.Agent;
 import org.jLOAF.Reasoning;
 import org.jLOAF.action.Action;
