@@ -157,6 +157,31 @@ public class SandboxOracle {
 		}
 	}
 	
+	public boolean testAgent(int index, StatisticsWrapper stat){
+		Case correctCase = null;
+		MovementAction action = null;
+		if (this.testingData == null){
+			Input in = perception.sense(sandbox.getCreature().get(creatureId));
+			action = testAgent.testAction(sandbox.getCreature().get(creatureId));
+			SandboxAction a = new SandboxAction(action);
+			correctCase = new Case(in, a, null);
+		}else{
+			correctCase = this.testingData.getCase(index);
+			action = MovementAction.values()[(int) ((SandboxAction)correctCase.getAction()).getFeature().getValue()];
+		}
+		
+		
+		Action act = stat.senseEnvironment(correctCase);
+		SandboxAction sa = (SandboxAction)act;
+		MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
+		System.out.println("Move : " + move);
+		return action.equals(move);
+	}
+	
+	public void runSimulation(boolean toLearn, boolean printStats){
+		runSimulation(toLearn, printStats, 0, "");
+	}
+	
 	public void runSimulation(boolean toLearn, boolean printStats, int runNumber, String agentName){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		//System.out.println("Running : " + this.testingData.getRunLength() + " test. Start Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
@@ -244,9 +269,5 @@ public class SandboxOracle {
 		}
 		
 		return s;
-	}
-	
-	public void runSimulation(boolean toLearn, boolean printStats){
-		runSimulation(toLearn, printStats, 0, "");
 	}
 }
