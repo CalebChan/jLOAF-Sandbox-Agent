@@ -2,6 +2,7 @@ package oracle.lfo;
 
 import java.io.File;
 import java.util.List;
+import java.util.Random;
 
 import oracle.Config;
 import oracle.SandboxOracle;
@@ -10,6 +11,7 @@ import oracle.TraceGenerator;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
+import org.jLOAF.util.CaseLogger;
 import org.junit.Assert;
 
 import agent.AbstractSandboxAgent;
@@ -35,6 +37,9 @@ public abstract class LfOAbstractTest {
 		LfOAbstractTest.list = list;
 	}
 	
+	protected abstract String getPreGenTestName();
+	protected abstract String getOutputTestName();
+	
 	protected static void init(ExpertStrategy expert, String testName) throws Exception{
 		Creature c = new DirtBasedCreature(7, 2, Direction.NORTH);
 		if (!Config.USE_PREGEN_TRACE){
@@ -43,7 +48,6 @@ public abstract class LfOAbstractTest {
 		}else{
 			expert.parseFile(list.getStringParam(ParameterNameEnum.TRACE_FOLDER.name()) + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}
-		//System.out.println("Done Reading");
 		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
 		loo = l.getTestingAndTrainingSets();
 		testNo = 0;
@@ -67,5 +71,42 @@ public abstract class LfOAbstractTest {
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), list);
 		oracle.setTestData(loo.get(testNo).getTesting());
+	}
+
+	protected void testRun() {
+		if (Config.PRINT_TEST_HEADERS){
+			System.out.println("+++++++++++++++Test " + getOutputTestName() +  " Simulation+++++++++++++++");
+		}
+		Random r = new Random();
+		oracle.resetOracleStats();
+		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
+			if (Config.LOG_RUN){
+				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt");
+			}
+			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, i + 1, getPreGenTestName());
+			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
+			oracle.setCreature(creature);
+			
+			CaseBase cb = loo.get(testNo).getTraining();
+			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+			oracle.setAgent(agent);
+			testNo++;
+			
+			oracle.setTestData(loo.get(testNo).getTesting());
+			if (Config.DEBUG_PRINT_STATS){
+				System.out.println("-----------------------------------------------");
+			}
+		}
+		if (Config.LOG_RUN){
+			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt");
+		}
+		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, Config.DEFAULT_NUM_OF_SIMULATIONS, getPreGenTestName());
+		if (Config.PRINT_TEST_HEADERS){
+			System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			System.out.println("+++++++++++++++End Test " + getOutputTestName() + " Simulation+++++++++++++++");
+		}else{
+			System.out.println(getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+			oracle.printStats(getOutputTestName() + " Simulation");
+		}
 	}
 }

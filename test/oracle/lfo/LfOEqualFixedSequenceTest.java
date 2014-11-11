@@ -1,10 +1,7 @@
 package oracle.lfo;
 
-import java.util.Random;
-
 import oracle.Config;
 
-import org.jLOAF.casebase.CaseBase;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -13,17 +10,17 @@ import org.junit.Test;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
-import util.ParameterNameEnum;
 import util.expert.lfo.EqualFixedSequenceExpertStrategy;
 import agent.AbstractSandboxAgent;
-import agent.SandboxAgent;
 import agent.lfo.EqualFixedSequenceExpert;
 
 public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
 
+	public static final String PREGEN_TEST_NAME = "FixedSequenceAgent";
+	
 	@BeforeClass 
 	public static void init() throws Exception{
-		LfOAbstractTest.init(new EqualFixedSequenceExpertStrategy(), getPreGenTestName());
+		LfOAbstractTest.init(new EqualFixedSequenceExpertStrategy(), PREGEN_TEST_NAME);
 	}
 
 	@AfterClass
@@ -40,31 +37,16 @@ public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
 	
 	@Test
 	public void testExpert(){
-		System.out.println("+++++++++++++++Test Equal Fixed Sequence Simulation+++++++++++++++");
-		Random r = new Random(0);
-		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
-			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS);
-			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
-			oracle.setCreature(creature);
-			
-			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
-			oracle.setAgent(agent);
-			testNo++;
-			
-			oracle.setTestData(loo.get(testNo).getTesting());
-			if (Config.DEBUG_PRINT_STATS){
-				System.out.println("-----------------------------------------------");
-			}
-			
-		}
-		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS);
-		System.out.println("Average Accuracy : " + oracle.getGlobalAccuracyAvg());
-		System.out.println("+++++++++++++++End Test Equal Fixed Sequence Simulation+++++++++++++++\n\n");
+		testRun();
 	}
 
-	protected static String getPreGenTestName() {
-		return "FixedSequenceAgent";
+	protected String getPreGenTestName() {
+		return PREGEN_TEST_NAME;
+	}
+
+	@Override
+	protected String getOutputTestName() {
+		return "Equal Fixed Sequence";
 	}
 
 }
