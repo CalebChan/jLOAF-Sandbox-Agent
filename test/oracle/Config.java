@@ -19,15 +19,15 @@ public class Config {
 	public static final String CASEBASE_EXT = ".cb";
 	public static final String TRACE_EXT = ".trace";
 	
-	public static final int DEFAULT_K = 4;
+	public static final boolean DEFAULT_USE_RANDOM_KNN = false;
 	
 	public static final boolean EXPORT_RUN = true;
-	public static boolean USE_RANDOM_KNN = false;
-	public static int RUN_NUMBER = 1;
-	public static int K_VALUE = DEFAULT_K;
-	public static final String DEFAULT_TRACE_FOLDER_PREFIX = "C:/Users/calebchan/Desktop/Stuff/workspace/Test Data/Batch Test 3/TB/";
-	public static String DEFAULT_TRACE_FOLDER = DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + RUN_NUMBER;
-	public static  String DEFAULT_EXPORT_RUN_FOLDER = DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((USE_RANDOM_KNN) ? "Random" : "NonRandom") + "/Run " + RUN_NUMBER;
+//	public static boolean USE_RANDOM_KNN = false;
+//	public static int RUN_NUMBER = 1;
+	public static final int K_VALUE = 4;
+	public static final String DEFAULT_TRACE_FOLDER_PREFIX = "C:/Users/Caleb/Desktop/Stuff/workspace/Test Data/Batch Test 3/TB/";
+//	public static String DEFAULT_TRACE_FOLDER = DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + RUN_NUMBER;
+//	public static  String DEFAULT_EXPORT_RUN_FOLDER = DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((USE_RANDOM_KNN) ? "Random" : "NonRandom") + "/Run " + RUN_NUMBER;
 	public static final boolean PRINT_BATCH_INFO = true;
 	
 	public static final String DEFAULT_DELIMITER = " ";

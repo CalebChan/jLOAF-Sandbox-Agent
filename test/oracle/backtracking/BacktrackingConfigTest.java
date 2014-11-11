@@ -12,10 +12,10 @@ import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.backtracking.ActionBasedAgent;
 import agent.backtracking.BacktrackingPerception;
-
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
+import util.ParameterList;
 
 public class BacktrackingConfigTest {
 
@@ -27,9 +27,9 @@ public class BacktrackingConfigTest {
 		AbstractSandboxAgent testAgent = new ActionBasedAgent(Config.DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_CASEBASE_NAME);
-		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
+		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception(), new ParameterList());
 	}
 	
 	@Test

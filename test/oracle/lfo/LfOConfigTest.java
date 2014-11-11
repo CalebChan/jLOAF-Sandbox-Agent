@@ -11,6 +11,7 @@ import org.junit.Test;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
+import util.ParameterList;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
@@ -26,9 +27,9 @@ public class LfOConfigTest {
 		AbstractSandboxAgent testAgent = new SmartRandomExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase3.cb");
-		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
+		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception(),new ParameterList());
 	}
 
 	@Test

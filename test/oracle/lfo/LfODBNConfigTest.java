@@ -12,6 +12,7 @@ import org.junit.Test;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
+import util.ParameterList;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
@@ -31,7 +32,7 @@ public class LfODBNConfigTest {
 		SandboxAgent agent = new SandboxAgent(cb, r, Config.K_VALUE);
 		r.setCaseRun(agent.getCaseRun());
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception(), new ParameterList());
 	}
 	
 	@Test

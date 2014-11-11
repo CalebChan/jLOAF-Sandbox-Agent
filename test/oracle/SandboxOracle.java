@@ -28,6 +28,8 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.MovementAction;
 import sandbox.Sandbox;
+import util.ParameterList;
+import util.ParameterNameEnum;
 
 public class SandboxOracle {
 
@@ -49,14 +51,17 @@ public class SandboxOracle {
 	
 	private Map<String, Map<String, Integer>> confusionMatrix;
 	
-	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, Agent agent, Creature creature, SandboxPerception perception){
-		this(worldSize, testAgent, -1, agent, creature, perception);
+	private ParameterList list;
+	
+	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, Agent agent, Creature creature, SandboxPerception perception, ParameterList list){
+		this(worldSize, testAgent, -1, agent, creature, perception, list);
 	}
 	
-	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iter, Agent agent, Creature creature, SandboxPerception perception){
+	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iter, Agent agent, Creature creature, SandboxPerception perception, ParameterList list){
 		if (worldSize == -1){
 			worldSize = Config.DEFAULT_WORLD_SIZE;
 		}
+		this.list = list;
 		this.worldSize = worldSize;
 		this.sandbox = new Sandbox(worldSize);
 		this.creatureId = sandbox.addCreature(creature);
@@ -147,12 +152,12 @@ public class SandboxOracle {
 		
 		BufferedWriter writer = null;
 		if (Config.EXPORT_RUN) {
-				File f = new File(Config.DEFAULT_EXPORT_RUN_FOLDER);
+				File f = new File(list.getStringParam(ParameterNameEnum.EXPORT_RUN_FOLDER.name()));
 				if (!f.exists()){
 					f.mkdirs();
 				}
 				try {
-					writer = new BufferedWriter(new FileWriter(Config.DEFAULT_EXPORT_RUN_FOLDER + "\\" + agentName + "_" + runNumber + "_k_" + Config.K_VALUE + ".txt"));
+					writer = new BufferedWriter(new FileWriter(list.getStringParam(ParameterNameEnum.EXPORT_RUN_FOLDER.name()) + "\\" + agentName + "_" + runNumber + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt"));
 				} catch (IOException e) {
 					Assert.fail();
 				}

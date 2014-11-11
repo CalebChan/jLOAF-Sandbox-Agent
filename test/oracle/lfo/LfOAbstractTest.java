@@ -10,7 +10,6 @@ import oracle.TraceGenerator;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
-import org.junit.After;
 import org.junit.Assert;
 
 import agent.AbstractSandboxAgent;
@@ -19,6 +18,8 @@ import agent.lfo.LfOPerception;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
+import util.ParameterList;
+import util.ParameterNameEnum;
 import util.expert.ExpertStrategy;
 
 public abstract class LfOAbstractTest {
@@ -28,13 +29,19 @@ public abstract class LfOAbstractTest {
 	protected static List<TestingTrainingPair> loo;
 	protected static int testNo;
 	
+	protected static ParameterList list;
+	
+	public static void setParamters(ParameterList list){
+		LfOAbstractTest.list = list;
+	}
+	
 	protected static void init(ExpertStrategy expert, String testName) throws Exception{
 		Creature c = new DirtBasedCreature(7, 2, Direction.NORTH);
 		if (!Config.USE_PREGEN_TRACE){
 			TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
 			expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}else{
-			expert.parseFile(Config.DEFAULT_TRACE_FOLDER + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
+			expert.parseFile(list.getStringParam(ParameterNameEnum.TRACE_FOLDER.name()) + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}
 		//System.out.println("Done Reading");
 		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
@@ -56,9 +63,9 @@ public abstract class LfOAbstractTest {
 	protected void setUp(AbstractSandboxAgent testAgent, Creature creature) throws Exception {
 		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
-		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
+		SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), list);
 		oracle.setTestData(loo.get(testNo).getTesting());
 	}
 }

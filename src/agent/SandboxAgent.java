@@ -41,10 +41,10 @@ public class SandboxAgent extends Agent{
 		
 		this.cb = cb;
 	}	
-	public SandboxAgent(CaseBase cb, boolean useSequential, int kValue) {
+	public SandboxAgent(CaseBase cb, boolean useSequential, int kValue, boolean useRandomKnn) {
 		this(cb, null, kValue);
 		if (useSequential){
-			this.r = new SequentialReasoning(cb, curRun, kValue, Config.USE_RANDOM_KNN);
+			this.r = new SequentialReasoning(cb, curRun, kValue, useRandomKnn);
 		}else{
 			this.r = new SimpleKNN(kValue, cb);
 		}

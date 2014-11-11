@@ -13,13 +13,14 @@ import org.junit.Test;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
+import util.ParameterNameEnum;
 import util.expert.lfo.EqualFixedSequenceExpertStrategy;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.lfo.EqualFixedSequenceExpert;
 
 public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
-	
+
 	@BeforeClass 
 	public static void init() throws Exception{
 		LfOAbstractTest.init(new EqualFixedSequenceExpertStrategy(), getPreGenTestName());
@@ -47,7 +48,7 @@ public class LfOEqualFixedSequenceTest extends LfOAbstractTest{
 			oracle.setCreature(creature);
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
+			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
 			oracle.setAgent(agent);
 			testNo++;
 			

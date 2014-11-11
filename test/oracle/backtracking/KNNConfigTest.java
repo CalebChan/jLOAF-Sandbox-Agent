@@ -17,6 +17,7 @@ import org.junit.runners.Parameterized.Parameters;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
+import util.ParameterList;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.backtracking.ActionBasedAgent;
@@ -48,9 +49,9 @@ public class KNNConfigTest {
 		AbstractSandboxAgent testAgent = new ActionBasedAgent(Config.DEFAULT_WORLD_SIZE, new StateBasedCreature(creature));
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_CASEBASE_NAME);
-		SandboxAgent agent = new SandboxAgent(cb, false, k);
+		SandboxAgent agent = new SandboxAgent(cb, false, k, Config.DEFAULT_USE_RANDOM_KNN);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception(), new ParameterList());
 	}
 	
 	@Test

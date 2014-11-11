@@ -15,13 +15,14 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import util.CaseRunExporter;
+import util.ParameterNameEnum;
 import util.expert.lfo.SmartExplorerExpertStrategy;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.lfo.SmartExplorerExpert;
 
 public class LfOSmartExplorerTest extends LfOAbstractTest {
-	
+
 	@BeforeClass 
 	public static void init() throws Exception{
 		LfOAbstractTest.init(new SmartExplorerExpertStrategy(), getPreGenTestName());
@@ -48,7 +49,7 @@ public class LfOSmartExplorerTest extends LfOAbstractTest {
 		oracle.resetOracleStats();
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
 			if (Config.LOG_RUN){
-				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + Config.K_VALUE + ".txt");
+				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt");
 			}
 			oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, i + 1, getPreGenTestName());
 			Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
@@ -57,7 +58,7 @@ public class LfOSmartExplorerTest extends LfOAbstractTest {
 			CaseRunExporter.expertCaseRun(((SandboxAgent)oracle.getAgent()).getAgentDecisions(), "ExportRun_Smart_" + testNo);
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE);
+			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
 			oracle.setAgent(agent);
 			testNo++;
 			
@@ -67,7 +68,7 @@ public class LfOSmartExplorerTest extends LfOAbstractTest {
 			}
 		}
 		if (Config.LOG_RUN){
-			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + Config.K_VALUE + ".txt");
+			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt");
 		}
 		
 		oracle.runSimulation(Config.AGENT_LEARN, Config.DEBUG_PRINT_STATS, Config.DEFAULT_NUM_OF_SIMULATIONS, getPreGenTestName());
