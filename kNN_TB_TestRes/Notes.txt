@@ -1,0 +1,33 @@
+Explanation of test cases are as follows to test for increasing k gives a lower accuracy:
+
+**NOTE** Format of cases N-E N-D E-E E-D S-E S-D W-E W-D  A
+
+Case 1 : Elimination Based on Different Past Action
+
+Hypothesis:
+	All correct cases will be eliminated based on action that cases the agent to go to either A or B. 
+	When TB goes back until split actions not the same as problem run will give similarity of 0 and 
+	thus get eliminated from candidate run list. 
+
+ ---------
+|B<-   ->A|
+ ---   ---
+    | |
+    | |
+    | |
+ --- ^ ---
+|Y-> | <-X|
+ ---------
+ 
+ X = The starting location of the correct runs
+ Y = The starting location of the incorrect run and the problem run
+ 
+ A = The ending location of the correct runs
+ B = The ending location of the incorrect run
+ 
+ Agents will move from X/Y to A/B
+ 4 Runs -> 9 Steps
+ 	- Run 1 - 3 correct runs 
+ 	- Run 4 incorrect run
+ 	
+Case 2 : Elimination Based on Different Past Input
