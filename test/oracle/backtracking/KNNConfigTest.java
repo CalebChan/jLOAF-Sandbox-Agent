@@ -51,7 +51,7 @@ public class KNNConfigTest {
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_CASEBASE_NAME);
 		SandboxAgent agent = new SandboxAgent(cb, false, k, Config.DEFAULT_USE_RANDOM_KNN);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 100, agent, creature, new BacktrackingPerception(), new ParameterList());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new BacktrackingPerception(), new ParameterList());
 	}
 	
 	@Test

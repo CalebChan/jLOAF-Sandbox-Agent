@@ -54,10 +54,6 @@ public class SandboxOracle {
 	private ParameterList list;
 	
 	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, Agent agent, Creature creature, SandboxPerception perception, ParameterList list){
-		this(worldSize, testAgent, -1, agent, creature, perception, list);
-	}
-	
-	public SandboxOracle(int worldSize, AbstractSandboxAgent testAgent, int iter, Agent agent, Creature creature, SandboxPerception perception, ParameterList list){
 		if (worldSize == -1){
 			worldSize = Config.DEFAULT_WORLD_SIZE;
 		}

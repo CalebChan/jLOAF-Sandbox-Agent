@@ -32,7 +32,7 @@ public class LfODBNConfigTest {
 		SandboxAgent agent = new SandboxAgent(cb, r, Config.K_VALUE);
 		r.setCaseRun(agent.getCaseRun());
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception(), new ParameterList());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), new ParameterList());
 	}
 	
 	@Test

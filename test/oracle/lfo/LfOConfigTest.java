@@ -29,7 +29,7 @@ public class LfOConfigTest {
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase3.cb");
 		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, 1000, agent, creature, new LfOPerception(),new ParameterList());
+		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), new ParameterList());
 	}
 
 	@Test
