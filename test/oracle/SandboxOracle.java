@@ -174,7 +174,7 @@ public class SandboxOracle {
 		Action act = stat.senseEnvironment(correctCase);
 		SandboxAction sa = (SandboxAction)act;
 		MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
-		System.out.println("Move : " + move);
+		System.out.println("Move : " + move + ", Original Action : " + action);
 		return action.equals(move);
 	}
 	

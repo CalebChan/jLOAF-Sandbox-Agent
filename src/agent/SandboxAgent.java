@@ -19,7 +19,7 @@ import sandbox.Creature;
 
 
 public class SandboxAgent extends Agent{
-	private CaseRun curRun;
+	protected CaseRun curRun;
 	
 	private CaseRun agentDecisions;
 	
