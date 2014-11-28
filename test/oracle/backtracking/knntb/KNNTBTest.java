@@ -11,6 +11,7 @@ import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.performance.ClassificationStatisticsWrapper;
 import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
+import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
 import org.junit.AfterClass;
@@ -32,7 +33,7 @@ public class KNNTBTest{
 	public static final int DEFAULT_LENGTH = 4;
 	public static final int NUM_OF_SIM = 5;
 	
-	public static final int DEFAULT_K = 4;
+	public static final int DEFAULT_K = 3;
 	public static final boolean USE_RANDOM_KNN = false;
 	
 	public static final double DEFAULT_THRESHOLD = 0.5;
@@ -65,7 +66,9 @@ public class KNNTBTest{
 	public void setUp() throws Exception{
 		CaseBase cb = loo.get(NUM_OF_SIM - 1).getTraining();
 		Assert.assertFalse(cb == null);
-		agent = new SandboxAgentTestStub(cb, true, DEFAULT_K, USE_RANDOM_KNN, DEFAULT_THRESHOLD);
+		SequentialReasoning r = new SequentialReasoning(cb, null, DEFAULT_K, USE_RANDOM_KNN);
+		agent = new SandboxAgentTestStub(cb, r, DEFAULT_THRESHOLD);
+		r.setCurrentRun(agent.getCaseRun());
 		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, null, agent, creature, new LfOPerception(), new ParameterList());
 		oracle.setTestData(loo.get(NUM_OF_SIM - 1).getTesting());

@@ -23,7 +23,7 @@ public class SandboxAgent extends Agent{
 	
 	private CaseRun agentDecisions;
 	
-	public SandboxAgent(CaseBase cb, Reasoning reasoning, int kValue){
+	public SandboxAgent(CaseBase cb, Reasoning reasoning){
 		super(null, null, null, cb);
 		
 		this.curRun = new CaseRun();
@@ -39,14 +39,6 @@ public class SandboxAgent extends Agent{
 		
 		this.cb = cb;
 	}	
-	public SandboxAgent(CaseBase cb, boolean useSequential, int kValue, boolean useRandomKnn) {
-		this(cb, null, kValue);
-		if (useSequential){
-			this.r = new SequentialReasoning(cb, curRun, kValue, useRandomKnn);
-		}else{
-			this.r = new SimpleKNN(kValue, cb);
-		}
-	}
 	
 	public CaseRun getCaseRun(){
 		return this.curRun;

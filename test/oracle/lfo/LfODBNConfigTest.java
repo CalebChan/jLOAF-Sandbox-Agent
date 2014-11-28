@@ -29,7 +29,7 @@ public class LfODBNConfigTest {
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase3.cb");
 		DBNReasoning r = new DBNReasoning(cb, 20, null, 4);
-		SandboxAgent agent = new SandboxAgent(cb, r, Config.K_VALUE);
+		SandboxAgent agent = new SandboxAgent(cb, r);
 		r.setCaseRun(agent.getCaseRun());
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), new ParameterList());

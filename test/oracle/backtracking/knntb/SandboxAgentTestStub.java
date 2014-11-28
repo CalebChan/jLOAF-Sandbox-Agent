@@ -1,5 +1,6 @@
 package oracle.backtracking.knntb;
 
+import org.jLOAF.Reasoning;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.casebase.CaseRun;
@@ -11,8 +12,8 @@ public class SandboxAgentTestStub extends SandboxAgent{
 
 	private CaseBase baseCaseBase;
 	
-	public SandboxAgentTestStub(CaseBase cb, boolean useSequential, int kValue, boolean useRandomKnn, double problemThreshold) {
-		super(cb, useSequential, kValue, useRandomKnn);
+	public SandboxAgentTestStub(CaseBase cb, Reasoning r, double problemThreshold) {
+		super(cb, r);
 		baseCaseBase = new CaseBase();
 		for (Case c : cb.getCases()){
 			baseCaseBase.add(c);

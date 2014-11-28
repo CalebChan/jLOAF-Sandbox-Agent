@@ -9,6 +9,7 @@ import oracle.SandboxOracle;
 import oracle.TraceGenerator;
 
 import org.jLOAF.casebase.CaseBase;
+import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
 import org.jLOAF.util.CaseLogger;
@@ -67,7 +68,10 @@ public abstract class LfOAbstractTest {
 	protected void setUp(AbstractSandboxAgent testAgent, Creature creature) throws Exception {
 		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
-		SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+//		SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+		SequentialReasoning r = new SequentialReasoning(cb, null, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+		SandboxAgent agent = new SandboxAgent(cb, r);
+		r.setCurrentRun(agent.getCaseRun());
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), list);
 		oracle.setTestData(loo.get(testNo).getTesting());
@@ -88,7 +92,11 @@ public abstract class LfOAbstractTest {
 			oracle.setCreature(creature);
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+//			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+			SequentialReasoning sr = new SequentialReasoning(cb, null, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
+			SandboxAgent agent = new SandboxAgent(cb, sr);
+			sr.setCurrentRun(agent.getCaseRun());
+			
 			oracle.setAgent(agent);
 			testNo++;
 			
