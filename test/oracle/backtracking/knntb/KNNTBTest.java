@@ -23,7 +23,6 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import util.ParameterList;
-import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
 
 public class KNNTBTest{
