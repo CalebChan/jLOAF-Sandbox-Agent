@@ -6,6 +6,14 @@ import java.util.Collection;
 
 import oracle.Config;
 
+import org.jLOAF.Reasoning;
+import org.jLOAF.reasoning.SequentialReasoning;
+import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
+import org.jLOAF.retrieve.sequence.DefaultWeightSequenceRetrieval;
+import org.jLOAF.retrieve.sequence.WeightSequenceRetrieval;
+import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
+import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
+import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
@@ -16,18 +24,25 @@ import util.ParameterNameEnum;
 import util.ParameterList;
 
 @RunWith(Parameterized.class)
-//@SuiteClasses({ 
-//	LfOSmartRandomTest.class,
-//	LfOSmartStraightLineTest.class,
-//	LfOZigZagTest.class, 
-//	//LfOEqualFixedSequenceTest.class, 
-//	LfOFixedSequenceTest.class,
-//	LfOSmartExplorerTest.class })
 @SuiteClasses(LfOTestSuite.class)
 public class LfOTestSuite {
 	
+	private static final boolean TEST_ALL = false;
+	
 	private static final int[] K_VALUES = {4, 10, 20, 100};
 	//private static final int[] K_VALUES = {4};
+	
+	private static final WeightFunction[] WEIGHT_FUNCTION = {
+		new FixedWeightFunction(0.9),
+		new FixedWeightFunction(0.5),
+		new FixedWeightFunction(0.25),
+		new FixedWeightFunction(0.1),
+		
+		new DecayWeightFunction(0.1),
+		new DecayWeightFunction(1),
+		new DecayWeightFunction(10),
+	};
+	
 	private static final int MAX_RUNS = 6;
 	
 	private static final int PARAMETERS = 4;
@@ -38,7 +53,7 @@ public class LfOTestSuite {
 	
 	private static ParameterList list;
 	
-	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum){
+	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, Reasoning r){
 		this.repeatedNum = repeatedNum;
 //		Config.RUN_NUMBER = runNum;
 //		Config.K_VALUE = kValue;
@@ -53,22 +68,38 @@ public class LfOTestSuite {
 		list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), isRandom);
 		list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + runNum);
 		list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((isRandom) ? "Random" : "NonRandom") + "/Run " + runNum + "/" + this.repeatedNum);
+		list.addParameter(ParameterNameEnum.REASONING.name(), r);
 		
 	}
 	
 	@Parameterized.Parameters
 	public static Collection<Object[]> testRuns(){
-		
-		Object o[][] = new Object[K_VALUES.length * MAX_RUNS * (MAX_REPEATED_RUNS + 1)][PARAMETERS];
+		int testSize = K_VALUES.length * MAX_RUNS * (MAX_REPEATED_RUNS + 1) * WEIGHT_FUNCTION.length * ((TEST_ALL) ? 2 : 1);
+		Object o[][] = new Object[testSize][PARAMETERS];
 		int index = 0;
 		for (int i = 0; i < MAX_RUNS; i++){
 			for (int j = 0; j < K_VALUES.length; j++){
-				for (int k = 0; k < MAX_REPEATED_RUNS; k++){
-					o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1};
+				for (WeightFunction w : WEIGHT_FUNCTION){
+					// Default Weight
+					if (TEST_ALL){
+						for (int k = 0; k < MAX_REPEATED_RUNS; k++){
+							o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, null};
+							index++;
+						}
+						o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, null};
+						index++;
+					}
+					// Fixed Weight
+					AbstractWeightedSequenceRetrieval retrival = null;
+					for (int k = 0; k < MAX_REPEATED_RUNS; k++){
+						retrival = new WeightSequenceRetrieval(SequentialReasoning.DEFAULT_THREHSOLD, SequentialReasoning.DEFAULT_SOLUTION_THRESHOLD, w);
+						o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, retrival};
+						index++;
+					}
+					retrival = new WeightSequenceRetrieval(SequentialReasoning.DEFAULT_THREHSOLD, SequentialReasoning.DEFAULT_SOLUTION_THRESHOLD, w);
+					o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, retrival};
 					index++;
 				}
-				o[index] = new Object[]{i + 1, K_VALUES[j], false, 1};
-				index++;
 			}
 		}
 		

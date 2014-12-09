@@ -10,6 +10,7 @@ import oracle.TraceGenerator;
 
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.SequentialReasoning;
+import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
 import org.jLOAF.util.CaseLogger;
@@ -65,13 +66,28 @@ public abstract class LfOAbstractTest {
 		f.delete();
 	}
 	
+	protected SandboxAgent createAgent(CaseBase cb){
+		int kValue = list.getIntParam(ParameterNameEnum.K_VALUE.name());
+		boolean randomKNN = list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name());
+		SequentialReasoning r = null;
+		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()) != null){
+			AbstractWeightedSequenceRetrieval retrieval = (AbstractWeightedSequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name());
+			r = new SequentialReasoning(cb, null, kValue, randomKNN, retrieval);
+		}else{
+			r = new SequentialReasoning(cb, null, kValue, randomKNN);
+		}
+		
+		SandboxAgent agent = new SandboxAgent(cb, r);
+		r.setCurrentRun(agent.getCaseRun());
+		
+		return agent;
+	}
+	
 	protected void setUp(AbstractSandboxAgent testAgent, Creature creature) throws Exception {
 		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
 //		SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
-		SequentialReasoning r = new SequentialReasoning(cb, null, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
-		SandboxAgent agent = new SandboxAgent(cb, r);
-		r.setCurrentRun(agent.getCaseRun());
+		SandboxAgent agent = createAgent(cb);
 		
 		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), list);
 		oracle.setTestData(loo.get(testNo).getTesting());
@@ -93,9 +109,7 @@ public abstract class LfOAbstractTest {
 			
 			CaseBase cb = loo.get(testNo).getTraining();
 //			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
-			SequentialReasoning sr = new SequentialReasoning(cb, null, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
-			SandboxAgent agent = new SandboxAgent(cb, sr);
-			sr.setCurrentRun(agent.getCaseRun());
+			SandboxAgent agent = createAgent(cb);
 			
 			oracle.setAgent(agent);
 			testNo++;

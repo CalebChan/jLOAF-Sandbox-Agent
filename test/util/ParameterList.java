@@ -21,6 +21,14 @@ public class ParameterList {
 		return null;
 	}
 	
+	public Object getParam(String tag){
+		return this.parameterMap.get(tag);
+	}
+	
+	public boolean containsParam(String tag){
+		return parameterMap.containsKey(tag);
+	}
+	
 	public int getIntParam(String tag){
 		Object o = this.parameterMap.get(tag);
 		if (o instanceof Integer){

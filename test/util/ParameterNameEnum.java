@@ -6,5 +6,6 @@ public enum ParameterNameEnum {
 	K_VALUE,
 	TRACE_FOLDER,
 	EXPORT_RUN_FOLDER,
-	ITER_NUM
+	ITER_NUM,
+	REASONING,
 }
