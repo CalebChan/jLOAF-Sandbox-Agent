@@ -6,13 +6,12 @@ import java.util.Collection;
 
 import oracle.Config;
 
-import org.jLOAF.Reasoning;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
-import org.jLOAF.retrieve.sequence.DefaultWeightSequenceRetrieval;
 import org.jLOAF.retrieve.sequence.WeightSequenceRetrieval;
 import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
+import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -33,13 +32,17 @@ public class LfOTestSuite {
 	//private static final int[] K_VALUES = {4};
 	
 	private static final WeightFunction[] WEIGHT_FUNCTION = {
+		new FixedWeightFunction(1),
+		
 		new FixedWeightFunction(0.9),
 		new FixedWeightFunction(0.5),
-		new FixedWeightFunction(0.25),
 		new FixedWeightFunction(0.1),
 		
-		new DecayWeightFunction(0.1),
-		new DecayWeightFunction(1),
+		new LinearWeightFunction(0.1),
+		new LinearWeightFunction(0.05),
+		
+		new DecayWeightFunction(-0.1),
+		new DecayWeightFunction(-1),
 		new DecayWeightFunction(10),
 	};
 	
@@ -53,7 +56,7 @@ public class LfOTestSuite {
 	
 	private static ParameterList list;
 	
-	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, Reasoning r){
+	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, AbstractWeightedSequenceRetrieval r){
 		this.repeatedNum = repeatedNum;
 //		Config.RUN_NUMBER = runNum;
 //		Config.K_VALUE = kValue;
@@ -109,6 +112,7 @@ public class LfOTestSuite {
 	@Test
 	public void testAll(){
 		System.out.println("Test Config : ");
+		System.out.println("\tWeight : " +((WeightSequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name())).getWeightFunction().toString());
 		System.out.println("\tRun Number : " + list.getIntParam(ParameterNameEnum.RUN_NUMBER.name()));
 		System.out.println("\tK Value : " + list.getIntParam(ParameterNameEnum.K_VALUE.name()));
 		System.out.println("\tIs KNN Random : " + list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
