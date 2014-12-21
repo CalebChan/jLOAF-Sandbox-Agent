@@ -38,22 +38,5 @@ public class SandboxSimilarity implements SimilarityMetricStrategy{
 		
 		return 0;
 	}
-	
-	private int getDist(double dist){
-		if (dist < 2){
-			return 1;
-		}
-		return 0;
-	}
-	
-	private int getRange(double sonar){
-		if (sonar < 2.0){
-			return 1;
-		}else if (sonar < 3 && sonar >= 2){
-			return 2;
-		}else{
-			return 3;
-		}
-	}
 
 }

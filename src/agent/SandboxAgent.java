@@ -8,8 +8,6 @@ import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Input;
-import org.jLOAF.reasoning.SequentialReasoning;
-import org.jLOAF.reasoning.SimpleKNN;
 import org.jLOAF.sim.atomic.Equality;
 import org.jLOAF.sim.complex.Mean;
 import agent.backtracking.SandboxFeatureInput;
