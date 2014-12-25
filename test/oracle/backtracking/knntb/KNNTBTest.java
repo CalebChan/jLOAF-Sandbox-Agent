@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import oracle.Config;
-import oracle.SandboxOracle;
+import oracle.SandboxTraceBasedOracle;
 
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.casebase.CaseRun;
@@ -20,10 +20,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import sandbox.Creature;
-import sandbox.Direction;
-import sandbox.creature.DirtBasedCreature;
-import util.ParameterList;
 import agent.lfo.LfOPerception;
 
 public class KNNTBTest{
@@ -39,7 +35,7 @@ public class KNNTBTest{
 	public static final double DEFAULT_THRESHOLD = 0.5;
 	
 	protected static List<TestingTrainingPair> loo;
-	protected SandboxOracle oracle;
+	protected SandboxTraceBasedOracle oracle;
 	protected SandboxAgentTestStub agent;
 	
 	@BeforeClass
@@ -66,11 +62,12 @@ public class KNNTBTest{
 	public void setUp() throws Exception{
 		CaseBase cb = loo.get(NUM_OF_SIM - 1).getTraining();
 		Assert.assertFalse(cb == null);
+		
 		SequentialReasoning r = new SequentialReasoning(cb, null, DEFAULT_K, USE_RANDOM_KNN);
 		agent = new SandboxAgentTestStub(cb, r, DEFAULT_THRESHOLD);
 		r.setCurrentRun(agent.getCaseRun());
-		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, null, agent, creature, new LfOPerception(), new ParameterList());
+		
+		oracle = new SandboxTraceBasedOracle(null, agent, new LfOPerception());
 		oracle.setTestData(loo.get(NUM_OF_SIM - 1).getTesting());
 	}
 
@@ -82,7 +79,7 @@ public class KNNTBTest{
 		System.out.println("Run : \n" + currentRun.toString());
 		agent.setCaseRun(agentRun, DEFAULT_K, USE_RANDOM_KNN, DEFAULT_THRESHOLD);
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
-		boolean same = oracle.testAgent(loo.get(NUM_OF_SIM - 1).getTesting().getRunLength() - 1, stat);
+		boolean same = oracle.testAgent(stat, loo.get(NUM_OF_SIM - 1).getTesting().getRunLength() - 1);
 		Assert.assertTrue("Check if results returns True", same);
 		System.out.println("Value is true");
 		agent.resetAgent();

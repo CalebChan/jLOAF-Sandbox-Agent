@@ -12,7 +12,6 @@ import org.junit.Test;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
-import util.ParameterList;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
@@ -32,20 +31,20 @@ public class LfODBNConfigTest {
 		SandboxAgent agent = new SandboxAgent(cb, r);
 		r.setCaseRun(agent.getCaseRun());
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new LfOPerception(), new ParameterList());
+		oracle = new SandboxOracle(testAgent, agent, new LfOPerception(), Config.DEFAULT_WORLD_SIZE, creature);
 	}
 	
 	@Test
 	public void testSimuation() {
 		System.out.println("+++++++++++++++Test Vanilla Simulation+++++++++++++++");
-		oracle.runSimulation(true, true);
+		oracle.runSimulation(true);
 		System.out.println("+++++++++++++++End Test Vanilla Simulation+++++++++++++++\n\n");
 	}
 	
 	@Test
 	public void testNoLearn(){
 		System.out.println("+++++++++++++++Test No Learn Simulation+++++++++++++++");
-		oracle.runSimulation(false, true);
+		oracle.runSimulation(false);
 		System.out.println("+++++++++++++++End No Learn Simulation+++++++++++++++\n\n");
 	}
 

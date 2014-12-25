@@ -58,11 +58,6 @@ public class LfOTestSuite {
 	
 	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, AbstractWeightedSequenceRetrieval r){
 		this.repeatedNum = repeatedNum;
-//		Config.RUN_NUMBER = runNum;
-//		Config.K_VALUE = kValue;
-//		Config.USE_RANDOM_KNN = isRandom;
-//		Config.DEFAULT_TRACE_FOLDER = Config.DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + Config.RUN_NUMBER;
-//		Config.DEFAULT_EXPORT_RUN_FOLDER = Config.DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((Config.USE_RANDOM_KNN) ? "Random" : "NonRandom") + "/Run " + Config.RUN_NUMBER + "/" + this.repeatedNum;
 		
 		list = new ParameterList();
 		list.addParameter(ParameterNameEnum.ITER_NUM.name(), repeatedNum);

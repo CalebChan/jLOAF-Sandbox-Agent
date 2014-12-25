@@ -18,7 +18,6 @@ import org.junit.runners.Parameterized.Parameters;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
-import util.ParameterList;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAgent;
 import agent.backtracking.ActionBasedAgent;
@@ -53,14 +52,14 @@ public class KNNConfigTest {
 //		SandboxAgent agent = new SandboxAgent(cb, false, k, Config.DEFAULT_USE_RANDOM_KNN);
 		SandboxAgent agent = new SandboxAgent(cb, new SimpleKNN(k, cb));
 		
-		oracle = new SandboxOracle(Config.DEFAULT_WORLD_SIZE, testAgent, agent, creature, new BacktrackingPerception(), new ParameterList());
+		oracle = new SandboxOracle(testAgent, agent, new BacktrackingPerception(), Config.DEFAULT_WORLD_SIZE, creature);
 	}
 	
 	@Test
 	public void testSimuation() {
 		System.out.println("+++++++++++++++Test Vanilla Simulation +++++++++++++++");
 		System.out.println("+++++++++++++++        K = " + this.k + " +++++++++++++++");
-		oracle.runSimulation(true, true);
+		oracle.runSimulation(true);
 		System.out.println("+++++++++++++++End Test Vanilla Simulation+++++++++++++++\n\n");
 	}
 	
@@ -68,7 +67,7 @@ public class KNNConfigTest {
 	public void testNoLearn(){
 		System.out.println("+++++++++++++++Test No Learn Simulation+++++++++++++++");
 		System.out.println("+++++++++++++++        K = " + this.k + " +++++++++++++++");
-		oracle.runSimulation(false, true);
+		oracle.runSimulation(false);
 		System.out.println("+++++++++++++++End No Learn Simulation+++++++++++++++\n\n");
 	}
 

@@ -13,8 +13,6 @@ import org.jLOAF.sim.complex.Mean;
 import agent.backtracking.SandboxFeatureInput;
 import agent.backtracking.BacktrackingPerception;
 import agent.backtracking.SandboxSimilarity;
-import sandbox.Creature;
-
 
 public class SandboxAgent extends Agent{
 	protected CaseRun curRun;
@@ -44,11 +42,6 @@ public class SandboxAgent extends Agent{
 	
 	public CaseRun getAgentDecisions(){
 		return this.agentDecisions;
-	}
-
-	public String senseEnvironment(Creature creature) {
-		Input in = ((BacktrackingPerception)this.p).sense(creature);
-		return this.mc.control(senseEnvironment(in));
 	}
 
 	@Override
