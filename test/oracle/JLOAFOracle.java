@@ -145,6 +145,20 @@ public class JLOAFOracle {
 	protected String getStatsString(StatisticsWrapper stat){
 		return "";
 	}
+	
+	public String getSimulationResults(String agentName){
+		String info = "";
+		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
+		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
+		for (String actions : wrapper.getAllExpectedActions()){
+			info += agentName + " Simulation " + actions + " Percision : " + wrapper.getPrecision(actions) + "\n";
+			info += agentName + " Simulation " + actions + " Recall : " + wrapper.getRecall(actions) + "\n";
+			info += agentName + " Simulation " + actions + " F1 : " + wrapper.getF1(actions) + "\n";
+		}
+		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
+		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
+		return info;
+	}
 
 	public double getGlobalAccuracyAvg() {
 		ConfusionMatrixStatisticsWrapper w = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);

@@ -1,10 +1,13 @@
 package oracle.lfo;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 
 import oracle.Config;
+import oracle.lfo.test.log.TestSuiteDebugObserver;
+import oracle.lfo.test.log.TestSuiteGeneralInfoLog;
 
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
@@ -13,7 +16,10 @@ import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
+import org.jLOAF.util.JLOAFLogger;
+import org.jLOAF.util.JLOAFLogger.Level;
 import org.junit.Test;
+import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -55,6 +61,19 @@ public class LfOTestSuite {
 	private int repeatedNum;
 	
 	private static ParameterList list;
+	
+	private static JLOAFLogger logger;
+	private static int testNo = 1;
+	static{
+		logger = JLOAFLogger.getInstance();
+		try {
+			TestSuiteDebugObserver ob = new TestSuiteDebugObserver("testSuiteLog.log");
+			logger.addObserver(ob);
+			logger.addObserver(new TestSuiteGeneralInfoLog());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, AbstractWeightedSequenceRetrieval r){
 		this.repeatedNum = repeatedNum;
@@ -114,6 +133,8 @@ public class LfOTestSuite {
 		System.out.println("\tRepeated Num : " + this.repeatedNum);
 		System.out.println("Start Time : " + (new Timestamp(System.currentTimeMillis()).toString()));
 		
+		
+		
 		LfOAbstractTest test[] = {	
 				new LfOSmartRandomTest(), 
 				new LfOSmartStraightLineTest(), 
@@ -121,12 +142,19 @@ public class LfOTestSuite {
 				new LfOFixedSequenceTest(), 
 				new LfOSmartExplorerTest()
 				};
-		
+		int i = 0;
 		for (LfOAbstractTest t : test){
+			logger.logMessage(Level.DEBUG, getClass(), "COUNT", "" + testNo + ":" + list.getIntParam(ParameterNameEnum.RUN_NUMBER.name()) + ":" + i);
+			
 			LfOAbstractTest.setParamters(LfOTestSuite.list);
-			JUnitCore.runClasses(t.getClass());
+			JUnitCore core = new JUnitCore();
+//			core.addListener(new TextListener(System.out));
+			core.run(t.getClass());
+			
+			logger.logMessage(Level.DEBUG, getClass(), "END", "" + testNo + ":" + list.getIntParam(ParameterNameEnum.RUN_NUMBER.name()) + ":" + i);
+			i++;
 		}
-		
+		testNo++;
 //		JUnitCore.runClasses(LfOSmartRandomTest.class, LfOSmartStraightLineTest.class, LfOZigZagTest.class, LfOFixedSequenceTest.class, LfOSmartExplorerTest.class);
 		System.out.println("End Time : " + (new Timestamp(System.currentTimeMillis()).toString()) + "\n");
 	}

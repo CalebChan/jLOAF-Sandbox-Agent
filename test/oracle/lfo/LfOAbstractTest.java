@@ -127,6 +127,7 @@ public abstract class LfOAbstractTest {
 		}
 		log.logMessage(Level.INFO, getClass(), LOG_SIM_STAT, "Run " + getPreGenTestName() + " : " + (Config.DEFAULT_NUM_OF_SIMULATIONS + 1));
 		oracle.runSimulation(Config.AGENT_LEARN);
-		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + JLOAFLogger.DEFAULT_DELIMITER + oracle.getGlobalAccuracyAvg());
+		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResults(getOutputTestName()));
 	}
 }
