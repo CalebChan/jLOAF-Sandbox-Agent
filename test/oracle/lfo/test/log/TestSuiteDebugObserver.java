@@ -23,14 +23,19 @@ public class TestSuiteDebugObserver implements Observer{
 		count = 0;
 	}
 	
+	public void close(){
+		try {
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		if (arg instanceof JLOAFLoggerInfoBundle){
 			JLOAFLoggerInfoBundle bundle = (JLOAFLoggerInfoBundle)arg;
-			if (!bundle.getLevel().equals(Level.DEBUG) && bundle.getLevel().equals(Level.EXPORT)){
-				return;
-			}
-			if (bundle.getClass().equals(Level.DEBUG)){
+			if (bundle.getLevel().equals(Level.DEBUG)){
 				if (bundle.getMessage().contains("Action")){
 					//writeMessage(bundle, "Earliest State-Action Pair Used : " + maxTime);
 					totalTime += maxTime;
@@ -47,7 +52,8 @@ public class TestSuiteDebugObserver implements Observer{
 					double avg = totalTime * 1.0 / count;
 					writeMessage(bundle, "Average State-Action Pair Used : " + avg);
 					count = 0;
-					maxTime = 0;
+					maxTime = -1;
+					totalTime = 0;
 				}
 			}
 		}
@@ -58,7 +64,6 @@ public class TestSuiteDebugObserver implements Observer{
 		out += "[" + extraInfo.getLevel().toString()  + ":" + extraInfo.getMessageClass().getName()+ "] - ";
 		out += "(TAG = " + extraInfo.getTag() + ")";
 		out += message;
-		
 		try {
 			writer.write(out + "\n");
 			writer.flush();

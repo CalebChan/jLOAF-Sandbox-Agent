@@ -107,13 +107,15 @@ public abstract class LfOAbstractTest {
 			if (Config.LOG_RUN){
 				CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (i + 1) + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt");
 			}
-			log.logMessage(Level.INFO, getClass(), LOG_SIM_STAT, "Run " + getPreGenTestName() + " : " + (i + 1));			
+			log.logMessage(Level.INFO, getClass(), LOG_SIM_STAT, "Run " + getPreGenTestName() + " : " + (i + 1));
+			
+			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test", testNo);
+			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Training", loo.get(testNo).getTraining().exportCaseBaseToJSON());
+			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Testing", loo.get(testNo).getTraining().exportCaseBaseToJSON());
+			
 			oracle.runSimulation(Config.AGENT_LEARN);
-			//Creature creature = new DirtBasedCreature(r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, r.nextInt(Config.DEFAULT_WORLD_SIZE - 2) + 1, Direction.values()[r.nextInt(Direction.values().length)]);
-			//oracle.setCreature(creature);
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-//			SandboxAgent agent = new SandboxAgent(cb, true, list.getIntParam(ParameterNameEnum.K_VALUE.name()), list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));
 			SandboxAgent agent = createAgent(cb);
 			
 			oracle.setAgent(agent);
@@ -125,9 +127,17 @@ public abstract class LfOAbstractTest {
 		if (Config.LOG_RUN){
 			CaseLogger.createLogger(true, "LOG_" + getPreGenTestName() + "_" + (Config.DEFAULT_NUM_OF_SIMULATIONS) + "_k_" + list.getIntParam(ParameterNameEnum.K_VALUE.name()) + ".txt");
 		}
+		
+		log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test", testNo);
+		log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Training", loo.get(testNo).getTraining().exportCaseBaseToJSON());
+		log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Testing", loo.get(testNo).getTraining().exportCaseBaseToJSON());
+		
 		log.logMessage(Level.INFO, getClass(), LOG_SIM_STAT, "Run " + getPreGenTestName() + " : " + (Config.DEFAULT_NUM_OF_SIMULATIONS + 1));
 		oracle.runSimulation(Config.AGENT_LEARN);
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResults(getOutputTestName()));
+		
+		
+		log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test", testNo + 1);
 	}
 }

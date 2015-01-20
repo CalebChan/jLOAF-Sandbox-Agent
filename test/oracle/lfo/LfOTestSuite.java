@@ -8,6 +8,7 @@ import java.util.Collection;
 import oracle.Config;
 import oracle.lfo.test.log.TestSuiteDebugObserver;
 import oracle.lfo.test.log.TestSuiteGeneralInfoLog;
+import oracle.lfo.test.log.TestSuiteJSONLog;
 
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
@@ -18,6 +19,7 @@ import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.jLOAF.util.JLOAFLogger;
 import org.jLOAF.util.JLOAFLogger.Level;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
@@ -33,30 +35,31 @@ import util.ParameterList;
 public class LfOTestSuite {
 	
 	private static final boolean TEST_ALL = false;
+	private static final boolean USE_NON_RANDOM = false;
 	
-	private static final int[] K_VALUES = {4, 10, 20, 100};
-	//private static final int[] K_VALUES = {4};
+//	private static final int[] K_VALUES = {4, 10, 20, 100};
+	private static final int[] K_VALUES = {4};
 	
 	private static final WeightFunction[] WEIGHT_FUNCTION = {
-		new FixedWeightFunction(1),
-		
-		new FixedWeightFunction(0.9),
-		new FixedWeightFunction(0.5),
-		new FixedWeightFunction(0.1),
-		
+//		new FixedWeightFunction(1),
+//		
+//		new FixedWeightFunction(0.9),
+//		new FixedWeightFunction(0.5),
+//		new FixedWeightFunction(0.1),
+//		
 		new LinearWeightFunction(0.1),
-		new LinearWeightFunction(0.05),
-		
-		new DecayWeightFunction(-0.1),
-		new DecayWeightFunction(-1),
-		new DecayWeightFunction(10),
+//		new LinearWeightFunction(0.05),
+//		
+//		new DecayWeightFunction(-0.1),
+//		new DecayWeightFunction(-1),
+//		new DecayWeightFunction(10),
 	};
 	
-	private static final int MAX_RUNS = 6;
+	private static final int MAX_RUNS = 1;
 	
 	private static final int PARAMETERS = 4;
 	
-	private static final int MAX_REPEATED_RUNS = 6;
+	private static final int MAX_REPEATED_RUNS = 1;
 	
 	private int repeatedNum;
 	
@@ -64,12 +67,14 @@ public class LfOTestSuite {
 	
 	private static JLOAFLogger logger;
 	private static int testNo = 1;
+	private static TestSuiteDebugObserver ob;
 	static{
 		logger = JLOAFLogger.getInstance();
 		try {
-			TestSuiteDebugObserver ob = new TestSuiteDebugObserver("testSuiteLog.log");
+			ob = new TestSuiteDebugObserver("testSuiteLog.log");
 			logger.addObserver(ob);
 			logger.addObserver(new TestSuiteGeneralInfoLog());
+			logger.addObserver(new TestSuiteJSONLog("testSuiteJSON.json"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -89,9 +94,14 @@ public class LfOTestSuite {
 		
 	}
 	
+	@AfterClass
+	public static void end(){
+		ob.close();
+	}
+	
 	@Parameterized.Parameters
 	public static Collection<Object[]> testRuns(){
-		int testSize = K_VALUES.length * MAX_RUNS * (MAX_REPEATED_RUNS + 1) * WEIGHT_FUNCTION.length * ((TEST_ALL) ? 2 : 1);
+		int testSize = K_VALUES.length * MAX_RUNS * (MAX_REPEATED_RUNS + ((USE_NON_RANDOM) ? 1 : 0)) * WEIGHT_FUNCTION.length * ((TEST_ALL) ? 2 : 1);
 		Object o[][] = new Object[testSize][PARAMETERS];
 		int index = 0;
 		for (int i = 0; i < MAX_RUNS; i++){
@@ -103,8 +113,10 @@ public class LfOTestSuite {
 							o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, null};
 							index++;
 						}
-						o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, null};
-						index++;
+						if (USE_NON_RANDOM){
+							o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, null};
+							index++;
+						}
 					}
 					// Fixed Weight
 					AbstractWeightedSequenceRetrieval retrival = null;
@@ -113,9 +125,11 @@ public class LfOTestSuite {
 						o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, retrival};
 						index++;
 					}
-					retrival = new WeightSequenceRetrieval(SequentialReasoning.DEFAULT_THREHSOLD, SequentialReasoning.DEFAULT_SOLUTION_THRESHOLD, w);
-					o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, retrival};
-					index++;
+					if (USE_NON_RANDOM){
+						retrival = new WeightSequenceRetrieval(SequentialReasoning.DEFAULT_THREHSOLD, SequentialReasoning.DEFAULT_SOLUTION_THRESHOLD, w);
+						o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, retrival};
+						index++;
+					}
 				}
 			}
 		}
@@ -137,10 +151,10 @@ public class LfOTestSuite {
 		
 		LfOAbstractTest test[] = {	
 				new LfOSmartRandomTest(), 
-				new LfOSmartStraightLineTest(), 
-				new LfOZigZagTest(), 
-				new LfOFixedSequenceTest(), 
-				new LfOSmartExplorerTest()
+//				new LfOSmartStraightLineTest(), 
+//				new LfOZigZagTest(), 
+//				new LfOFixedSequenceTest(), 
+//				new LfOSmartExplorerTest()
 				};
 		int i = 0;
 		for (LfOAbstractTest t : test){
@@ -148,7 +162,7 @@ public class LfOTestSuite {
 			
 			LfOAbstractTest.setParamters(LfOTestSuite.list);
 			JUnitCore core = new JUnitCore();
-//			core.addListener(new TextListener(System.out));
+			core.addListener(new TextListener(System.out));
 			core.run(t.getClass());
 			
 			logger.logMessage(Level.DEBUG, getClass(), "END", "" + testNo + ":" + list.getIntParam(ParameterNameEnum.RUN_NUMBER.name()) + ":" + i);

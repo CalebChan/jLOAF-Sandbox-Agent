@@ -131,7 +131,9 @@ public class JLOAFOracle {
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_START,"");
 		for (int i = 0; i < this.testingData.getRunLength(); i++){
+			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test Start", i);
 			boolean result = testAgent(stat, i);
+			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Result", result);
 			if (toLearn && !result){
 				this.agent.learn(this.testingData.getCase(i));
 			}
