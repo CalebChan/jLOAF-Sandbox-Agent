@@ -110,8 +110,6 @@ public abstract class LfOAbstractTest {
 			log.logMessage(Level.INFO, getClass(), LOG_SIM_STAT, "Run " + getPreGenTestName() + " : " + (i + 1));
 			
 			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test", testNo);
-			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Training", loo.get(testNo).getTraining().exportCaseBaseToJSON());
-			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Testing", loo.get(testNo).getTraining().exportCaseBaseToJSON());
 			
 			oracle.runSimulation(Config.AGENT_LEARN);
 			
