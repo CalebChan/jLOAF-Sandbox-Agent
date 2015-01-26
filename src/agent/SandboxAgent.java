@@ -22,8 +22,8 @@ public class SandboxAgent extends Agent{
 	public SandboxAgent(CaseBase cb, Reasoning reasoning){
 		super(null, null, null, cb);
 		
-		this.curRun = new CaseRun();
-		this.agentDecisions = new CaseRun();
+		this.curRun = new CaseRun("Current Run");
+		this.agentDecisions = new CaseRun("Agent Decision");
 		
 		ComplexInput.setClassStrategy(new Mean());
 		AtomicInput.setClassStrategy(new Equality());

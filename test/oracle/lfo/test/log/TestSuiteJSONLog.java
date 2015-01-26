@@ -45,6 +45,7 @@ public class TestSuiteJSONLog implements Observer{
 			if (bundle.getLevel().equals(Level.EXPORT) && bundle.getTag().equals(JLOAFLogger.JSON_TAG)){
 				if (bundle.getMessage().equals("Test")){
 					if (this.output.length() > 0){
+//						System.out.println("Test Run : " + bundle.getMessageExtra().toString());
 						outputToJSON(bundle.getMessageExtra().toString());
 					}
 					output = new JSONObject();
@@ -65,7 +66,16 @@ public class TestSuiteJSONLog implements Observer{
 					rObject.put("Name", runName);
 					rObject.put("Sim", sim);
 					
+//					if (runName.equals("3") && testNo == 35){
+//						System.out.println("Name : " + rObject.toString());
+//					}
+					
 					this.rHistory.put(rObject);
+					
+					time = -1;
+					rType = "";
+					runName = "";
+					sim = -1;
 					
 				}else if (bundle.getMessage().equals("End Retrieval")){
 					this.action = bundle.getMessageExtra().toString();
