@@ -41,13 +41,13 @@ public class LfOTestSuite {
 	private static final int[] K_VALUES = {4};
 	
 	private static final WeightFunction[] WEIGHT_FUNCTION = {
-//		new FixedWeightFunction(1),
+		new FixedWeightFunction(1),
 //		
 //		new FixedWeightFunction(0.9),
 //		new FixedWeightFunction(0.5),
 //		new FixedWeightFunction(0.1),
 //		
-		new LinearWeightFunction(0.1),
+//		new LinearWeightFunction(0.1),
 //		new LinearWeightFunction(0.05),
 //		
 //		new DecayWeightFunction(-0.1),

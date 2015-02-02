@@ -25,6 +25,9 @@ public class TestSuiteJSONLog implements Observer{
 	private String action;
 	private int testNo;
 	
+	private int caseIndex;
+	private String runN;
+	
 	public TestSuiteJSONLog(String saveFile) {
 		this.output = new JSONObject();
 		this.rHistory = new JSONArray();
@@ -57,6 +60,10 @@ public class TestSuiteJSONLog implements Observer{
 					this.rType = bundle.getMessageExtra().toString();
 				}else if (bundle.getMessage().equals("Run Name")){
 					this.runName = bundle.getMessageExtra().toString();
+				}else if (bundle.getMessage().equals("Case No")){
+					this.caseIndex = Integer.parseInt(bundle.getMessageExtra().toString());
+				}else if (bundle.getMessage().equals("Parent Run Name")){
+					this.runN = bundle.getMessageExtra().toString();
 				}else if (bundle.getMessage().equals("Sim")){
 					this.sim = (double)bundle.getMessageExtra();
 					
@@ -65,6 +72,8 @@ public class TestSuiteJSONLog implements Observer{
 					rObject.put("R Type", rType);
 					rObject.put("Name", runName);
 					rObject.put("Sim", sim);
+					rObject.put("Case No", caseIndex);
+					rObject.put("P Name", runN);
 					
 //					if (runName.equals("3") && testNo == 35){
 //						System.out.println("Name : " + rObject.toString());
