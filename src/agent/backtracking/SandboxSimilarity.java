@@ -1,9 +1,9 @@
 package agent.backtracking;
 
 import org.jLOAF.inputs.Input;
-import org.jLOAF.sim.SimilarityMetricStrategy;
+import org.jLOAF.sim.SimilarityInputMetricStrategy;
 
-public class SandboxSimilarity implements SimilarityMetricStrategy{
+public class SandboxSimilarity implements SimilarityInputMetricStrategy{
 
 	@Override
 	public double similarity(Input i1, Input i2) {

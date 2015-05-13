@@ -11,8 +11,8 @@ public class ModableCaseRun extends CaseRun {
 	private static final long serialVersionUID = -5994651358402675027L;
 	
 	public ModableCaseRun(CaseRun run){
-		for (int i = 0; i < run.getRunLength(); i++){
-			this.addCaseToRun(run.getCase(i));
+		for (int i = run.getRunLength() - 1; i >= 0 ; i--){
+			this.addCaseToRun(run.getCasePastOffset(i));
 		}
 	}
 	

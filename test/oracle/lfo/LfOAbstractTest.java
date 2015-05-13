@@ -9,7 +9,7 @@ import oracle.TraceGenerator;
 
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.SequentialReasoning;
-import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
+import org.jLOAF.retrieve.SequenceRetrieval;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
 import org.jLOAF.util.CaseLogger;
@@ -38,7 +38,7 @@ public abstract class LfOAbstractTest {
 	
 	protected JLOAFLogger log = JLOAFLogger.getInstance();
 	
-	public static void setParamters(ParameterList list){
+	static void setParamters(ParameterList list){
 		LfOAbstractTest.list = list;
 	}
 	
@@ -78,7 +78,7 @@ public abstract class LfOAbstractTest {
 		boolean randomKNN = list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name());
 		SequentialReasoning r = null;
 		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()) != null){
-			AbstractWeightedSequenceRetrieval retrieval = (AbstractWeightedSequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name());
+			SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name());
 			r = new SequentialReasoning(cb, null, kValue, randomKNN, retrieval);
 		}else{
 			r = new SequentialReasoning(cb, null, kValue, randomKNN);

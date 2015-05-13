@@ -3,7 +3,7 @@ package agent.backtracking;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
-import org.jLOAF.sim.SimilarityMetricStrategy;
+import org.jLOAF.sim.SimilarityInputMetricStrategy;
 
 public class SandboxFeatureInput extends AtomicInput{
 
@@ -12,7 +12,7 @@ public class SandboxFeatureInput extends AtomicInput{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static SimilarityMetricStrategy simMet;
+	private static SimilarityInputMetricStrategy simMet;
 	
 	public SandboxFeatureInput(String name, Feature f) {
 		super(name, f);
@@ -48,7 +48,7 @@ public class SandboxFeatureInput extends AtomicInput{
 		}
 	}
 
-	public static void setClassSimilarityMetric(SimilarityMetricStrategy s){
+	public static void setClassSimilarityMetric(SimilarityInputMetricStrategy s){
 		SandboxFeatureInput.simMet = s;
 	}
 }

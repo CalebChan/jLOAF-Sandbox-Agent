@@ -10,8 +10,8 @@ import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.retrieve.kNNRandom;
-import org.jLOAF.sim.atomic.Equality;
-import org.jLOAF.sim.complex.Mean;
+import org.jLOAF.sim.atomic.InputEquality;
+import org.jLOAF.sim.complex.InputMean;
 import org.jLOAF.tools.CaseBaseIO;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,8 +33,8 @@ public class kNNRandomTest {
 		expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_TEST_CASEBASE_NAME + ".cb");
 		
-		ComplexInput.setClassStrategy(new Mean());
-		AtomicInput.setClassStrategy(new Equality());
+		ComplexInput.setClassStrategy(new InputMean());
+		AtomicInput.setClassStrategy(new InputEquality());
 		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
 		
 		rKNN = new kNNRandom(4, cb);

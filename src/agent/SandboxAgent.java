@@ -8,8 +8,8 @@ import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Input;
-import org.jLOAF.sim.atomic.Equality;
-import org.jLOAF.sim.complex.Mean;
+import org.jLOAF.sim.atomic.InputEquality;
+import org.jLOAF.sim.complex.InputMean;
 import agent.backtracking.SandboxFeatureInput;
 import agent.backtracking.BacktrackingPerception;
 import agent.backtracking.SandboxSimilarity;
@@ -25,8 +25,8 @@ public class SandboxAgent extends Agent{
 		this.curRun = new CaseRun("Current Run");
 		this.agentDecisions = new CaseRun("Agent Decision");
 		
-		ComplexInput.setClassStrategy(new Mean());
-		AtomicInput.setClassStrategy(new Equality());
+		ComplexInput.setClassStrategy(new InputMean());
+		AtomicInput.setClassStrategy(new InputEquality());
 		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
 		
 		this.r = reasoning;

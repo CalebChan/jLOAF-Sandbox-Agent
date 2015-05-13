@@ -114,7 +114,7 @@ public class JLOAFOracle {
 	}
 	
 	public boolean testAgent(StatisticsWrapper stat, int time){
-		Case correctCase = this.testingData.getCase(time);
+		Case correctCase = this.testingData.getCasePastOffset(time);
 		MovementAction action = MovementAction.values()[(int) ((SandboxAction)correctCase.getAction()).getFeature().getValue()];
 		
 		Action act = stat.senseEnvironment(correctCase);
@@ -130,12 +130,12 @@ public class JLOAFOracle {
 	public void runSimulation(boolean toLearn){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_START,"");
-		for (int i = 0; i < this.testingData.getRunLength(); i++){
+		for (int i = this.testingData.getRunLength() - 1; i >= 0 ; i--){
 			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test Start", i);
 			boolean result = testAgent(stat, i);
 			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Result", result);
 			if (toLearn && !result){
-				this.agent.learn(this.testingData.getCase(i));
+				this.agent.learn(this.testingData.getCasePastOffset(i));
 			}
 		}
 		collectStats(stat);

@@ -10,12 +10,8 @@ import oracle.lfo.test.log.TestSuiteDebugObserver;
 import oracle.lfo.test.log.TestSuiteGeneralInfoLog;
 import oracle.lfo.test.log.TestSuiteJSONLog;
 
-import org.jLOAF.reasoning.SequentialReasoning;
-import org.jLOAF.retrieve.AbstractWeightedSequenceRetrieval;
-import org.jLOAF.retrieve.sequence.WeightSequenceRetrieval;
-import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
+import org.jLOAF.retrieve.SequenceRetrieval;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
-import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.jLOAF.util.JLOAFLogger;
 import org.jLOAF.util.JLOAFLogger.Level;
@@ -80,7 +76,7 @@ public class LfOTestSuite {
 		}
 	}
 	
-	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, AbstractWeightedSequenceRetrieval r){
+	public LfOTestSuite(int runNum, int kValue, boolean isRandom, int repeatedNum, SequenceRetrieval r){
 		this.repeatedNum = repeatedNum;
 		
 		list = new ParameterList();
@@ -106,31 +102,18 @@ public class LfOTestSuite {
 		int index = 0;
 		for (int i = 0; i < MAX_RUNS; i++){
 			for (int j = 0; j < K_VALUES.length; j++){
-				for (WeightFunction w : WEIGHT_FUNCTION){
-					// Default Weight
-					if (TEST_ALL){
-						for (int k = 0; k < MAX_REPEATED_RUNS; k++){
-							o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, null};
-							index++;
-						}
-						if (USE_NON_RANDOM){
-							o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, null};
-							index++;
-						}
-					}
-					// Fixed Weight
-					AbstractWeightedSequenceRetrieval retrival = null;
+				// Default Weight
+				if (TEST_ALL){
 					for (int k = 0; k < MAX_REPEATED_RUNS; k++){
-						retrival = new WeightSequenceRetrieval(SequentialReasoning.DEFAULT_THREHSOLD, SequentialReasoning.DEFAULT_SOLUTION_THRESHOLD, w);
-						o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, retrival};
+						o[index] = new Object[]{i + 1, K_VALUES[j], true, k + 1, null};
 						index++;
 					}
 					if (USE_NON_RANDOM){
-						retrival = new WeightSequenceRetrieval(SequentialReasoning.DEFAULT_THREHSOLD, SequentialReasoning.DEFAULT_SOLUTION_THRESHOLD, w);
-						o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, retrival};
+						o[index] = new Object[]{i + 1, K_VALUES[j], false, 1, null};
 						index++;
 					}
 				}
+
 			}
 		}
 		
@@ -140,7 +123,7 @@ public class LfOTestSuite {
 	@Test
 	public void testAll(){
 		System.out.println("Test Config : ");
-		System.out.println("\tWeight : " +((WeightSequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name())).getWeightFunction().toString());
+		//System.out.println("\tWeight : " +((WeightSequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name())).getWeightFunction().toString());
 		System.out.println("\tRun Number : " + list.getIntParam(ParameterNameEnum.RUN_NUMBER.name()));
 		System.out.println("\tK Value : " + list.getIntParam(ParameterNameEnum.K_VALUE.name()));
 		System.out.println("\tIs KNN Random : " + list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name()));

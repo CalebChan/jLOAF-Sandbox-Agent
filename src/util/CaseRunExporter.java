@@ -19,8 +19,8 @@ public class CaseRunExporter {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 			
-			for (int i = 0; i < run.getRunLength(); i++){
-				Case c = run.getCase(0);
+			for (int i = run.getRunLength() - 1; i >= 0; i--){
+				Case c = run.getCasePastOffset(i);
 				String s = "";
 				ComplexInput inputs = (ComplexInput)c.getInput();
 				for (Direction d : Direction.values()){
