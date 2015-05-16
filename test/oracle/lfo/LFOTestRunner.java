@@ -2,9 +2,6 @@ package oracle.lfo;
 
 import oracle.Config;
 
-import org.junit.internal.TextListener;
-import org.junit.runner.JUnitCore;
-
 import util.ParameterList;
 import util.ParameterNameEnum;
 
@@ -20,12 +17,11 @@ public class LFOTestRunner {
 		this.list = list;
 	}
 	
-	public void testAll(LfOAbstractTest tests[]){
-		JUnitCore core = new JUnitCore();
-		core.addListener(new TextListener(System.out));
-		for (LfOAbstractTest t : tests){
-			LfOAbstractTest.setParamters(list);
-			core.run(t.getClass());
+	public void testAll(LfOAbstractCreatureTest tests[]){
+		for (LfOAbstractCreatureTest t : tests){
+			t.setParamters(list);
+			t.initSetting();
+			t.testRun();
 		}
 	}
 	
@@ -54,8 +50,6 @@ public class LFOTestRunner {
 					runner.setParameterList(list);
 					runner.testAll(TestConfiguration.test);
 				}
-
-
 			}
 		}
 	}

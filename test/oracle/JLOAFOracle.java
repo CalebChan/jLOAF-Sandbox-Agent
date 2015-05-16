@@ -131,17 +131,19 @@ public class JLOAFOracle {
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_START,"");
 		for (int i = this.testingData.getRunLength() - 1; i >= 0 ; i--){
-			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test Start", i);
+			System.out.println("Test NO : " + i);
+//			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test Start", i);
 			boolean result = testAgent(stat, i);
-			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Result", result);
+			System.out.println("Result : " + result);
+//			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Result", result);
 			if (toLearn && !result){
 				this.agent.learn(this.testingData.getCasePastOffset(i));
 			}
 		}
 		collectStats(stat);
-		log.logMessage(Level.INFO, this.getClass(), LOG_SIM_STAT, getStatsString(stat));
+//		log.logMessage(Level.INFO, this.getClass(), LOG_SIM_STAT, getStatsString(stat));
 		this.testingData = null;
-		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_END,"");
+//		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_END,"");
 	}
 	
 	protected String getStatsString(StatisticsWrapper stat){
