@@ -33,9 +33,9 @@ public class TestConfiguration {
 	
 	public static final LfOAbstractCreatureTest test[] = {	
 			new LfOSmartRandomTest(), 
-//			new LfOSmartStraightLineTest(), 
-//			new LfOZigZagTest(), 
-//			new LfOFixedSequenceTest(), 
-//			new LfOSmartExplorerTest()
+			new LfOSmartStraightLineTest(), 
+			new LfOZigZagTest(), 
+			new LfOFixedSequenceTest(), 
+			new LfOSmartExplorerTest()
 			};
 }

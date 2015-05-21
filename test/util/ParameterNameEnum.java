@@ -7,5 +7,6 @@ public enum ParameterNameEnum {
 	TRACE_FOLDER,
 	EXPORT_RUN_FOLDER,
 	ITER_NUM,
+	RETRIEVAL,
 	REASONING,
 }

@@ -1,7 +1,8 @@
 package oracle.lfo;
 
-import oracle.Config;
+import org.jLOAF.retrieve.KNNRetrieval;
 
+import oracle.Config;
 import util.ParameterList;
 import util.ParameterNameEnum;
 
@@ -37,6 +38,9 @@ public class LFOTestRunner {
 					list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), true);
 					list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + (i + 1));
 					list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ("Random") + "/Run " + (i + 1) + "/" + (k + 1));
+					
+					list.addParameter(ParameterNameEnum.REASONING.name(), new KNNRetrieval());
+					
 					runner.setParameterList(list);
 					runner.testAll(TestConfiguration.test);
 				}
@@ -47,6 +51,9 @@ public class LFOTestRunner {
 					list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), false);
 					list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + (i + 1));
 					list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((false) ? "Random" : "NonRandom") + "/Run " + (i + 1) + "/" + (1));
+					
+					list.addParameter(ParameterNameEnum.REASONING.name(), new KNNRetrieval());
+					
 					runner.setParameterList(list);
 					runner.testAll(TestConfiguration.test);
 				}

@@ -7,6 +7,8 @@ import oracle.Config;
 import oracle.JLOAFOracle;
 
 import org.jLOAF.casebase.CaseBase;
+import org.jLOAF.reasoning.BacktrackingReasoning;
+import org.jLOAF.reasoning.KNNBacktracking;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.SequenceRetrieval;
 import org.jLOAF.tools.LeaveOneOut;
@@ -72,11 +74,13 @@ public abstract class LfOAbstractTest {
 	protected SandboxAgent createAgent(CaseBase cb){
 		int kValue = list.getIntParam(ParameterNameEnum.K_VALUE.name());
 		boolean randomKNN = list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name());
-		SequentialReasoning r = null;
+		BacktrackingReasoning r = null;
 		
-		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()) != null){
-			SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.REASONING.name());
+		if (list.containsParam(ParameterNameEnum.RETRIEVAL.name()) && list.getParam(ParameterNameEnum.RETRIEVAL.name()) != null){
+			SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.RETRIEVAL.name());
 			r = new SequentialReasoning(cb, null, kValue, randomKNN, retrieval);
+		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("KNN")){
+			r = new KNNBacktracking(cb, null, kValue);
 		}else{
 			r = new SequentialReasoning(cb, null, kValue, randomKNN);
 		}
@@ -115,5 +119,7 @@ public abstract class LfOAbstractTest {
 		
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResults(getOutputTestName()));
+		System.out.println(getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
+		System.out.println(oracle.getSimulationResults(getOutputTestName()));
 	}
 }
