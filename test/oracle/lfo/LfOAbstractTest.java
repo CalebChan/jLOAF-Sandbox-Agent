@@ -8,6 +8,7 @@ import oracle.JLOAFOracle;
 
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.BacktrackingReasoning;
+import org.jLOAF.reasoning.BestRunReasoning;
 import org.jLOAF.reasoning.KNNBacktracking;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.SequenceRetrieval;
@@ -76,13 +77,17 @@ public abstract class LfOAbstractTest {
 		boolean randomKNN = list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name());
 		BacktrackingReasoning r = null;
 		
-		if (list.containsParam(ParameterNameEnum.RETRIEVAL.name()) && list.getParam(ParameterNameEnum.RETRIEVAL.name()) != null){
-			SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.RETRIEVAL.name());
-			r = new SequentialReasoning(cb, null, kValue, randomKNN, retrieval);
-		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("KNN")){
+		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("KNN")){
 			r = new KNNBacktracking(cb, null, kValue);
-		}else{
-			r = new SequentialReasoning(cb, null, kValue, randomKNN);
+		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("BEST")){
+			r = new BestRunReasoning(cb, kValue);
+		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("SEQ")){
+			if(list.containsParam(ParameterNameEnum.RETRIEVAL.name()) && list.getParam(ParameterNameEnum.RETRIEVAL.name()) != null){
+				SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.RETRIEVAL.name());
+				r = new SequentialReasoning(cb, null, kValue, randomKNN, retrieval);
+			}else{
+				r = new SequentialReasoning(cb, null, kValue, randomKNN);
+			}
 		}
 		
 		SandboxAgent agent = new SandboxAgent(cb, r);
