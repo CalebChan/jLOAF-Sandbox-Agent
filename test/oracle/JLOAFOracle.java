@@ -131,19 +131,13 @@ public class JLOAFOracle {
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_START,"");
 		for (int i = this.testingData.getRunLength() - 1; i >= 0 ; i--){
-//			System.out.println("Test NO : " + i);
-//			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Test Start", i);
 			boolean result = testAgent(stat, i);
-//			System.out.println("Result : " + result);
-//			log.logMessage(Level.EXPORT, getClass(), JLOAFLogger.JSON_TAG, "Result", result);
 			if (toLearn && !result){
 				this.agent.learn(this.testingData.getCasePastOffset(i));
 			}
 		}
 		collectStats(stat);
-//		log.logMessage(Level.INFO, this.getClass(), LOG_SIM_STAT, getStatsString(stat));
 		this.testingData = null;
-//		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_END,"");
 	}
 	
 	protected String getStatsString(StatisticsWrapper stat){
@@ -164,6 +158,15 @@ public class JLOAFOracle {
 		return info;
 	}
 
+	public String getSimulationResultsSimple(String agentName){
+		String info = "";
+		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
+		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
+		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
+		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
+		return info;
+	}
+	
 	public double getGlobalAccuracyAvg() {
 		ConfusionMatrixStatisticsWrapper w = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
 		return w.getClassificationAccuracy();

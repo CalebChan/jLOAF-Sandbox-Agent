@@ -123,8 +123,7 @@ public abstract class LfOAbstractTest {
 		oracle.runSimulation(Config.AGENT_LEARN);
 		
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
-		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResults(getOutputTestName()));
-		System.out.println(getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
-		System.out.println(oracle.getSimulationResults(getOutputTestName()));
+		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResultsSimple(getOutputTestName()));
+		System.out.println(oracle.getSimulationResultsSimple(getOutputTestName()));
 	}
 }
