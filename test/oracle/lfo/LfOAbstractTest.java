@@ -78,9 +78,9 @@ public abstract class LfOAbstractTest {
 		BacktrackingReasoning r = null;
 		
 		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("KNN")){
-			r = new KNNBacktracking(cb, null, kValue);
+			r = new KNNBacktracking(cb, null, kValue, randomKNN, randomKNN);
 		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("BEST")){
-			r = new BestRunReasoning(cb, kValue);
+			r = new BestRunReasoning(cb, kValue, randomKNN);
 		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("SEQ")){
 			if(list.containsParam(ParameterNameEnum.RETRIEVAL.name()) && list.getParam(ParameterNameEnum.RETRIEVAL.name()) != null){
 				SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.RETRIEVAL.name());

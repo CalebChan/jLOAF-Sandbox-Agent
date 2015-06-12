@@ -58,7 +58,7 @@ public class LFOTestRunner {
 							}else{
 								for (WeightFunction w : TestConfiguration.WEIGHT_FUNCTION){
 									kNNUtil.setWeightFunction(w);
-									System.out.println("Random, k : " + TestConfiguration.K_VALUES[j] + " Iter " + i);
+									System.out.println("Random, k : " + TestConfiguration.K_VALUES[j] + " Iter " + (k + 1));
 									System.out.println("Weight Function : " + w.toString());
 									runner.setParameterList(list);
 									runner.testAll(TestConfiguration.test);

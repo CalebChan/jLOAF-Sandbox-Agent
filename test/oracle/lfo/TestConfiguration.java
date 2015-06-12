@@ -8,7 +8,7 @@ import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 
 public class TestConfiguration {
 	public static final boolean TEST_ALL = false;
-	public static final boolean USE_NON_RANDOM = true;
+	public static final boolean USE_NON_RANDOM = false;
 	
 	public static final int[] K_VALUES = {4, 10, 20, 100};
 //	public static final int[] K_VALUES = {4};
@@ -26,11 +26,11 @@ public class TestConfiguration {
 		new DecayWeightFunction(-0.1),
 		new DecayWeightFunction(-0.01),
 		
-		new GaussianWeightFunction(1, 0.15),
-		new GaussianWeightFunction(0.9, 0.15),
-		new GaussianWeightFunction(0.8, 0.15),
-		new GaussianWeightFunction(0.75, 0.15),
-		new GaussianWeightFunction(0.5, 0.15),
+		new GaussianWeightFunction(0, 1.5),
+		new GaussianWeightFunction(1, 1.5),
+		new GaussianWeightFunction(2, 1.5),
+		new GaussianWeightFunction(5, 1.5),
+		new GaussianWeightFunction(10, 1.5),
 		
 	};
 	
@@ -38,10 +38,10 @@ public class TestConfiguration {
 	
 	public static final int PARAMETERS = 4;
 	
-	public static final int MAX_REPEATED_RUNS = 1;
+	public static final int MAX_REPEATED_RUNS = 6;
 	
 	public static final String REASONINGS[] = {
-		"SEQ",
+//		"SEQ",
 		"KNN",
 		"BEST"
 	};

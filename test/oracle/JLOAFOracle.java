@@ -148,6 +148,7 @@ public class JLOAFOracle {
 		String info = "";
 		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
 		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
+		info += agentName + " Simulation Matrix Total : " + getSimulationSize() + "\n";
 		for (String actions : wrapper.getAllExpectedActions()){
 			info += agentName + " Simulation " + actions + " Percision : " + wrapper.getPrecision(actions) + "\n";
 			info += agentName + " Simulation " + actions + " Recall : " + wrapper.getRecall(actions) + "\n";
@@ -158,10 +159,21 @@ public class JLOAFOracle {
 		return info;
 	}
 
+	private int getSimulationSize(){
+		int total = 0;
+		for (String s1 : confusionMatrix.keySet()){
+			for (String s2 : confusionMatrix.get(s1).keySet()){
+				total += confusionMatrix.get(s1).get(s2);
+			}
+		}
+		return total;
+	}
+	
 	public String getSimulationResultsSimple(String agentName){
 		String info = "";
 		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
 		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
+		info += agentName + " Simulation Matrix Total : " + getSimulationSize() + "\n";
 		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
 		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
 		return info;
