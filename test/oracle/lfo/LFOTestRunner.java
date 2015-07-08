@@ -22,6 +22,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 
 
 public class LFOTestRunner extends JFrame implements ItemListener, ActionListener, PropertyChangeListener, ListSelectionListener{
@@ -35,10 +36,12 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 	JFrame frame;
 	JCheckBox randKNN;
 	JComboBox diffKValue, reasoningType, agentType, weightFunction;
-	JFormattedTextField traceFolder, exportRunFolder, maxRuns, iterNum;
+	JFormattedTextField/* traceFolder, exportRunFolder,*/ maxRuns, iterNum;
 	JTable table;	// selected weight function values will be transfered into this table
 	JList diffKValueList, reasoningTypeList, agentTypeList, weightFunctionList; //when testing multiple configurations, JLists allow for multiple selections while JComboBoxes do not
-	JButton singleTest, multiTest, start;
+	JButton singleTest, multiTest, start, findTraceFolder, findExportRunFolder;
+	JFileChooser fileChooser;
+	String traceFolderLocation, exportRunFolderLocation;
 	
 	JLabel diffKValueLabel, reasoningTypeLabel, iterNumLabel, agentTypeLabel, weightFunctionLabel,	// labels above most components
 			traceFolderLabel, exportRunFolderLabel, maxRunsLabel;									// to indicate configuration type
@@ -196,21 +199,37 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		iterNum.setVisible(true);
 		frame.add(iterNum);
 		
-		traceFolder = new JFormattedTextField("Enter a Trace Folder");
-		traceFolder.setFont(new Font("Arial", Font.PLAIN, 10));
-		traceFolder.setBounds(325, 25, 250, 50);
-		traceFolder.setBackground(Color.white);
-		traceFolder.addPropertyChangeListener("value", this);
-		traceFolder.setVisible(true);
-		frame.add(traceFolder);
+//		traceFolder = new JFormattedTextField("Enter a Trace Folder");
+//		traceFolder.setFont(new Font("Arial", Font.PLAIN, 10));
+//		traceFolder.setBounds(325, 25, 250, 50);
+//		traceFolder.setBackground(Color.white);
+//		traceFolder.addPropertyChangeListener("value", this);
+//		traceFolder.setVisible(true);
+//		frame.add(traceFolder);
+//		
+//		exportRunFolder = new JFormattedTextField("Enter an Export Run Folder");
+//		exportRunFolder.setFont(new Font("Arial", Font.PLAIN, 10));
+//		exportRunFolder.setBounds(325, 125, 250, 50);
+//		exportRunFolder.setBackground(Color.white);
+//		exportRunFolder.addPropertyChangeListener("value", this);
+//		exportRunFolder.setVisible(true);
+//		frame.add(exportRunFolder);
 		
-		exportRunFolder = new JFormattedTextField("Enter an Export Run Folder");
-		exportRunFolder.setFont(new Font("Arial", Font.PLAIN, 10));
-		exportRunFolder.setBounds(325, 125, 250, 50);
-		exportRunFolder.setBackground(Color.white);
-		exportRunFolder.addPropertyChangeListener("value", this);
-		exportRunFolder.setVisible(true);
-		frame.add(exportRunFolder);
+		findTraceFolder = new JButton("Find a Trace Folder");
+		findTraceFolder.setFont(new Font("Arial", Font.PLAIN, 10));
+		findTraceFolder.setBounds(325, 25, 250, 50);
+		findTraceFolder.setBackground(Color.white);
+		findTraceFolder.addActionListener(this);
+		findTraceFolder.setVisible(true);
+		frame.add(findTraceFolder);
+		
+		findExportRunFolder = new JButton("Find an Export Run Folder");
+		findExportRunFolder.setFont(new Font("Arial", Font.PLAIN, 10));
+		findExportRunFolder.setBounds(325, 125, 250, 50);
+		findExportRunFolder.setBackground(Color.white);
+		findExportRunFolder.addActionListener(this);
+		findExportRunFolder.setVisible(true);
+		frame.add(findExportRunFolder);
 		
 		agentType = new JComboBox(agentTypeOptions);
 		agentType.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -265,18 +284,15 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		maxRuns.setVisible(true);
 		frame.add(maxRuns);
 		
-		Object[][] initial= {{weightFunction.getSelectedItem(), "1", ""}};
+		Object[][] initial= {{weightFunction.getSelectedItem(), "1.0", ""}};
 		
 		tableModel model=new tableModel(initial, columnHeaders);
 		table = new JTable();
 		table.setModel(model);
 		table.setVisible(true);
 		table.addPropertyChangeListener("value", this);
-		
 		table.setBounds(325, 420, 370, 90);
 		table.getColumnModel().getColumn(0).setPreferredWidth(150);
-		//table.setFillsViewportHeight(true);
-		//frame.add(table);
 		
 		scroll5 = new JScrollPane(table);
 		scroll5.setPreferredSize(new Dimension(250, 75));
@@ -372,7 +388,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		multiTest.setEnabled(true);
 		multiTest.setBackground(Color.white);
 		
-		Object[][] weightTab = {{weightFunction.getSelectedItem(), "1", ""}};
+		Object[][] weightTab = {{weightFunction.getSelectedItem(), "1.0", ""}};
 
 		tableModel model = new tableModel(weightTab, columnHeaders);
 		table.setModel(model);
@@ -547,11 +563,13 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		  * 
 		  * The following class prevents users from entering non-interger values into the parameters of the table
 		  * If non-integers are entered into any cell, the program will take that cell's last integer value
+		  * 
+		  * Update: User should be allowed to enter doubles as well, so code needs to be modified so doubles can be entered but strings cannot be:
 		  */
-		 @Override
-		 public Class<?> getColumnClass(int columnIndex) {	 
-			 return Integer.class;
-		 }
+//		 @Override
+//		 public Class<?> getColumnClass(int columnIndex) {	 
+//			 return Integer.class;
+//		 }
 	}
 	
 	
@@ -571,9 +589,9 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 			Integer.parseInt(iterNum.getText());
 			
 			for(int i = 0; i<weightFunctionList.getSelectedValues().length; i++){ // making sure only integers are being entered as the parameters for the weight function table
-				Integer.parseInt((String)(table.getModel().getValueAt(i, 1)));
+				Double.parseDouble((String)(table.getModel().getValueAt(i, 1)));
 				if(weightFunctionList.getSelectedValues()[i] == "Gaussian Weight Function"){
-					Integer.parseInt((String)(table.getModel().getValueAt(i,2)));
+					Double.parseDouble((String)(table.getModel().getValueAt(i,2)));
 				}
 			}
 			start.setEnabled(true);
@@ -616,9 +634,9 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 			
 			for(int i = 0; i < weightFunctionList.getSelectedValues().length; i++){
 				weightTable[i][0] = weightFunctionList.getSelectedValues()[i];
-				weightTable[i][1] = "1";
+				weightTable[i][1] = "1.0";
 				if(weightTable[i][0] == "Gaussian Weight Function"){
-					weightTable[i][2] = "1";
+					weightTable[i][2] = "1.0";
 				}
 				else{
 					weightTable[i][2] = "";
@@ -661,42 +679,46 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 			multiTests = true;
 			guiSetupMulti();
 		}
+		if(e.getSource() == findTraceFolder){
+			fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = fileChooser.showOpenDialog(this);
+			traceFolderLocation = fileChooser.getSelectedFile().toString() +"/";
+			findTraceFolder.setText(traceFolderLocation);
+		}
+		if(e.getSource() == findExportRunFolder){
+			fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = fileChooser.showOpenDialog(this);
+			exportRunFolderLocation = fileChooser.getSelectedFile().toString() + "/";
+			findExportRunFolder.setText(exportRunFolderLocation);
+		}
 		if(e.getSource() == start){
-			
-			//To improve the system to prevent user from entering non-integers into the JTable 
-			/*
-			if(table.isEditing() == true){
-				table.getCellEditor().stopCellEditing();
-			}
-			*/
-			
-			
-			
-//			LFOTestRunner runner = new LFOTestRunner(null);
+
 			if(multiTests == false){
 				ParameterList list = new ParameterList();
 				
 /* Test Output: */
-				System.out.println();
-	 			System.out.println("Reasoning Method: " + reasoningType.getSelectedItem());				//only for testing
-	 			if(randomKNN == true){
-					System.out.println("Iteration Number: " + iterNum.getText());						//only for testing
-				}
-				else{
-					System.out.println("Iteration Number: " + (1));										//only for testing
-				}
-	 			System.out.println("Run Number: " + Integer.parseInt((maxRuns.getText())));						//only for testing
-				System.out.println("K Value: " + diffKValue.getSelectedItem());									//only for testing
-				System.out.println("Random kNN: " + randomKNN);													//only for testing
-				System.out.println("Trace Folder: " + traceFolder.getText() + "Expert/Run " + maxRuns.getText());	//only for testing
-				if(randomKNN == true){
-					System.out.println("Export Run Folder: " + exportRunFolder.getText() +  "Agent " + ("Random") + "/Run " + maxRuns.getText() + "/" + iterNum.getText());	//only for testing	
-				}
-				else{
-					System.out.println("Export Run Folder: " + exportRunFolder.getText() +  "Agent " + ((false) ? "Random" : "NonRandom") + "/Run " + maxRuns.getText() + "/" + (1));	//only for testing					
-				}				
-				System.out.println("Reasoning Method: " + reasoningType.getSelectedItem());						//only for testing
-				//System.out.println();																			//only for testing
+//				System.out.println();
+//	 			System.out.println("Reasoning Method: " + reasoningType.getSelectedItem());				//only for testing
+//	 			if(randomKNN == true){
+//					System.out.println("Iteration Number: " + iterNum.getText());						//only for testing
+//				}
+//				else{
+//					System.out.println("Iteration Number: " + (1));										//only for testing
+//				}
+//	 			System.out.println("Run Number: " + Integer.parseInt((maxRuns.getText())));						//only for testing
+//				System.out.println("K Value: " + diffKValue.getSelectedItem());									//only for testing
+//				System.out.println("Random kNN: " + randomKNN);													//only for testing
+//				System.out.println("Trace Folder: " + traceFolderLocation + "Expert/Run " + maxRuns.getText());	//only for testing
+//				if(randomKNN == true){
+//					System.out.println("Export Run Folder: " + exportRunFolderLocation +  "Agent " + ("Random") + "/Run " + maxRuns.getText() + "/" + iterNum.getText());	//only for testing	
+//				}
+//				else{
+//					System.out.println("Export Run Folder: " + exportRunFolderLocation +  "Agent " + ("NonRandom") + "/Run " + maxRuns.getText() + "/" + (1));	//only for testing					
+//				}				
+//				System.out.println("Reasoning Method: " + reasoningType.getSelectedItem());						//only for testing
+//				System.out.println();																			//only for testing
 /* End of Test output*/			
 				
 				System.out.println("Reasoning Method : " + reasoningType.getSelectedItem());					
@@ -709,12 +731,12 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 				list.addParameter(ParameterNameEnum.RUN_NUMBER.name(), maxRuns.getText());
 				list.addParameter(ParameterNameEnum.K_VALUE.name(), diffKValue.getSelectedItem());
 				list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), randomKNN);
-				list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), traceFolder.getText() + "Expert/Run " + maxRuns.getText());
+				list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), traceFolderLocation + "Expert/Run " + maxRuns.getText());
 				if(randomKNN == true){
-					list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolder.getText() +  "Agent " + ("Random") + "/Run " + maxRuns.getText() + "/" + iterNum.getText());
+					list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolderLocation +  "Agent " + ("Random") + "/Run " + maxRuns.getText() + "/" + iterNum.getText());
 				}
 				else{
-					list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolder.getText() +  "Agent " + ((false) ? "Random" : "NonRandom") + "/Run " + maxRuns.getText() + "/" + (1));
+					list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolderLocation +  "Agent " + ("NonRandom") + "/Run " + maxRuns.getText() + "/" + (1));
 				}				
 				list.addParameter(ParameterNameEnum.REASONING.name(), reasoningType.getSelectedItem());
 				System.out.println();
@@ -750,34 +772,34 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 				}else{
 					WeightFunction w = new FixedWeightFunction(0.1);
 					if(weightFunction.getSelectedItem() == "Decay Weight Function"){
-						w = new DecayWeightFunction(Integer.parseInt((String)table.getValueAt(0, 1)));
+						w = new DecayWeightFunction(Double.parseDouble((String)table.getValueAt(0, 1)));
 					}
 					if(weightFunction.getSelectedItem() == "Fixed Weight Function"){
-						System.out.println(table.getValueAt(0, 1));
-						w = new FixedWeightFunction(Integer.parseInt((String)table.getValueAt(0, 1)));
+						w = new FixedWeightFunction(Double.parseDouble((String)table.getValueAt(0, 1)));
 					}
 					if(weightFunction.getSelectedItem() == "Gaussian Weight Function"){
-						w = new GaussianWeightFunction(Integer.parseInt((String)table.getValueAt(0, 1)), Integer.parseInt((String)table.getValueAt(0, 2)));
+						w = new GaussianWeightFunction(Double.parseDouble((String)table.getValueAt(0, 1)), Double.parseDouble((String)table.getValueAt(0, 2)));
 					}
 					if(weightFunction.getSelectedItem() == "Linear Weight Function"){
-						w = new LinearWeightFunction(Integer.parseInt((String)table.getValueAt(0, 1)));
+						w = new LinearWeightFunction(Double.parseDouble((String)table.getValueAt(0, 1)));
 					}
 					if(weightFunction.getSelectedItem() == "Time Varying Function"){
-//						w = new TimeVaryingWeightFunction(Integer.parseInt((String)table.getValueAt(0, 1)));
+//						w = new TimeVaryingWeightFunction(Double.parseDouble((String)table.getValueAt(0, 1)));
 					}
-						kNNUtil.setWeightFunction(w);
-						if(randomKNN == true){
-							System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + iterNum.getText());
-						}
-						else{
-							System.out.println("Random, k : " + diffKValue.getSelectedItem());
-						}
-						
-						System.out.println("Weight Function : " + w.toString());
-						setParameterList(list);
-						testAll(newTest);
-						System.out.println("end reached");
+					
+					kNNUtil.setWeightFunction(w);
+					if(randomKNN == true){
+						System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + iterNum.getText());
+					}
+					else{
+						System.out.println("Random, k : " + diffKValue.getSelectedItem());
+					}
+					
+					System.out.println("Weight Function : " + w.toString());
+					setParameterList(list);
+					testAll(newTest);
 				}
+				System.out.println();
 			}
 			else{
 				int[] r = reasoningTypeList.getSelectedIndices();	// user's selected reasoning types.
@@ -792,31 +814,31 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 				}
 
 				for (int m = 0; m<r.length; m++){
-					System.out.println("Reasoning Method: " + TestConfiguration.REASONINGS[r[m]]);
+					System.out.println("Reasoning Method : " + TestConfiguration.REASONINGS[r[m]]);
 					for (int i = 0; i < Integer.parseInt(maxRuns.getText()); i++){
 						for (int j = 0; j < l.length; j++){
 							ParameterList list = new ParameterList();
 							for (int k = 0; k<valueOfMaxRuns; k++){
 /* Test Output*/							
-								if(randomKNN == true){
-									System.out.println("Iteration Number: " + (k+1));							//only for testing
-								}
-								else{
-									System.out.println("Iteration Number: " + 1);									// only for testing
-								}
-								
-								System.out.println("Run Number: " + (i+1));									//only for testing
-								System.out.println("K Value: " + intKValues[l[j]]);							//only for testing
-								System.out.println("Random kNN: " + randomKNN);								//only for testing
-								System.out.println("Trace Folder: " + traceFolder.getText() + "Expert/Run " + (i + 1));					//only for testing
-								if(randomKNN == true){
-									System.out.println("Export Run Folder: " + exportRunFolder.getText() + "Agent" + ("Random") + "/Run " + (i+1) + "/" + (k+1));	//only for testing
-								}
-								else{
-									System.out.println("Export Run Folder: " + exportRunFolder.getText() + "Agent " + ((false) ? "Random" : "NonRandom") +"/Run " + (i+1) + "/" + (1));	// only for testing
-								}
-								System.out.println("Reasoning Method: " + TestConfiguration.REASONINGS[r[m]]);				//only for testing
-								System.out.println();														//only for testing	
+//								if(randomKNN == true){
+//									System.out.println("Iteration Number: " + (k+1));							//only for testing
+//								}
+//								else{
+//									System.out.println("Iteration Number: " + 1);									// only for testing
+//								}
+//								
+//								System.out.println("Run Number: " + (i+1));									//only for testing
+//								System.out.println("K Value: " + intKValues[l[j]]);							//only for testing
+//								System.out.println("Random kNN: " + randomKNN);								//only for testing
+//								System.out.println("Trace Folder: " + traceFolderLocation + "Expert/Run " + (i + 1));					//only for testing
+//								if(randomKNN == true){
+//									System.out.println("Export Run Folder: " + exportRunFolderLocation + "Agent " + ("Random") + "/Run " + (i+1) + "/" + (k+1));	//only for testing
+//								}
+//								else{
+//									System.out.println("Export Run Folder: " + exportRunFolderLocation + "Agent " + ("NonRandom") + "/Run " + (i+1) + "/" + (1));	// only for testing
+//								}
+//								System.out.println("Reasoning Method: " + TestConfiguration.REASONINGS[r[m]]);				//only for testing
+//								System.out.println();														//only for testing	
 /* End of test output */
 								if(randomKNN == true){
 									list.addParameter(ParameterNameEnum.ITER_NUM.name(), k + 1);
@@ -827,12 +849,12 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 								list.addParameter(ParameterNameEnum.RUN_NUMBER.name(), i + 1);
 								list.addParameter(ParameterNameEnum.K_VALUE.name(), intKValues[l[j]]);
 								list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), randomKNN);
-								list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), traceFolder.getText() + "Expert/Run " + (i + 1));
+								list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), traceFolderLocation + "Expert/Run " + (i + 1));
 								if(randomKNN == true){
-								list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolder.getText() +  "Agent " + ("Random") + "/Run " + (i+1) + "/" + (k+1));
+									list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolderLocation +  "Agent " + ("Random") + "/Run " + (i+1) + "/" + (k+1));
 								}
 								else{
-									list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), Config.DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((false) ? "Random" : "NonRandom") + "/Run " + (i+1) + "/" + (1));
+									list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolderLocation +  "Agent " + ("NonRandom") + "/Run " + (i+1) + "/" + (1));
 								}
 								
 								list.addParameter(ParameterNameEnum.REASONING.name(), TestConfiguration.REASONINGS[r[m]]);
@@ -877,31 +899,26 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 									
 									WeightFunction[] selectedWeights = new WeightFunction[weightFunctionList.getSelectedIndices().length];
 									for(int n = 0; n < selectedWeights.length; n++){
-										if(weightFunction.getSelectedItem() == "Decay Weight Function"){
-											selectedWeights[n] = new DecayWeightFunction((Integer)table.getValueAt(1, 1));
-											n++;
+										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Decay Weight Function"){
+											selectedWeights[n] = new DecayWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
-										if(weightFunction.getSelectedItem() == "Fixed Weight Function"){
-											selectedWeights[n] = new FixedWeightFunction((Integer)table.getValueAt(1, 1));
-											n++;
+										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Fixed Weight Function"){
+											selectedWeights[n] = new FixedWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
-										if(weightFunction.getSelectedItem() == "Gaussian Weight Function"){
-											selectedWeights[n] = new GaussianWeightFunction((Integer)table.getValueAt(1, 1), (Integer)table.getValueAt(1, 2));
-											n++;
+										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Gaussian Weight Function"){
+											selectedWeights[n] = new GaussianWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)), Double.parseDouble((String)table.getValueAt(n, 2)));
 										}
-										if(weightFunction.getSelectedItem() == "Linear Weight Function"){
-											selectedWeights[n] = new LinearWeightFunction((Integer)table.getValueAt(1, 1));
-											n++;
+										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Linear Weight Function"){
+											selectedWeights[n] = new LinearWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
-										if(weightFunction.getSelectedItem() == "Time Varying Function"){
-//											selectedWeights[n] = new TimeVaryingWeightFunction((Integer)table.getValueAt(1, 1));
-//											n++;
+										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Time Varying Function"){
+//											selectedWeights[n] = new TimeVaryingWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
 									}
-									for(WeightFunction w:selectedWeights){
+									for(WeightFunction w : selectedWeights){
 										kNNUtil.setWeightFunction(w);
 										if(randomKNN == true){
-											System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + iterNum.getText());
+											System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + (k+1));
 										}
 										else{
 											System.out.println("Random, k : " + diffKValue.getSelectedItem());
@@ -912,11 +929,13 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 										testAll(newTest);
 									}
 								}
+								System.out.println();
 							}
 						}
 					}
 				}
 			}
+			System.out.println("end reached");
 		}
 	}	
 }
