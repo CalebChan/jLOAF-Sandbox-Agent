@@ -79,7 +79,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		if(multiTests == false){
 			LfOAbstractCreatureTest inst;
 			try {
-				inst = tests[agentType.getSelectedIndex()].getClass().newInstance();
+				inst = tests[0].getClass().newInstance();
 				inst.setParamters(list);
 				inst.initSetting();
 				inst.testRun();
