@@ -16,7 +16,8 @@ public abstract class LfOAbstractCreatureTest extends LfOAbstractTest{
 			TraceGenerator.generateTrace(Config.DEFAULT_ITER, Config.DEFAULT_GRID_SIZE, Config.DEFAULT_LENGTH, Config.DEFAULT_TEST_TRACE_NAME, true, c, expert);
 			expert.parseFile(Config.DEFAULT_TEST_TRACE_NAME, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}else{
-			expert.parseFile(list.getStringParam(ParameterNameEnum.TRACE_FOLDER.name()) + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
+//			expert.parseFile(list.getStringParam(ParameterNameEnum.TRACE_FOLDER.name()) + "\\" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
+			expert.parseFile(list.getStringParam(ParameterNameEnum.TRACE_FOLDER.name()) + "/" + testName, Config.DEFAULT_TEST_CASEBASE_NAME);
 		}
 		
 		initTrainingAndTestingSets(Config.DEFAULT_TEST_CASEBASE_NAME, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
