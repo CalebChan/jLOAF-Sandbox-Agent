@@ -23,21 +23,33 @@ import agent.SandboxPerception;
 import agent.lfo.DirtBasedAgentSenseConfig;
 
 public class JLOAFOracle {
+	protected static String buildPerceptionString(ComplexInput input){
+		String s = "";
+		
+		for (Direction d : Direction.values()){
+			int type = (int) ((AtomicInput)input.get(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX)).getFeature().getValue();
+			int dist = (int) ((AtomicInput)input.get(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX)).getFeature().getValue();
+			s += type + " " + dist + " ";
+		}
+		
+		return s;
+	}
 	public static final String LOG_SIM_START = "SIM_START";
 	public static final String LOG_SIM_RESULT = "SIM_RESULT";
 	public static final String LOG_SIM_END = "SIM_END";
 	public static final String LOG_SIM_STAT = "SIM_STAT";
-	protected JLOAFLogger log;
 	
+	protected JLOAFLogger log;
 	protected AbstractSandboxAgent testAgent;
+	
 	protected Agent agent;
 	
 	protected SandboxPerception perception;
-	
 	protected int simulationCount;
-	protected double globalAccuracy;
 	
+	protected double globalAccuracy;
 	protected CaseRun testingData;
+	
 	protected Map<String, Map<String, Integer>> confusionMatrix;
 	
 	public JLOAFOracle(AbstractSandboxAgent ta, Agent a, SandboxPerception p){
@@ -53,18 +65,56 @@ public class JLOAFOracle {
 		this.log = JLOAFLogger.getInstance();
 	}
 	
-	public void setAgent(Agent agent){
-		this.agent = agent;
+	protected void collectStats(StatisticsWrapper stat){
+		this.globalAccuracy += stat.getClassificationAccuracy();
+		this.simulationCount++;
+		
+		mergeConfusionMatrix(stat.getConfusionMatrix());
 	}
 	
-	public void setTestData(CaseRun test){
-		this.testingData = test;
+	public double getGlobalAccuracyAvg() {
+		ConfusionMatrixStatisticsWrapper w = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
+		return w.getClassificationAccuracy();
 	}
 	
-	public void resetOracleStats(){
-		this.globalAccuracy = 0;
-		this.simulationCount = 0;
-		this.confusionMatrix.clear();
+	public String getSimulationResults(String agentName){
+		String info = "";
+		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
+		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
+		info += agentName + " Simulation Matrix Total : " + getSimulationSize() + "\n";
+		for (String actions : wrapper.getAllExpectedActions()){
+			info += agentName + " Simulation " + actions + " Percision : " + wrapper.getPrecision(actions) + "\n";
+			info += agentName + " Simulation " + actions + " Recall : " + wrapper.getRecall(actions) + "\n";
+			info += agentName + " Simulation " + actions + " F1 : " + wrapper.getF1(actions) + "\n";
+		}
+		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
+		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
+		return info;
+	}
+	
+	public String getSimulationResultsSimple(String agentName){
+		String info = "";
+		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
+		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
+		info += agentName + " Simulation Matrix Total : " + getSimulationSize() + "\n";
+		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
+		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
+		return info;
+	}
+	
+	private int getSimulationSize(){
+		int total = 0;
+		for (String s1 : confusionMatrix.keySet()){
+			for (String s2 : confusionMatrix.get(s1).keySet()){
+				total += confusionMatrix.get(s1).get(s2);
+			}
+		}
+		return total;
+	}
+	
+	@Deprecated
+	protected String getStatsString(StatisticsWrapper stat){
+		return "";
 	}
 	
 	private void mergeConfusionMatrix(Map<String, Map<String, Integer>> map1){
@@ -94,37 +144,10 @@ public class JLOAFOracle {
 		}
 	}
 	
-	protected void collectStats(StatisticsWrapper stat){
-		this.globalAccuracy += stat.getClassificationAccuracy();
-		this.simulationCount++;
-		
-		mergeConfusionMatrix(stat.getConfusionMatrix());
-	}
-	
-	protected static String buildPerceptionString(ComplexInput input){
-		String s = "";
-		
-		for (Direction d : Direction.values()){
-			int type = (int) ((AtomicInput)input.get(d.name() + DirtBasedAgentSenseConfig.TYPE_SUFFIX)).getFeature().getValue();
-			int dist = (int) ((AtomicInput)input.get(d.name() + DirtBasedAgentSenseConfig.DISTANCE_SUFFIX)).getFeature().getValue();
-			s += type + " " + dist + " ";
-		}
-		
-		return s;
-	}
-	
-	public boolean testAgent(StatisticsWrapper stat, int time){
-		Case correctCase = this.testingData.getCasePastOffset(time);
-		MovementAction action = MovementAction.values()[(int) ((SandboxAction)correctCase.getAction()).getFeature().getValue()];
-		
-		Action act = stat.senseEnvironment(correctCase);
-		SandboxAction sa = (SandboxAction)act;
-		
-		MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
-		
-		ComplexInput ci = (ComplexInput)correctCase.getInput();
-		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_RESULT, buildPerceptionString(ci) + move.ordinal());
-		return action.equals(move);
+	public void resetOracleStats(){
+		this.globalAccuracy = 0;
+		this.simulationCount = 0;
+		this.confusionMatrix.clear();
 	}
 	
 	public void runSimulation(boolean toLearn){
@@ -139,48 +162,26 @@ public class JLOAFOracle {
 		collectStats(stat);
 		this.testingData = null;
 	}
-	
-	protected String getStatsString(StatisticsWrapper stat){
-		return "";
-	}
-	
-	public String getSimulationResults(String agentName){
-		String info = "";
-		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
-		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
-		info += agentName + " Simulation Matrix Total : " + getSimulationSize() + "\n";
-		for (String actions : wrapper.getAllExpectedActions()){
-			info += agentName + " Simulation " + actions + " Percision : " + wrapper.getPrecision(actions) + "\n";
-			info += agentName + " Simulation " + actions + " Recall : " + wrapper.getRecall(actions) + "\n";
-			info += agentName + " Simulation " + actions + " F1 : " + wrapper.getF1(actions) + "\n";
-		}
-		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
-		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
-		return info;
-	}
 
-	private int getSimulationSize(){
-		int total = 0;
-		for (String s1 : confusionMatrix.keySet()){
-			for (String s2 : confusionMatrix.get(s1).keySet()){
-				total += confusionMatrix.get(s1).get(s2);
-			}
-		}
-		return total;
+	public void setAgent(Agent agent){
+		this.agent = agent;
 	}
 	
-	public String getSimulationResultsSimple(String agentName){
-		String info = "";
-		ConfusionMatrixStatisticsWrapper wrapper = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
-		info += agentName + " Simulation Expected Actions : " + wrapper.getAllExpectedActions().size() + "\n";
-		info += agentName + " Simulation Matrix Total : " + getSimulationSize() + "\n";
-		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
-		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
-		return info;
+	public void setTestData(CaseRun test){
+		this.testingData = test;
 	}
 	
-	public double getGlobalAccuracyAvg() {
-		ConfusionMatrixStatisticsWrapper w = new ConfusionMatrixStatisticsWrapper(this.confusionMatrix);
-		return w.getClassificationAccuracy();
+	public boolean testAgent(StatisticsWrapper stat, int time){
+		Case correctCase = this.testingData.getCasePastOffset(time);
+		MovementAction action = MovementAction.values()[(int) ((SandboxAction)correctCase.getAction()).getFeature().getValue()];
+		
+		Action act = stat.senseEnvironment(correctCase);
+		SandboxAction sa = (SandboxAction)act;
+		
+		MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
+		
+		ComplexInput ci = (ComplexInput)correctCase.getInput();
+		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_RESULT, buildPerceptionString(ci) + move.ordinal());
+		return action.equals(move);
 	}
 }

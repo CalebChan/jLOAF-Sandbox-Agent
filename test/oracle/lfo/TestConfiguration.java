@@ -41,7 +41,7 @@ public class TestConfiguration {
 	public static final int MAX_REPEATED_RUNS = 6;
 	
 	public static final String REASONINGS[] = {
-//		"SEQ",
+		"SEQ",
 		"KNN",
 		"BEST"
 	};

@@ -21,12 +21,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 
-public class LFOTestRunner extends JFrame implements ItemListener, ActionListener, PropertyChangeListener, ListSelectionListener{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class LFOTestRunner implements ItemListener, ActionListener, PropertyChangeListener, ListSelectionListener{
 
 	private ParameterList list;
 	
@@ -546,7 +541,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		if(e.getSource() == findTraceFolder){
 			fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.showOpenDialog(this);
+			fileChooser.showOpenDialog(frame);
 			try{
 				traceFolderLocation = fileChooser.getSelectedFile().toString() +"/";
 				findTraceFolder.setText(traceFolderLocation);
@@ -556,7 +551,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		if(e.getSource() == findExportRunFolder){
 			fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.showOpenDialog(this);
+			fileChooser.showOpenDialog(frame);
 			try{
 				exportRunFolderLocation = fileChooser.getSelectedFile().toString() + "/";
 				findExportRunFolder.setText(exportRunFolderLocation);
