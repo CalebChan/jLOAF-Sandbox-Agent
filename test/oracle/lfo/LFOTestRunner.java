@@ -6,8 +6,6 @@ import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.GaussianWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
-import org.jLOAF.retrieve.sequence.weight.TimeVaryingWeightFunction;
-
 import util.ParameterList;
 import util.ParameterNameEnum;
 
@@ -25,41 +23,51 @@ import java.beans.PropertyChangeListener;
 
 public class LFOTestRunner extends JFrame implements ItemListener, ActionListener, PropertyChangeListener, ListSelectionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ParameterList list;
 	
-	Integer[] intKValues; //will turn TestConfiguration.K_VALUES from an int to an Integer for the jComboBox
-	Integer[] intIterNums; //will turn TestConfiguration.MAX_REPEATED_RUNS from an int to an Integer
-	
+	private Integer[] intKValues; //will turn TestConfiguration.K_VALUES from an int to an Integer for the jComboBox
 	// GUI Components: 
-	JFrame frame;
-	JCheckBox randKNN;
-	JComboBox diffKValue, reasoningType, agentType, weightFunction;
-	JFormattedTextField/* traceFolder, exportRunFolder,*/ maxRuns, iterNum;
-	JTable table;	// selected weight function values will be transfered into this table
-	JList diffKValueList, reasoningTypeList, agentTypeList, weightFunctionList; //when testing multiple configurations, JLists allow for multiple selections while JComboBoxes do not
-	JButton singleTest, multiTest, start, findTraceFolder, findExportRunFolder;
-	JFileChooser fileChooser;
-	String traceFolderLocation, exportRunFolderLocation;
+	private JFrame frame;
+	private JCheckBox randKNN;
+	private JComboBox<Integer> diffKValue;
+	private JComboBox<String> reasoningType;
+	private JComboBox<String> agentType;
+	private JComboBox<String> weightFunction;
+	private JFormattedTextField/* traceFolder, exportRunFolder,*/ maxRuns, iterNum;
+	private JTable table;	// selected weight function values will be transfered into this table
+	private JList<Integer> diffKValueList; //when testing multiple configurations, JLists allow for multiple selections while JComboBoxes do not
+	private JList<String> reasoningTypeList;
+	private JList<String> agentTypeList;
+	private JList<String> weightFunctionList;
 	
-	JLabel diffKValueLabel, reasoningTypeLabel, iterNumLabel, agentTypeLabel, weightFunctionLabel,	// labels above most components
+	private JButton singleTest, multiTest, start, findTraceFolder, findExportRunFolder;
+	private JFileChooser fileChooser;
+	private String traceFolderLocation, exportRunFolderLocation;
+	
+	private JLabel diffKValueLabel, reasoningTypeLabel, iterNumLabel, agentTypeLabel, weightFunctionLabel,	// labels above most components
 			traceFolderLabel, exportRunFolderLabel, maxRunsLabel;									// to indicate configuration type
 	
-	String[] columnHeaders = {"Weight Function", "Parameter 1", "Parameter 2"};		// headers for the selected weight function table
+	private String[] columnHeaders = {"Weight Function", "Parameter 1", "Parameter 2"};		// headers for the selected weight function table
 	
-	JScrollPane scroll1, scroll2, scroll3, scroll4, scroll5;	//scrollers for the JLists and the JTable
+	private JScrollPane scroll1, scroll2, scroll3, scroll4, scroll5;	//scrollers for the JLists and the JTable
 	
-	boolean randomKNN = false; 	// determines if kNN is random or set
-	boolean multiTests = false;	// determines if there is a single test or multiple
+	private boolean randomKNN = false; 	// determines if kNN is random or set
+	private boolean multiTests = false;	// determines if there is a single test or multiple
 	
 	// Different weight function types:
-	String[] weights = {"Decay Weight Function"
+	private String[] weights = {"Decay Weight Function"
 						,"Fixed Weight Function"
 						,"Gaussian Weight Function"
 						,"Linear Weight Function"
 //						,"Time Varying Function"
 						};
 	
-	String[] agentTypeOptions = {"LfOSmartRandomTest", 
+	private String[] agentTypeOptions = {"LfOSmartRandomTest", 
 								"LfOSmartStraightLineTest", 
 								"LfOZigZagTest", 
 								"LfOFixedSequenceTest", 
@@ -128,7 +136,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 			intKValues[i] = Integer.valueOf(TestConfiguration.K_VALUES[i]);
 		}
 		
-		diffKValue = new JComboBox(intKValues);
+		diffKValue = new JComboBox<Integer>(intKValues);
 		diffKValue.setFont(new Font("Arial", Font.PLAIN, 10));
 		diffKValue.setBounds(25, 125, 250, 25);
 		diffKValue.setBackground(Color.white);
@@ -136,7 +144,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		diffKValue.setVisible(true);
 		frame.add(diffKValue);
 		
-		diffKValueList = new JList(intKValues);
+		diffKValueList = new JList<Integer>(intKValues);
 		diffKValueList.setFont(new Font("Arial", Font.PLAIN, 10));
 		diffKValueList.setBackground(Color.white);
 		diffKValueList.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -149,7 +157,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		scroll1.setVisible(false);
 		frame.add(scroll1,BorderLayout.CENTER);
 		
-		reasoningType = new JComboBox(TestConfiguration.REASONINGS);		
+		reasoningType = new JComboBox<String>(TestConfiguration.REASONINGS);		
 		reasoningType.setFont(new Font("Arial", Font.PLAIN, 10));
 		reasoningType.setBounds(25, 225, 250, 25);
 		reasoningType.setBackground(Color.white);
@@ -157,7 +165,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		reasoningType.setVisible(true);
 		frame.add(reasoningType);
 		
-		reasoningTypeList = new JList(TestConfiguration.REASONINGS);		
+		reasoningTypeList = new JList<String>(TestConfiguration.REASONINGS);		
 		reasoningTypeList.setFont(new Font("Arial", Font.PLAIN, 10));
 		reasoningTypeList.setBackground(Color.white);
 		reasoningTypeList.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -195,7 +203,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		findExportRunFolder.setVisible(true);
 		frame.add(findExportRunFolder);
 		
-		agentType = new JComboBox(agentTypeOptions);
+		agentType = new JComboBox<String>(agentTypeOptions);
 		agentType.setFont(new Font("Arial", Font.PLAIN, 10));
 		agentType.setBounds(325, 225, 250, 25);
 		agentType.setBackground(Color.white);
@@ -204,7 +212,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		agentType.setVisible(true);
 		frame.add(agentType);
 		
-		agentTypeList = new JList(agentTypeOptions);		
+		agentTypeList = new JList<String>(agentTypeOptions);		
 		agentTypeList.setFont(new Font("Arial", Font.PLAIN, 10));
 		agentTypeList.setBackground(Color.white);
 		agentTypeList.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -217,7 +225,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		scroll3.setVisible(false);
 		frame.add(scroll3,BorderLayout.CENTER);
 		
-		weightFunction = new JComboBox(weights);
+		weightFunction = new JComboBox<String>(weights);
 		weightFunction.setFont(new Font("Arial", Font.PLAIN, 10));
 		weightFunction.setBounds(325, 325, 250, 25);
 		weightFunction.setSelectedIndex(0);
@@ -226,7 +234,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		weightFunction.setVisible(true);
 		frame.add(weightFunction);
 		
-		weightFunctionList = new JList(weights);
+		weightFunctionList = new JList<String>(weights);
 		weightFunctionList.setFont(new Font("Arial", Font.PLAIN, 10));
 		weightFunctionList.setBackground(Color.white);
 		weightFunctionList.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -397,7 +405,11 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 	 * in which case the user is capable of entering two parameters
 	 */
 	public class tableModel extends DefaultTableModel{
-		 public tableModel(Object[][] a, String[] b){
+		 /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		public tableModel(Object[][] a, String[] b){
 			 super(a, b);
 		 }
 		 @Override
@@ -534,7 +546,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		if(e.getSource() == findTraceFolder){
 			fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int returnVal = fileChooser.showOpenDialog(this);
+			fileChooser.showOpenDialog(this);
 			try{
 				traceFolderLocation = fileChooser.getSelectedFile().toString() +"/";
 				findTraceFolder.setText(traceFolderLocation);
@@ -544,7 +556,7 @@ public class LFOTestRunner extends JFrame implements ItemListener, ActionListene
 		if(e.getSource() == findExportRunFolder){
 			fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int returnVal = fileChooser.showOpenDialog(this);
+			fileChooser.showOpenDialog(this);
 			try{
 				exportRunFolderLocation = fileChooser.getSelectedFile().toString() + "/";
 				findExportRunFolder.setText(exportRunFolderLocation);
