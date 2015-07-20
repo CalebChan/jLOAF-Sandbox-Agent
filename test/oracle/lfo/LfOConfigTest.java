@@ -3,6 +3,7 @@ package oracle.lfo;
 import oracle.Config;
 import oracle.SandboxOracle;
 
+import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.tools.CaseBaseIO;
@@ -13,7 +14,6 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import agent.AbstractSandboxAgent;
-import agent.SandboxAgent;
 import agent.lfo.LfOPerception;
 import agent.lfo.SmartRandomExpert;
 
@@ -29,8 +29,8 @@ public class LfOConfigTest {
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase3.cb");
 //		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
 		SequentialReasoning r = new SequentialReasoning(cb, null, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
-		SandboxAgent agent = new SandboxAgent(cb, r);
-		r.setCurrentRun(agent.getCaseRun());
+		RunAgent agent = new RunAgent(r, cb);
+		r.setCurrentRun(agent.getCurrentRun());
 		
 		oracle = new SandboxOracle(testAgent, agent, new LfOPerception(), Config.DEFAULT_WORLD_SIZE, creature);
 	}

@@ -6,6 +6,7 @@ import java.util.Collection;
 import oracle.Config;
 import oracle.SandboxOracle;
 
+import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.SimpleKNN;
 import org.jLOAF.tools.CaseBaseIO;
@@ -19,7 +20,6 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
 import agent.AbstractSandboxAgent;
-import agent.SandboxAgent;
 import agent.backtracking.ActionBasedAgent;
 import agent.backtracking.BacktrackingPerception;
 
@@ -50,7 +50,7 @@ public class KNNConfigTest {
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_CASEBASE_NAME);
 //		SandboxAgent agent = new SandboxAgent(cb, false, k, Config.DEFAULT_USE_RANDOM_KNN);
-		SandboxAgent agent = new SandboxAgent(cb, new SimpleKNN(k, cb));
+		RunAgent agent = new RunAgent(new SimpleKNN(k, cb), cb);
 		
 		oracle = new SandboxOracle(testAgent, agent, new BacktrackingPerception(), Config.DEFAULT_WORLD_SIZE, creature);
 	}

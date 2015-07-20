@@ -6,6 +6,7 @@ import java.util.List;
 import oracle.Config;
 import oracle.JLOAFOracle;
 
+import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.BacktrackingReasoning;
 import org.jLOAF.reasoning.BestRunReasoning;
@@ -18,9 +19,6 @@ import org.jLOAF.util.JLOAFLogger;
 import org.jLOAF.util.JLOAFLogger.Level;
 import org.junit.Assert;
 
-import agent.AbstractSandboxAgent;
-import agent.SandboxAgent;
-import agent.lfo.LfOPerception;
 import util.ParameterList;
 import util.ParameterNameEnum;
 
@@ -72,7 +70,7 @@ public abstract class LfOAbstractTest {
 		}
 	}
 	
-	protected SandboxAgent createAgent(CaseBase cb){
+	protected RunAgent createAgent(CaseBase cb){
 		int kValue = list.getIntParam(ParameterNameEnum.K_VALUE.name());
 		boolean randomKNN = list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name());
 		BacktrackingReasoning r = null;
@@ -90,37 +88,34 @@ public abstract class LfOAbstractTest {
 			}
 		}
 		
-		SandboxAgent agent = new SandboxAgent(cb, r);
-		r.setCurrentRun(agent.getCaseRun());
+		RunAgent agent = new RunAgent(r, cb);
+		r.setCurrentRun(agent.getCurrentRun());
 		
 		return agent;
 	}
 	
 	
-	protected void setUp(AbstractSandboxAgent testAgent) {
+	protected void setUp() {
 		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
-		SandboxAgent agent = createAgent(cb);
-		oracle = new JLOAFOracle(testAgent, agent, new LfOPerception());
+		RunAgent agent = createAgent(cb);
+		oracle = new JLOAFOracle(agent);
 	}
 
 	protected void testRun() {
 		oracle.resetOracleStats();
-		oracle.setTestData(loo.get(testNo).getTesting());
 		
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){			
-			oracle.runSimulation(Config.AGENT_LEARN);
+			oracle.runSimulation(loo.get(testNo).getTesting());
 			
 			CaseBase cb = loo.get(testNo).getTraining();
-			SandboxAgent agent = createAgent(cb);
+			RunAgent agent = createAgent(cb);
 			
 			oracle.setAgent(agent);
 			testNo++;
-			
-			oracle.setTestData(loo.get(testNo).getTesting());
 		}
 		
-		oracle.runSimulation(Config.AGENT_LEARN);
+		oracle.runSimulation(loo.get(testNo).getTesting());
 		
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResultsSimple(getOutputTestName()));

@@ -1,12 +1,13 @@
 package oracle;
 
-import org.jLOAF.Agent;
 import org.jLOAF.action.Action;
+import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.Case;
-import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.Input;
+import org.jLOAF.performance.ClassificationStatisticsWrapper;
 import org.jLOAF.performance.StatisticsBundle;
 import org.jLOAF.performance.StatisticsWrapper;
+import org.jLOAF.performance.actionestimation.LastActionEstimate;
 
 import sandbox.Creature;
 import sandbox.MovementAction;
@@ -22,11 +23,17 @@ public class SandboxOracle extends JLOAFOracle{
 	
 	private int worldSize;
 	
-	public SandboxOracle(AbstractSandboxAgent ta, Agent a, SandboxPerception p, int worldSize, Creature creature) {
-		super(ta, a, p);
+	protected SandboxPerception perception;
+	protected AbstractSandboxAgent testAgent;
+	
+	public SandboxOracle(AbstractSandboxAgent ta, RunAgent a, SandboxPerception p, int worldSize, Creature creature) {
+		super(a);
 		
 		this.worldSize = worldSize;
 		setCreature(creature);
+		
+		this.perception = p;
+		this.testAgent = ta;
 	}
 	
 	public void setCreature(Creature c){
@@ -36,26 +43,24 @@ public class SandboxOracle extends JLOAFOracle{
 		sandbox.init();
 	}
 	
-	@Override
-	public void setTestData(CaseRun test){
-		this.testingData = null;
+	public void runSimulation(boolean learn){
+		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
+		for (int i = 0; i < Config.DEFAULT_LENGTH; i++){
+			Input in = perception.sense(sandbox.getCreature().get(creatureId));
+			MovementAction action = testAgent.testAction(sandbox.getCreature().get(creatureId));
+			SandboxAction a = new SandboxAction(action);
+			
+			Case correctCase = new Case(in, a, null);
+			Action act = stat.senseEnvironment(correctCase);
+			SandboxAction sa = (SandboxAction)act;
+			MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
+			
+			if (!a.equals(move)){
+				this.agent.learn(new Case(in, act, null));
+			}
+		}
 	}
-	
-	@Override
-	public boolean testAgent(StatisticsWrapper stat, int time){
-		Input in = perception.sense(sandbox.getCreature().get(creatureId));
-		MovementAction action = testAgent.testAction(sandbox.getCreature().get(creatureId));
-		SandboxAction a = new SandboxAction(action);
-		
-		Case correctCase = new Case(in, a, null);
-		
-		
-		Action act = stat.senseEnvironment(correctCase);
-		SandboxAction sa = (SandboxAction)act;
-		MovementAction move = MovementAction.values()[(int) sa.getFeature().getValue()];
-		
-		return a.equals(move);
-	}
+
 	@Override
 	protected String getStatsString(StatisticsWrapper stat){
 		String s = "Creature : " + sandbox.getCreature().get(creatureId).toString() + "\n";

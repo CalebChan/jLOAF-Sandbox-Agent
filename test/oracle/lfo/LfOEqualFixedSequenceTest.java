@@ -1,13 +1,6 @@
 package oracle.lfo;
 
-import oracle.Config;
-
-import sandbox.Creature;
-import sandbox.Direction;
-import sandbox.creature.DirtBasedCreature;
 import util.expert.lfo.EqualFixedSequenceExpertStrategy;
-import agent.AbstractSandboxAgent;
-import agent.lfo.EqualFixedSequenceExpert;
 
 public class LfOEqualFixedSequenceTest extends LfOAbstractCreatureTest{
 
@@ -25,9 +18,7 @@ public class LfOEqualFixedSequenceTest extends LfOAbstractCreatureTest{
 	@Override
 	protected void initSetting() {
 		super.init(new EqualFixedSequenceExpertStrategy(), PREGEN_TEST_NAME);
-		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
-		AbstractSandboxAgent testAgent = new EqualFixedSequenceExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
-		setUp(testAgent);
+		setUp();
 	}
 
 }

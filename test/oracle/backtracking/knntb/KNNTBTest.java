@@ -65,10 +65,9 @@ public class KNNTBTest{
 		
 		SequentialReasoning r = new SequentialReasoning(cb, null, DEFAULT_K, USE_RANDOM_KNN);
 		agent = new SandboxAgentTestStub(cb, r, DEFAULT_THRESHOLD);
-		r.setCurrentRun(agent.getCaseRun());
+		r.setCurrentRun(agent.getCurrentRun());
 		
 		oracle = new SandboxTraceBasedOracle(null, agent, new LfOPerception());
-		oracle.setTestData(loo.get(NUM_OF_SIM - 1).getTesting());
 	}
 
 	@Test
@@ -79,7 +78,8 @@ public class KNNTBTest{
 		System.out.println("Run : \n" + currentRun.toString());
 		agent.setCaseRun(agentRun, DEFAULT_K, USE_RANDOM_KNN, DEFAULT_THRESHOLD);
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
-		boolean same = oracle.testAgent(stat, loo.get(NUM_OF_SIM - 1).getTesting().getRunLength() - 1);
+		int index = loo.get(NUM_OF_SIM - 1).getTesting().getRunLength() - 1;
+		boolean same = oracle.testAgent(stat, loo.get(NUM_OF_SIM - 1).getTesting().getCasePastOffset(index));
 		Assert.assertTrue("Check if results returns True", same);
 		System.out.println("Value is true");
 		agent.resetAgent();

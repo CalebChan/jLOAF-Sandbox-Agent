@@ -1,19 +1,18 @@
 package oracle.backtracking.knntb;
 
 import org.jLOAF.Reasoning;
+import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.reasoning.SequentialReasoning;
 
-import agent.SandboxAgent;
-
-public class SandboxAgentTestStub extends SandboxAgent{
+public class SandboxAgentTestStub extends RunAgent{
 
 	private CaseBase baseCaseBase;
 	
 	public SandboxAgentTestStub(CaseBase cb, Reasoning r, double problemThreshold) {
-		super(cb, r);
+		super(r, cb);
 		baseCaseBase = new CaseBase();
 		for (Case c : cb.getCases()){
 			baseCaseBase.add(c);
@@ -21,8 +20,8 @@ public class SandboxAgentTestStub extends SandboxAgent{
 	}
 	
 	public void setCaseRun(CaseRun run, int kValue, boolean useRandomKnn, double problemThreshold){
-		this.curRun = run;
-		this.r = new SequentialReasoning(cb, curRun, kValue, useRandomKnn,problemThreshold, 0.0);
+		this.currentRun = run;
+		this.r = new SequentialReasoning(cb, currentRun, kValue, useRandomKnn,problemThreshold, 0.0);
 	}
 	
 	public void setCaseRun(CaseBase cb, int kValue, boolean useRandomKnn, double problemThreshold){
@@ -39,7 +38,7 @@ public class SandboxAgentTestStub extends SandboxAgent{
 	
 	public void resetAgent(){
 		this.cb = new CaseBase();
-		this.curRun = new CaseRun();
+		this.currentRun = new CaseRun();
 		for (Case c : baseCaseBase.getCases()){
 			cb.add(c);
 		}

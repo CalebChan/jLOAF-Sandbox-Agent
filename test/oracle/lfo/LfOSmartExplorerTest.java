@@ -1,13 +1,6 @@
 package oracle.lfo;
 
-import oracle.Config;
-
-import sandbox.Creature;
-import sandbox.Direction;
-import sandbox.creature.DirtBasedCreature;
 import util.expert.lfo.SmartExplorerExpertStrategy;
-import agent.AbstractSandboxAgent;
-import agent.lfo.SmartExplorerExpert;
 
 public class LfOSmartExplorerTest extends LfOAbstractCreatureTest {
 	
@@ -25,8 +18,6 @@ public class LfOSmartExplorerTest extends LfOAbstractCreatureTest {
 	@Override
 	protected void initSetting() {
 		super.init(new SmartExplorerExpertStrategy(), PREGEN_TEST_NAME);
-		Creature creature = new DirtBasedCreature(7, 2, Direction.NORTH);
-		AbstractSandboxAgent testAgent = new SmartExplorerExpert(Config.DEFAULT_WORLD_SIZE, new DirtBasedCreature(creature));
-		setUp(testAgent);
+		setUp();
 	}
 }

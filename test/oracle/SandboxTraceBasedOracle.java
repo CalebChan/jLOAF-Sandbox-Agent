@@ -1,14 +1,20 @@
 package oracle;
 
-import org.jLOAF.Agent;
+import org.jLOAF.agent.RunAgent;
 
 import agent.AbstractSandboxAgent;
 import agent.SandboxPerception;
 
 public class SandboxTraceBasedOracle extends JLOAFOracle{
 	
-	public SandboxTraceBasedOracle(AbstractSandboxAgent ta, Agent a, SandboxPerception p) {
-		super(ta, a, p);
+	protected SandboxPerception perception;
+	protected AbstractSandboxAgent testAgent;
+	
+	public SandboxTraceBasedOracle(AbstractSandboxAgent ta, RunAgent a, SandboxPerception p) {
+		super(a);
+		
+		this.perception = p;
+		this.testAgent = ta;
 	}
 
 }

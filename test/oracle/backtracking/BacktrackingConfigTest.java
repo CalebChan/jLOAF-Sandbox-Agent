@@ -3,6 +3,7 @@ package oracle.backtracking;
 import oracle.Config;
 import oracle.SandboxOracle;
 
+import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.tools.CaseBaseIO;
@@ -10,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import agent.AbstractSandboxAgent;
-import agent.SandboxAgent;
 import agent.backtracking.ActionBasedAgent;
 import agent.backtracking.BacktrackingPerception;
 import sandbox.Creature;
@@ -29,8 +29,8 @@ public class BacktrackingConfigTest {
 		CaseBase cb = CaseBaseIO.loadCaseBase(Config.DEFAULT_CASEBASE_NAME);
 		//SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
 		SequentialReasoning r = new SequentialReasoning(cb, null, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
-		SandboxAgent agent = new SandboxAgent(cb, r);
-		r.setCurrentRun(agent.getCaseRun());
+		RunAgent agent = new RunAgent(r, cb);
+		r.setCurrentRun(agent.getCurrentRun());
 		
 		oracle = new SandboxOracle(testAgent, agent, new BacktrackingPerception(), Config.DEFAULT_WORLD_SIZE, creature);
 	}
