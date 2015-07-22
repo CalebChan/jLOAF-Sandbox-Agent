@@ -416,19 +416,6 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 			 return(col == 1);
 		 }
 		 
-		 /*
-		  * (non-Javadoc)
-		  * @see javax.swing.table.AbstractTableModel#getColumnClass(int)
-		  * 
-		  * The following class prevents users from entering non-interger values into the parameters of the table
-		  * If non-integers are entered into any cell, the program will take that cell's last integer value
-		  * 
-		  * Update: User should be allowed to enter doubles as well, so code needs to be modified so doubles can be entered but strings cannot be:
-		  */
-//		 @Override
-//		 public Class<?> getColumnClass(int columnIndex) {	 
-//			 return Integer.class;
-//		 }
 	}
 	
 	
