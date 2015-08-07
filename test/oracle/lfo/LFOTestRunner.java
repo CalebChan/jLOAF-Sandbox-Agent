@@ -6,10 +6,12 @@ import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.GaussianWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
+
 import util.ParameterList;
 import util.ParameterNameEnum;
 
 // GUI imports: 
+
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -50,6 +52,8 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 	private String[] columnHeaders = {"Weight Function", "Parameter 1", "Parameter 2"};		// headers for the selected weight function table
 	
 	private JScrollPane scroll1, scroll2, scroll3, scroll4, scroll5;	//scrollers for the JLists and the JTable
+	
+	private tableModel tableModel;
 	
 	private boolean randomKNN = false; 	// determines if kNN is random or set
 	private boolean multiTests = false;	// determines if there is a single test or multiple
@@ -229,18 +233,20 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		weightFunction.setVisible(true);
 		frame.add(weightFunction);
 		
-		weightFunctionList = new JList<String>(weights);
-		weightFunctionList.setFont(new Font("Arial", Font.PLAIN, 10));
-		weightFunctionList.setBackground(Color.white);
-		weightFunctionList.setBorder(BorderFactory.createLineBorder(Color.black));
-		weightFunctionList.setSelectedIndex(0);
-		weightFunctionList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		weightFunctionList.addListSelectionListener(this);
+//		weightFunctionList = new JList<String>(weights);
+//		weightFunctionList.setFont(new Font("Arial", Font.PLAIN, 10));
+//		weightFunctionList.setBackground(Color.white);
+//		weightFunctionList.setBorder(BorderFactory.createLineBorder(Color.black));
+//		weightFunctionList.setSelectedIndex(0);
+//		weightFunctionList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+//		weightFunctionList.addListSelectionListener(this);
 		
-		scroll4 = new JScrollPane(weightFunctionList);
+		JPanel p = buildWeightPanel();
+		scroll4 = new JScrollPane(p);
 		scroll4.setPreferredSize(new Dimension(250, 75));
 		scroll4.setBounds(325,325,250,60);
 		scroll4.setVisible(false);
+		
 		frame.add(scroll4,BorderLayout.CENTER);
 		
 		maxRuns = new JFormattedTextField("1");
@@ -251,11 +257,12 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		maxRuns.setVisible(true);
 		frame.add(maxRuns);
 		
-		Object[][] initial= {{weightFunction.getSelectedItem(), "1.0", ""}};
+//		Object[][] initial= {{weightFunction.getSelectedItem(), "1.0", ""}};
+		Object[][] initial= new Object[0][0];;
 		
-		tableModel model=new tableModel(initial, columnHeaders);
+		tableModel =new tableModel(initial, columnHeaders);
 		table = new JTable();
-		table.setModel(model);
+		table.setModel(tableModel);
 		table.setVisible(true);
 		table.addPropertyChangeListener("value", this);
 		table.setBounds(325, 420, 370, 90);
@@ -336,6 +343,30 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		frame.setVisible(true);
 	}
 	
+	private JPanel buildWeightPanel(){
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(3, 2, 5, 5));
+		
+		for (int i = 0; i < weights.length; i++){
+			JButton b = new JButton(weights[i].split(" ")[0]);
+			b.addActionListener(this);
+			b.setActionCommand("Weight");
+			panel.add(b);
+		}
+		
+		JButton b = new JButton("Clear");
+		b.setActionCommand("Clear");
+		b.addActionListener(this);
+		panel.add(b);
+		
+		b = new JButton("");
+		b.setEnabled(false);
+		panel.add(b);
+		
+		return panel;
+	}
+	
 	/*
 	 * This function is executed when the "Single Test" button is pressed. The function alters the GUI to
 	 * limit the user to selecting only one value for each configuration 
@@ -376,7 +407,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		scroll3.setVisible(true);
 		scroll4.setVisible(true);
 		
-		weightFunctionList.setSelectedIndex(0);
+		//weightFunctionList.setSelectedIndex(0);
 		
 		singleTest.setEnabled(true);
 		singleTest.setBackground(Color.white);
@@ -409,7 +440,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		 }
 		 @Override
 		 public boolean isCellEditable(int row, int col) {
-			 if(table.getModel().getValueAt(row, 0) == "Gaussian Weight Function"){
+			 if(table.getModel().getValueAt(row, 0).equals("Gaussian Weight Function")){
 				 if(col!=0)
 					 return true;
 			 }
@@ -434,12 +465,12 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 			Integer.parseInt(maxRuns.getText());
 			Integer.parseInt(iterNum.getText());
 			
-			for(int i = 0; i<weightFunctionList.getSelectedIndices().length; i++){ // making sure only integers are being entered as the parameters for the weight function table
-				Double.parseDouble((String)(table.getModel().getValueAt(i, 1)));
-				if(weights[weightFunctionList.getSelectedIndices()[i]] == "Gaussian Weight Function"){
-					Double.parseDouble((String)(table.getModel().getValueAt(i,2)));
-				}
-			}
+//			for(int i = 0; i<weightFunctionList.getSelectedIndices().length; i++){ // making sure only integers are being entered as the parameters for the weight function table
+//				Double.parseDouble((String)(table.getModel().getValueAt(i, 1)));
+//				if(weights[weightFunctionList.getSelectedIndices()[i]] == "Gaussian Weight Function"){
+//					Double.parseDouble((String)(table.getModel().getValueAt(i,2)));
+//				}
+//			}
 			start.setEnabled(true);
 		}
 		catch(NumberFormatException f){
@@ -488,9 +519,9 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 					weightTable[i][2] = "";
 				}				
 			}
-			tableModel model = new tableModel(weightTable, columnHeaders);
-			table.setModel(model);
-			table.getColumnModel().getColumn(0).setPreferredWidth(150);
+			//tableModel model = new tableModel(weightTable, columnHeaders);
+			//table.setModel(model);
+			//table.getColumnModel().getColumn(0).setPreferredWidth(150);
 		}
 	}
 
@@ -516,16 +547,24 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 			tableModel model = new tableModel(weightTab, columnHeaders);
 			table.setModel(model);
 			table.getColumnModel().getColumn(0).setPreferredWidth(150);
-		}
-		if(e.getSource() == singleTest){
+		}else if (e.getSource() instanceof JButton && e.getActionCommand().equals("Weight")){
+			JButton b = (JButton) e.getSource();
+			String line[] = {b.getText() + " Weight Function", "1.0", "1.0"};
+			if (!b.getText().equals("Gaussian")){
+				line[2] = "";
+			}
+			tableModel.addRow(line);
+		}else if (e.getSource() instanceof JButton && e.getActionCommand().equals("Clear")){
+			tableModel = new tableModel(new Object[0][0], columnHeaders);
+			table.setModel(tableModel);
+			table.getColumnModel().getColumn(0).setPreferredWidth(150);
+		}else if(e.getSource() == singleTest){
 			multiTests = false;
 			guiSetupSingle();
-		}
-		if(e.getSource() == multiTest){
+		}else if(e.getSource() == multiTest){
 			multiTests = true;
 			guiSetupMulti();
-		}
-		if(e.getSource() == findTraceFolder){
+		}else if(e.getSource() == findTraceFolder){
 			fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			fileChooser.showOpenDialog(frame);
@@ -534,8 +573,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 				findTraceFolder.setText(traceFolderLocation);
 			}
 			catch(Exception NullPointerException){}
-		}
-		if(e.getSource() == findExportRunFolder){
+		}else if(e.getSource() == findExportRunFolder){
 			fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			fileChooser.showOpenDialog(frame);
@@ -544,8 +582,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 				findExportRunFolder.setText(exportRunFolderLocation);
 			}
 			catch(Exception NullPointerException){}
-		}
-		if(e.getSource() == start){
+		}else if(e.getSource() == start){
 			
 			if(table.isEditing() == true){
 				table.getCellEditor().stopCellEditing();
@@ -597,7 +634,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 						System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + maxRuns.getText());
 					}
 					else {
-						System.out.println("Random, k : " + diffKValue.getSelectedItem());
+						System.out.println("Non Random, k : " + diffKValue.getSelectedItem());
 					}
 					
 					setParameterList(list);
@@ -626,7 +663,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 						System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + iterNum.getText());
 					}
 					else {
-						System.out.println("Random, k : " + diffKValue.getSelectedItem());
+						System.out.println("Non Random, k : " + diffKValue.getSelectedItem());
 					}
 					
 					System.out.println("Weight Function : " + w.toString());
@@ -701,41 +738,41 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 								
 								if (TestConfiguration.REASONINGS[r[m]].equals("SEQ")){
 									if(randomKNN == true){
-										System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + (i + 1));
+										System.out.println("Random, k : " + intKValues[l[j]] + " Iter " + (i + 1));
 									}
 									else {
-										System.out.println("Random, k : " + diffKValue.getSelectedItem());
+										System.out.println("Non Random, k : " + intKValues[l[j]]);
 									}
 									
 									setParameterList(list);
 									testAll(newTest);	
 								}
 								else {
-									WeightFunction[] selectedWeights = new WeightFunction[weightFunctionList.getSelectedIndices().length];
-									for(int n = 0; n < selectedWeights.length; n++){
-										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Decay Weight Function"){
+									WeightFunction[] selectedWeights = new WeightFunction[table.getRowCount()];
+									for(int n = 0; n < table.getRowCount(); n++){
+										if(table.getValueAt(n, 0).equals("Decay Weight Function")){
 											selectedWeights[n] = new DecayWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
-										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Fixed Weight Function"){
+										if(table.getValueAt(n, 0).equals("Fixed Weight Function")){
 											selectedWeights[n] = new FixedWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
-										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Gaussian Weight Function"){
+										if(table.getValueAt(n, 0).equals("Gaussian Weight Function")){
 											selectedWeights[n] = new GaussianWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)), Double.parseDouble((String)table.getValueAt(n, 2)));
 										}
-										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Linear Weight Function"){
+										if(table.getValueAt(n, 0).equals("Linear Weight Function")){
 											selectedWeights[n] = new LinearWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
-										if(weights[weightFunctionList.getSelectedIndices()[n]] == "Time Varying Function"){
+										if(table.getValueAt(n, 0).equals("Time Varying Function")){
 //											selectedWeights[n] = new TimeVaryingWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
 										}
 									}
 									for(WeightFunction w : selectedWeights){
 										kNNUtil.setWeightFunction(w);
 										if(randomKNN == true){
-											System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + (k+1));
+											System.out.println("Random, k : " + intKValues[l[j]] + " Iter " + (k+1));
 										}
 										else {
-											System.out.println("Random, k : " + diffKValue.getSelectedItem());
+											System.out.println("Non Random, k : " + intKValues[l[j]]);
 										}
 										
 										System.out.println("Weight Function : " + w.toString());
