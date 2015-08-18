@@ -268,6 +268,75 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		table.setBounds(325, 420, 370, 90);
 		table.getColumnModel().getColumn(0).setPreferredWidth(150);
 		
+		String line[] = {"","",""};
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Linear Weight Function";
+		line[1] = "0.5";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Linear Weight Function";
+		line[1] = "0.2";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Linear Weight Function";
+		line[1] = "0.1";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Linear Weight Function";
+		line[1] = "0.05";
+		tableModel.addRow(line);
+		
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Decay Weight Function";
+		line[1] = "10";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Decay Weight Function";
+		line[1] = "1";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Decay Weight Function";
+		line[1] = "0.1";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[2] = "";
+		line[0] = "Decay Weight Function";
+		line[1] = "0.01";
+		tableModel.addRow(line);
+		
+		line = new String[3];
+		line[0] = "Gaussian Weight Function";
+		line[1] = "0.15";
+		line[2] = "0";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[0] = "Gaussian Weight Function";
+		line[1] = "0.15";
+		line[2] = "1";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[0] = "Gaussian Weight Function";
+		line[1] = "0.15";
+		line[2] = "2";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[0] = "Gaussian Weight Function";
+		line[1] = "0.15";
+		line[2] = "5";
+		tableModel.addRow(line);
+		line = new String[3];
+		line[0] = "Gaussian Weight Function";
+		line[1] = "0.15";
+		line[2] = "10";
+		tableModel.addRow(line);
+		
 		scroll5 = new JScrollPane(table);
 		scroll5.setPreferredSize(new Dimension(250, 75));
 		scroll5.setBounds(325,420,370,90);
@@ -671,122 +740,102 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 					testAll(newTest);
 				}
 				System.out.println();
-			}
-			else {
-				int[] r = reasoningTypeList.getSelectedIndices();	// user's selected reasoning types.
-				int[] l = diffKValueList.getSelectedIndices();		// user's selected k values.
-				
-				int valueOfMaxRuns;
-				if(randomKNN == true){
-					valueOfMaxRuns = Integer.parseInt(iterNum.getText());
-				}
-				else {
-					valueOfMaxRuns = 1;
-				}
+			} else {
+				int[] r = reasoningTypeList.getSelectedIndices(); // user's
+																	// selected
+																	// reasoning
+																	// types.
+				int[] l = diffKValueList.getSelectedIndices(); // user's
+																// selected k
+																// values.
 
-				for (int m = 0; m<r.length; m++){
+				for (int m = 0; m < r.length; m++) {
 					System.out.println("Reasoning Method : " + TestConfiguration.REASONINGS[r[m]]);
-					for (int i = 0; i < Integer.parseInt(maxRuns.getText()); i++){
-						for (int j = 0; j < l.length; j++){
+					for (int j = 0; j < l.length; j++) {
+						for (int i = 0; i < Integer.parseInt(maxRuns.getText()); i++) {
 							ParameterList list = new ParameterList();
-							for (int k = 0; k<valueOfMaxRuns; k++){
 
-								if(randomKNN == true){
-									list.addParameter(ParameterNameEnum.ITER_NUM.name(), k + 1);
+							list.addParameter(ParameterNameEnum.RUN_NUMBER.name(), i + 1);
+							list.addParameter(ParameterNameEnum.K_VALUE.name(), intKValues[l[j]]);
+							list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), randomKNN);
+							list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(),traceFolderLocation + "Expert/Run "	+ (i + 1));
+							if (randomKNN == true) {
+								list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(),exportRunFolderLocation + "Agent "	+ ("Random") + "/Run " + (i + 1) + "/" + (1));
+							} else {
+								list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(),exportRunFolderLocation + "Agent "	+ ("NonRandom") + "/Run " + (i + 1) + "/" + (1));
+							}
+
+							list.addParameter(ParameterNameEnum.REASONING.name(), TestConfiguration.REASONINGS[r[m]]);
+
+							LfOAbstractCreatureTest[] newTest = new LfOAbstractCreatureTest[agentTypeList.getSelectedIndices().length];
+							for (int t = 0; t < newTest.length; t++) {
+								if (agentType.getSelectedItem() == "LfOSmartRandomTest") {
+									newTest[t] = new LfOSmartRandomTest();
+									t++;
 								}
-								else {
-									list.addParameter(ParameterNameEnum.ITER_NUM.name(), 1);
+								if (agentType.getSelectedItem() == "LfOSmartStraightLineTest") {
+									newTest[t] = new LfOSmartStraightLineTest();
+									t++;
 								}
-								list.addParameter(ParameterNameEnum.RUN_NUMBER.name(), i + 1);
-								list.addParameter(ParameterNameEnum.K_VALUE.name(), intKValues[l[j]]);
-								list.addParameter(ParameterNameEnum.USE_RANDOM_KNN.name(), randomKNN);
-								list.addParameter(ParameterNameEnum.TRACE_FOLDER.name(), traceFolderLocation + "Expert/Run " + (i + 1));
-								if(randomKNN == true){
-									list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolderLocation +  "Agent " + ("Random") + "/Run " + (i+1) + "/" + (k+1));
+								if (agentType.getSelectedItem() == "LfOZigZagTest") {
+									newTest[t] = new LfOZigZagTest();
+									t++;
 								}
-								else {
-									list.addParameter(ParameterNameEnum.EXPORT_RUN_FOLDER.name(), exportRunFolderLocation +  "Agent " + ("NonRandom") + "/Run " + (i+1) + "/" + (1));
+								if (agentType.getSelectedItem() == "LfOFixedSequenceTest") {
+									newTest[t] = new LfOFixedSequenceTest();
+									t++;
 								}
-								
-								list.addParameter(ParameterNameEnum.REASONING.name(), TestConfiguration.REASONINGS[r[m]]);
-								
-								
-								LfOAbstractCreatureTest[] newTest = new LfOAbstractCreatureTest[agentTypeList.getSelectedIndices().length];
-								for(int t = 0; t < newTest.length; t++){
-									if(agentType.getSelectedItem() == "LfOSmartRandomTest"){
-										newTest[t] = new LfOSmartRandomTest();
-										t++;
+								if (agentType.getSelectedItem() == "LfOSmartExplorerTest") {
+									newTest[t] = new LfOSmartExplorerTest();
+									t++;
+								}
+							}
+
+							if (TestConfiguration.REASONINGS[r[m]].equals("SEQ")) {
+								if (randomKNN == true) {
+									System.out.println("Random, k : " + intKValues[l[j]] + " Iter " + (i + 1));
+								} else {
+									System.out.println("Non Random, k : " + intKValues[l[j]]);
+								}
+
+								setParameterList(list);
+								testAll(newTest);
+							} else {
+								WeightFunction[] selectedWeights = new WeightFunction[table.getRowCount()];
+								for (int n = 0; n < table.getRowCount(); n++) {
+									if (table.getValueAt(n, 0).equals("Decay Weight Function")) {
+										selectedWeights[n] = new DecayWeightFunction(Double.parseDouble((String) table.getValueAt(n, 1)));
 									}
-									if(agentType.getSelectedItem() == "LfOSmartStraightLineTest"){
-										newTest[t] = new LfOSmartStraightLineTest();
-										t++;
+									if (table.getValueAt(n, 0).equals("Fixed Weight Function")) {
+										selectedWeights[n] = new FixedWeightFunction(Double.parseDouble((String) table.getValueAt(n, 1)));
 									}
-									if(agentType.getSelectedItem() == "LfOZigZagTest"){
-										newTest[t] = new LfOZigZagTest();
-										t++;
+									if (table.getValueAt(n, 0).equals("Gaussian Weight Function")) {
+										selectedWeights[n] = new GaussianWeightFunction(Double.parseDouble((String) table.getValueAt(n, 1)),Double.parseDouble((String) table.getValueAt(n, 2)));
 									}
-									if(agentType.getSelectedItem() == "LfOFixedSequenceTest"){
-										newTest[t] = new LfOFixedSequenceTest();
-										t++;
-									}
-									if(agentType.getSelectedItem() == "LfOSmartExplorerTest"){
-										newTest[t] = new LfOSmartExplorerTest();
-										t++;
+									if (table.getValueAt(n, 0).equals("Linear Weight Function")) {
+										selectedWeights[n] = new LinearWeightFunction(Double.parseDouble((String) table.getValueAt(n, 1)));
 									}
 								}
-								
-								
-								if (TestConfiguration.REASONINGS[r[m]].equals("SEQ")){
-									if(randomKNN == true){
+								for (WeightFunction w : selectedWeights) {
+									kNNUtil.setWeightFunction(w);
+									if (randomKNN == true) {
 										System.out.println("Random, k : " + intKValues[l[j]] + " Iter " + (i + 1));
-									}
-									else {
+									} else {
 										System.out.println("Non Random, k : " + intKValues[l[j]]);
 									}
-									
+
+									System.out.println("Weight Function : " + w.toString());
 									setParameterList(list);
-									testAll(newTest);	
+									testAll(newTest);
 								}
-								else {
-									WeightFunction[] selectedWeights = new WeightFunction[table.getRowCount()];
-									for(int n = 0; n < table.getRowCount(); n++){
-										if(table.getValueAt(n, 0).equals("Decay Weight Function")){
-											selectedWeights[n] = new DecayWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
-										}
-										if(table.getValueAt(n, 0).equals("Fixed Weight Function")){
-											selectedWeights[n] = new FixedWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
-										}
-										if(table.getValueAt(n, 0).equals("Gaussian Weight Function")){
-											selectedWeights[n] = new GaussianWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)), Double.parseDouble((String)table.getValueAt(n, 2)));
-										}
-										if(table.getValueAt(n, 0).equals("Linear Weight Function")){
-											selectedWeights[n] = new LinearWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
-										}
-										if(table.getValueAt(n, 0).equals("Time Varying Function")){
-//											selectedWeights[n] = new TimeVaryingWeightFunction(Double.parseDouble((String)table.getValueAt(n, 1)));
-										}
-									}
-									for(WeightFunction w : selectedWeights){
-										kNNUtil.setWeightFunction(w);
-										if(randomKNN == true){
-											System.out.println("Random, k : " + intKValues[l[j]] + " Iter " + (k+1));
-										}
-										else {
-											System.out.println("Non Random, k : " + intKValues[l[j]]);
-										}
-										
-										System.out.println("Weight Function : " + w.toString());
-										setParameterList(list);
-										testAll(newTest);
-									}
-								}
+
 								System.out.println();
 							}
 						}
 					}
 				}
 			}
-			System.out.println("end reached");
+			//System.out.println("end reached");
 		}
 	}	
 }
