@@ -6,3 +6,4 @@
 LOG*.txt
 /trace
 /run/
+/build/
