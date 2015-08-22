@@ -4,11 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import oracle.Config;
-
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.tools.CaseBaseIO;
+
+import common.Config;
 
 public abstract class ExpertTraceParser {
 

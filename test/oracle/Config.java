@@ -14,9 +14,6 @@ public class Config {
 	public static final int DEFAULT_GRID_SIZE = 11;
 	public static final int DEFAULT_LENGTH = 1000;
 	
-	public static final String CASEBASE_EXT = ".cb";
-	public static final String TRACE_EXT = ".trace";
-	
 	public static final boolean DEFAULT_USE_RANDOM_KNN = false;
 	
 	public static final boolean EXPORT_RUN = true;
@@ -28,8 +25,6 @@ public class Config {
 //	public static String DEFAULT_TRACE_FOLDER = DEFAULT_TRACE_FOLDER_PREFIX + "Expert/Run " + RUN_NUMBER;
 //	public static  String DEFAULT_EXPORT_RUN_FOLDER = DEFAULT_TRACE_FOLDER_PREFIX +  "Agent " + ((USE_RANDOM_KNN) ? "Random" : "NonRandom") + "/Run " + RUN_NUMBER;
 	public static final boolean PRINT_BATCH_INFO = true;
-	
-	public static final String DEFAULT_DELIMITER = " ";
 	
 	public static final int DEFAULT_NUM_OF_SIMULATIONS = 7;
 	

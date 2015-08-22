@@ -61,7 +61,7 @@ public abstract class LfOAbstractTest {
 	}
 	
 	public void initTrainingAndTestingSets(String caseBaseName, int length, int numOfSimulations){
-		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(caseBaseName + Config.CASEBASE_EXT, length, numOfSimulations);
+		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(caseBaseName + common.Config.CASEBASE_EXT, length, numOfSimulations);
 		loo = l.getTestingAndTrainingSets();
 	}
 	
@@ -69,12 +69,12 @@ public abstract class LfOAbstractTest {
 		if (!Config.DELETE_TRACE){
 			return;
 		}
-		File f = new File(Config.DEFAULT_TEST_TRACE_NAME + Config.TRACE_EXT);
+		File f = new File(Config.DEFAULT_TEST_TRACE_NAME + common.Config.TRACE_EXT);
 		if (f.exists()){
 			f.delete();
 		}
 		
-		f = new File(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT);
+		f = new File(Config.DEFAULT_TEST_CASEBASE_NAME + common.Config.CASEBASE_EXT);
 		if (f.exists()){
 			f.delete();
 		}

@@ -1,6 +1,7 @@
 package util.expert;
 
-import oracle.Config;
+import common.Config;
+
 import agent.lfo.LfOTraceParser;
 
 public abstract class LfOExpertStrategy implements ExpertStrategy{

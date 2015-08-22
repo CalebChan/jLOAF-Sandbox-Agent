@@ -45,7 +45,7 @@ public class kNNRandomTest {
 		if (!Config.DELETE_TRACE){
 			return;
 		}
-		File f = new File(Config.DEFAULT_TEST_CASEBASE_NAME + Config.CASEBASE_EXT);
+		File f = new File(Config.DEFAULT_TEST_CASEBASE_NAME + common.Config.CASEBASE_EXT);
 		f.delete();
 	}
 

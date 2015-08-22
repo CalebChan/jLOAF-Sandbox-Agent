@@ -43,7 +43,7 @@ public class KNNTBTest{
 		DefaultLfOExpertStrategy expert = new DefaultLfOExpertStrategy();
 		expert.parseFile(TRACE_NAME, CASEBASE_NAME);
 
-		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(CASEBASE_NAME + Config.CASEBASE_EXT, DEFAULT_LENGTH, NUM_OF_SIM);
+		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(CASEBASE_NAME + common.Config.CASEBASE_EXT, DEFAULT_LENGTH, NUM_OF_SIM);
 		loo = l.getTestingAndTrainingSets();
 		
 	}
@@ -54,7 +54,7 @@ public class KNNTBTest{
 			return;
 		}
 		
-		File f = new File(CASEBASE_NAME + Config.CASEBASE_EXT);
+		File f = new File(CASEBASE_NAME + common.Config.CASEBASE_EXT);
 		f.delete();
 	}
 	
