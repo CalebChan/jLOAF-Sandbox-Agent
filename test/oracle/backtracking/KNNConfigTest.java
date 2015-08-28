@@ -21,7 +21,6 @@ import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
 import agent.AbstractSandboxAgent;
 import agent.backtracking.ActionBasedAgent;
-import agent.backtracking.BacktrackingPerception;
 
 @RunWith(Parameterized.class)
 public class KNNConfigTest {
@@ -52,7 +51,7 @@ public class KNNConfigTest {
 //		SandboxAgent agent = new SandboxAgent(cb, false, k, Config.DEFAULT_USE_RANDOM_KNN);
 		RunAgent agent = new RunAgent(new SimpleKNN(k, cb), cb);
 		
-		oracle = new SandboxOracle(testAgent, agent, new BacktrackingPerception(), Config.DEFAULT_WORLD_SIZE, creature);
+		oracle = new SandboxOracle(testAgent, agent, "");
 	}
 	
 	@Test

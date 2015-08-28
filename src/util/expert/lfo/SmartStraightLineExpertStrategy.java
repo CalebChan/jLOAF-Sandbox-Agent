@@ -10,7 +10,7 @@ public class SmartStraightLineExpertStrategy extends LfOExpertStrategy {
 
 	@Override
 	public AbstractSandboxAgent getAgent(int size, int x, int y, Direction dir) {
-		return new SmartStraightLineExpert(size, new DirtBasedCreature(x, y, dir));
+		return new SmartStraightLineExpert(new DirtBasedCreature(x, y, dir), null);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import oracle.Config;
 import oracle.JLOAFOracle;
+import oracle.SandboxOracle;
 
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.action.ComplexAction;
@@ -115,7 +116,12 @@ public abstract class LfOAbstractTest {
 		CaseBase cb = loo.get(testNo).getTraining();
 		Assert.assertFalse(cb == null);
 		RunAgent agent = createAgent(cb);
-		oracle = new JLOAFOracle(agent);
+		if (TestConfiguration.USE_MAPS){
+			oracle = new SandboxOracle(null, agent, "");
+		}else{
+			oracle = new JLOAFOracle(agent);
+		}
+		
 	}
 
 	protected void testRun() {

@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import agent.AbstractSandboxAgent;
 import agent.backtracking.ActionBasedAgent;
-import agent.backtracking.BacktrackingPerception;
 import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.StateBasedCreature;
@@ -32,7 +31,7 @@ public class BacktrackingConfigTest {
 		RunAgent agent = new RunAgent(r, cb);
 		r.setCurrentRun(agent.getCurrentRun());
 		
-		oracle = new SandboxOracle(testAgent, agent, new BacktrackingPerception(), Config.DEFAULT_WORLD_SIZE, creature);
+		oracle = new SandboxOracle(testAgent, agent, "");
 	}
 	
 	@Test

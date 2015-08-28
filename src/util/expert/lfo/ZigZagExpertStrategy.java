@@ -10,7 +10,7 @@ public class ZigZagExpertStrategy extends LfOExpertStrategy{
     
     @Override
     public AbstractSandboxAgent getAgent(int size, int x, int y, Direction dir) {
-        return new ZigZagExpert(size, new DirtBasedCreature(x, y, dir));
+        return new ZigZagExpert(new DirtBasedCreature(x, y, dir), null);
     }
 
     @Override

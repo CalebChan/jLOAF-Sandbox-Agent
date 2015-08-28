@@ -12,7 +12,7 @@ public class FixedSequenceExpertStrategy extends LfOExpertStrategy{
     
     @Override
     public AbstractSandboxAgent getAgent(int size, int x, int y, Direction dir) {
-        return new FixedSequenceExpert(size, new DirtBasedCreature(x, y, dir));
+        return new FixedSequenceExpert(new DirtBasedCreature(x, y, dir), null);
     }
 
     @Override

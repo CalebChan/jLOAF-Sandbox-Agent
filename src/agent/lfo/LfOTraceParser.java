@@ -5,6 +5,8 @@ import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Feature;
 
+import common.Config;
+
 import sandbox.Direction;
 import sandbox.MovementAction;
 import agent.ExpertTraceParser;
@@ -19,7 +21,7 @@ public class LfOTraceParser extends ExpertTraceParser{
 
 	@Override
 	public Case parseLine(String[] tokens, Case c) {
-		ComplexInput ci = new ComplexInput("LfoInput");
+		ComplexInput ci = new ComplexInput(Config.COMPLEX_INPUT_NAME);
 		int index = 0;
 		for (Direction d : Direction.values()){
 			int type = (int) Double.parseDouble(tokens[index]);

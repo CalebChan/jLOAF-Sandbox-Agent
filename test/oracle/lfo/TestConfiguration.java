@@ -46,6 +46,12 @@ public class TestConfiguration {
 		"BEST"
 	};
 	
+	public static final String MAP_NAMES[] = {
+		,
+	};
+	
+	public static final boolean USE_MAPS = false;
+	
 	public static final LfOAbstractCreatureTest test[] = {	
 			new LfOSmartRandomTest(), 
 			new LfOSmartStraightLineTest(), 
