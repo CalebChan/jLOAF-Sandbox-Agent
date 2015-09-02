@@ -1,5 +1,11 @@
 package oracle.lfo;
 
+import oracle.lfo.expert.LfOFixedSequenceTest;
+import oracle.lfo.expert.LfOSmartExplorerTest;
+import oracle.lfo.expert.LfOSmartRandomTest;
+import oracle.lfo.expert.LfOSmartStraightLineTest;
+import oracle.lfo.expert.LfOZigZagTest;
+
 import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.GaussianWeightFunction;
@@ -50,7 +56,8 @@ public class TestConfiguration {
 		,
 	};
 	
-	public static final boolean USE_MAPS = false;
+	public static final boolean USE_MAPS = true;
+	public static final boolean USE_PREGEN_TRACE = true;
 	
 	public static final LfOAbstractCreatureTest test[] = {	
 			new LfOSmartRandomTest(), 
@@ -59,4 +66,16 @@ public class TestConfiguration {
 			new LfOFixedSequenceTest(), 
 			new LfOSmartExplorerTest()
 			};
+	
+	private static final String BASE_MAP_DIR = "C:/Users/calebchan/Desktop/Stuff/workspace/LFOsimulator/maps/";
+	
+	public static final String MAP_LOCATION[] = {
+		BASE_MAP_DIR + "discreet-8x8.xml",
+		BASE_MAP_DIR + "discreet-8x8-2.xml",
+		BASE_MAP_DIR + "discreet-8x8-3.xml",
+		BASE_MAP_DIR + "discreet-8x8-4.xml",
+		BASE_MAP_DIR + "discreet-8x8-5.xml",
+		BASE_MAP_DIR + "discreet-32x32.xml",
+		BASE_MAP_DIR + "discreet-32x32-2.xml"};
+	
 }

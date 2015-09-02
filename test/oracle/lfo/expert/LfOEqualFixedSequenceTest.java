@@ -1,5 +1,6 @@
-package oracle.lfo;
+package oracle.lfo.expert;
 
+import oracle.lfo.LfOAbstractCreatureTest;
 import util.expert.lfo.EqualFixedSequenceExpertStrategy;
 
 public class LfOEqualFixedSequenceTest extends LfOAbstractCreatureTest{

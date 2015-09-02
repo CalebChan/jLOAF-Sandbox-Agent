@@ -5,8 +5,6 @@ import java.util.List;
 
 import oracle.Config;
 import oracle.JLOAFOracle;
-import oracle.SandboxOracle;
-
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.action.ComplexAction;
 import org.jLOAF.agent.RunAgent;
@@ -26,8 +24,6 @@ import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
 import org.jLOAF.util.JLOAFLogger;
 import org.jLOAF.util.JLOAFLogger.Level;
-import org.junit.Assert;
-
 import agent.backtracking.SandboxFeatureInput;
 import agent.backtracking.SandboxSimilarity;
 import util.ParameterList;
@@ -56,6 +52,8 @@ public abstract class LfOAbstractTest {
 	public LfOAbstractTest(){
 		this(null);
 	}
+	
+	protected abstract void setUp();
 	
 	public void setParamters(ParameterList list){
 		this.list = list;
@@ -109,19 +107,6 @@ public abstract class LfOAbstractTest {
 		ComplexAction.setClassStrategy(new ActionMean());
 		
 		return agent;
-	}
-	
-	
-	protected void setUp() {
-		CaseBase cb = loo.get(testNo).getTraining();
-		Assert.assertFalse(cb == null);
-		RunAgent agent = createAgent(cb);
-		if (TestConfiguration.USE_MAPS){
-			oracle = new SandboxOracle(null, agent, "");
-		}else{
-			oracle = new JLOAFOracle(agent);
-		}
-		
 	}
 
 	protected void testRun() {

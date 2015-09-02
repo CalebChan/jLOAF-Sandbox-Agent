@@ -1,5 +1,11 @@
 package oracle.lfo;
 
+import oracle.lfo.expert.LfOFixedSequenceTest;
+import oracle.lfo.expert.LfOSmartExplorerTest;
+import oracle.lfo.expert.LfOSmartRandomTest;
+import oracle.lfo.expert.LfOSmartStraightLineTest;
+import oracle.lfo.expert.LfOZigZagTest;
+
 import org.jLOAF.retrieve.kNNUtil;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
@@ -11,6 +17,8 @@ import util.ParameterList;
 import util.ParameterNameEnum;
 
 // GUI imports: 
+
+
 
 
 import javax.swing.*;

@@ -14,7 +14,7 @@ import sandbox.Creature;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import agent.AbstractSandboxAgent;
-import agent.lfo.SmartRandomExpert;
+import agent.lfo.expert.SmartRandomExpert;
 
 public class LfOConfigTest {
 	

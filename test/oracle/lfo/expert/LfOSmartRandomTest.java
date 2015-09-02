@@ -1,5 +1,6 @@
-package oracle.lfo;
+package oracle.lfo.expert;
 
+import oracle.lfo.LfOAbstractCreatureTest;
 import util.expert.lfo.SmartRandomExpertStrategy;
 
 public class LfOSmartRandomTest extends LfOAbstractCreatureTest{

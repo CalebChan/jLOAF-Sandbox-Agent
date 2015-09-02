@@ -1,7 +1,7 @@
 package util.expert.lfo;
 
 import agent.AbstractSandboxAgent;
-import agent.lfo.SmartStraightLineExpert;
+import agent.lfo.expert.SmartStraightLineExpert;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import util.expert.LfOExpertStrategy;

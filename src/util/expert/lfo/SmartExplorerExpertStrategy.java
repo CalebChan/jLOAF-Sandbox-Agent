@@ -4,7 +4,7 @@ import agent.AbstractSandboxAgent;
 import sandbox.Direction;
 import util.expert.LfOExpertStrategy;
 import sandbox.creature.DirtBasedCreature;
-import agent.lfo.SmartExplorerExpert;
+import agent.lfo.expert.SmartExplorerExpert;
 
 public class SmartExplorerExpertStrategy extends LfOExpertStrategy{
     

@@ -33,7 +33,7 @@ public class LfOTraceParser extends ExpertTraceParser{
 			ci.add(ait);
 			ci.add(aid);
 		}
-		int actionIndex = (int) Double.parseDouble(tokens[index]);
+		int actionIndex = (int) Double.parseDouble(tokens[index]) - 1;
 		MovementAction action = MovementAction.values()[actionIndex];
 		SandboxAction a = new SandboxAction(action);
 		return new Case(ci, a, c);

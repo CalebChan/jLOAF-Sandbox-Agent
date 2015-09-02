@@ -1,5 +1,6 @@
-package oracle.lfo;
+package oracle.lfo.expert;
 
+import oracle.lfo.LfOAbstractCreatureTest;
 import util.expert.lfo.SmartExplorerExpertStrategy;
 
 public class LfOSmartExplorerTest extends LfOAbstractCreatureTest {

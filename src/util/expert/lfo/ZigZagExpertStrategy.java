@@ -4,7 +4,7 @@ import agent.AbstractSandboxAgent;
 import sandbox.Direction;
 import util.expert.LfOExpertStrategy;
 import sandbox.creature.DirtBasedCreature;
-import agent.lfo.ZigZagExpert;
+import agent.lfo.expert.ZigZagExpert;
 
 public class ZigZagExpertStrategy extends LfOExpertStrategy{
     

@@ -1,21 +1,36 @@
 package oracle;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.jLOAF.action.Action;
 import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.Case;
-import org.jLOAF.inputs.AtomicInput;
+import org.jLOAF.casebase.CaseRun;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
 import org.jLOAF.performance.ClassificationStatisticsWrapper;
 import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import sandbox.BoxObstacle;
+import sandbox.Direction;
 import sandbox.Environment;
 import sandbox.MovementAction;
 import sandbox.sensor.Sensor;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAction;
+import agent.backtracking.SandboxFeatureInput;
 
 public class SandboxOracle extends JLOAFOracle{
 
@@ -29,11 +44,81 @@ public class SandboxOracle extends JLOAFOracle{
 		buildEnvironment(worldFile);
 	}
 	
-	public void buildEnvironment(String filename){
-		
+	private void buildSandbox(Element element){
+		int x = Integer.parseInt(element.getAttribute("dx"));
+		int y = Integer.parseInt(element.getAttribute("dy"));
+		sandbox = new Environment(x, y);
+		this.testAgent.setEnvironment(sandbox);
 	}
 	
-	public void runSimulation(boolean learn){
+	private void buildObjects(Element element){
+		NodeList nl = element.getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++){
+			if (nl.item(i).getNodeType() == Node.ELEMENT_NODE) {
+				Element obj = (Element) nl.item(i);
+				String objType = obj.getNodeName();
+				int x = (int) Math.floor(Double.parseDouble(obj.getElementsByTagName("x").item(0).getTextContent()));
+				int y = (int) Math.floor(Double.parseDouble(obj.getElementsByTagName("y").item(0).getTextContent()));
+				if (objType.equals("dirt")){
+					sandbox.addDirt(x, y);
+					continue;
+				}else if (objType.equals("vacuum")){
+					this.testAgent.getCreature().moveCreature(x, y, Direction.NORTH);
+					continue;
+				}
+				NodeList shapeList = obj.getElementsByTagName("shape");
+				for (int j = 0; j < shapeList.getLength(); j++){
+					if (shapeList.item(j).getNodeType() == Node.ELEMENT_NODE){
+						Element shape = (Element) shapeList.item(j).getChildNodes().item(0);
+						int dx = (int) Math.floor(Double.parseDouble(shape.getAttribute("dx"))) / 2;
+						int dy = (int) Math.floor(Double.parseDouble(shape.getAttribute("dx"))) / 2;
+						sandbox.addObstacle(new BoxObstacle(x, y, dx, dy));
+					}
+				}
+			}
+		}
+	}
+	
+	public void buildEnvironment(String filename){
+		
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = (Document) dBuilder.parse(new File(filename));
+			doc.getDocumentElement().normalize();
+			NodeList e = doc.getChildNodes().item(0).getChildNodes();
+			for (int i = 0; i < e.getLength(); i++){
+				if (e.item(i).getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) e.item(i);
+					switch (element.getNodeName()){
+					case "map":
+						buildSandbox(element);
+						break;
+					case "objects":
+						buildObjects(element);
+						break;
+					default:
+						break;
+					}
+					
+				}
+			}
+			
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void runSimulation(boolean toLearn){
+		runSimulation(null);
+	}
+	
+	@Override
+	public void runSimulation(CaseRun testingData){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		for (int i = 0; i < Config.DEFAULT_LENGTH; i++){
 			sandbox.updateSensor(this.testAgent.getCreature());
@@ -45,7 +130,7 @@ public class SandboxOracle extends JLOAFOracle{
 			Case c = new Case(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
-			
+			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
 			sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
 		}
 		collectStats(stat);
@@ -55,16 +140,18 @@ public class SandboxOracle extends JLOAFOracle{
 		if (s.getSenseKeys().size() == 1){
 			Input input = null;
 			for (String key : s.getSenseKeys()){
-				input = new AtomicInput(key, new Feature((double) s.getSense(key).getValue()));
+				int value = (int) s.getSense(key).getValue();
+				input = new SandboxFeatureInput(key, new Feature(value * 1.0));
 			}
 			return input;
 		}else{
 			ComplexInput input = new ComplexInput(common.Config.COMPLEX_INPUT_NAME);
 			for (String key : s.getSenseKeys()){
-				input.add(new AtomicInput(key, new Feature((double) s.getSense(key).getValue())));
+				int value = (int) s.getSense(key).getValue();
+				input.add(new SandboxFeatureInput(key, new Feature(value * 1.0)));
 			}
+			return input;
 		}
-		return null;
 	}
 
 //	@Override

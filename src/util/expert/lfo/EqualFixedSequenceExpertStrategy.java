@@ -5,7 +5,7 @@ import util.expert.LfOExpertStrategy;
 import sandbox.Direction;
 import sandbox.creature.DirtBasedCreature;
 import agent.AbstractSandboxAgent;
-import agent.lfo.EqualFixedSequenceExpert;
+import agent.lfo.expert.EqualFixedSequenceExpert;
 
 
 public class EqualFixedSequenceExpertStrategy extends LfOExpertStrategy{
