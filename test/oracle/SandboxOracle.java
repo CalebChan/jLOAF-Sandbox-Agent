@@ -130,7 +130,7 @@ public class SandboxOracle extends JLOAFOracle{
 			Case c = new Case(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
-			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
+//			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
 			sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
 		}
 		collectStats(stat);

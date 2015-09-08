@@ -33,7 +33,7 @@ public abstract class LfOAbstractCreatureTest extends LfOAbstractTest{
 		Assert.assertFalse(cb == null);
 		RunAgent agent = createAgent(cb);
 		if (TestConfiguration.USE_MAPS){
-			System.out.println("Maps No : " + testNo + ", Name : " + TestConfiguration.MAP_LOCATION[testNo]);
+//			System.out.println("Maps No : " + testNo + ", Name : " + TestConfiguration.MAP_LOCATION[testNo]);
 			oracle = new SandboxOracle(expertAgent, agent, TestConfiguration.MAP_LOCATION[testNo]);
 		}else{
 			oracle = new JLOAFOracle(agent);
