@@ -36,4 +36,7 @@ public class Config {
 	
 	// The learn flag should always be set to false when using leave-one-out
 	public static final boolean AGENT_LEARN = true;
+	
+	
+	public static final boolean USE_VISUAL = true;
 }
