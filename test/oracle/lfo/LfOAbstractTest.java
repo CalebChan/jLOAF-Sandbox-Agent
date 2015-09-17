@@ -5,6 +5,8 @@ import java.util.List;
 
 import oracle.Config;
 import oracle.JLOAFOracle;
+import oracle.SandboxOracle;
+
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.action.ComplexAction;
 import org.jLOAF.agent.RunAgent;
@@ -116,11 +118,16 @@ public abstract class LfOAbstractTest {
 		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){			
 			oracle.runSimulation(loo.get(testNo).getTesting());
 			
+			testNo++;
 			CaseBase cb = loo.get(testNo).getTraining();
 			RunAgent agent = createAgent(cb);
-			
+			if (oracle instanceof SandboxOracle){
+				SandboxOracle o = (SandboxOracle)oracle;
+//				System.out.println("Maps No : " + testNo + ", Name : " + TestConfiguration.MAP_LOCATION[testNo]);
+				o.buildEnvironment(TestConfiguration.MAP_LOCATION[testNo]);
+			}
 			oracle.setAgent(agent);
-			testNo++;
+			
 		}
 		
 		oracle.runSimulation(loo.get(testNo).getTesting());

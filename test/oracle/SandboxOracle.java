@@ -80,7 +80,7 @@ public class SandboxOracle extends JLOAFOracle{
 	}
 	
 	public void buildEnvironment(String filename){
-		
+//		System.out.println("File name : " + filename);
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -120,6 +120,7 @@ public class SandboxOracle extends JLOAFOracle{
 	@Override
 	public void runSimulation(CaseRun testingData){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
+//		System.out.println("Name : " + this.testAgent.getClass().getSimpleName());
 		for (int i = 0; i < Config.DEFAULT_LENGTH; i++){
 			sandbox.updateSensor(this.testAgent.getCreature());
 			Sensor s = this.testAgent.getCreature().getSensor();
