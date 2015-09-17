@@ -27,6 +27,7 @@ import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
 import org.jLOAF.reasoning.BacktrackingReasoning;
 import org.jLOAF.reasoning.BestRunReasoning;
+import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.kNNUtil;
 import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
 import org.jLOAF.sim.atomic.ActionEquality;
@@ -55,6 +56,8 @@ import sandbox.gui.EnvironmentPanel;
 import sandbox.sensor.Sensor;
 import util.expert.ExpertStrategy;
 import util.expert.lfo.SmartExplorerExpertStrategy;
+import util.expert.lfo.SmartRandomExpertStrategy;
+import util.expert.lfo.SmartStraightLineExpertStrategy;
 
 public class VisualSandbox {
 	
@@ -72,15 +75,19 @@ public class VisualSandbox {
 	private JFrame frame;
 	
 	public static void main(String args[]){
-		ExpertStrategy expertStrat = new SmartExplorerExpertStrategy();
+		
+		int RUN_NUMBER = 2;
+		
+		ExpertStrategy expertStrat = new SmartStraightLineExpertStrategy();
 		AbstractSandboxAgent expert = expertStrat.getAgent(0, 0, 0, Direction.NORTH);
 		
-		expertStrat.parseFile("C:/Users/calebchan/Desktop/Stuff/workspace/Test Data/Batch Test 3/TB/Expert/Run 1/SmartRandomExplorerAgent", Config.DEFAULT_TEST_CASEBASE_NAME);
+		expertStrat.parseFile("C:/Users/calebchan/Desktop/Stuff/workspace/Test Data/Batch Test 3/TB/Expert/Run " + RUN_NUMBER + "/SmartStraightLineAgent", Config.DEFAULT_TEST_CASEBASE_NAME);
 		LeaveOneOut l = LeaveOneOut.loadTrainAndTest(Config.DEFAULT_TEST_CASEBASE_NAME + common.Config.CASEBASE_EXT, Config.DEFAULT_LENGTH, Config.DEFAULT_NUM_OF_SIMULATIONS);
 		List<TestingTrainingPair> loo = l.getTestingAndTrainingSets();
 		
 		CaseBase cb = loo.get(0).getTraining();
 		
+		//BacktrackingReasoning r = new SequentialReasoning(cb, null, 4, false);
 		BacktrackingReasoning r = new BestRunReasoning(cb, 4, true);
 		RunAgent agent = new RunAgent(r, cb);
 		r.setCurrentRun(agent.getCurrentRun());
@@ -93,7 +100,7 @@ public class VisualSandbox {
 		
 		kNNUtil.setWeightFunction(new LinearWeightFunction(0.1));
 		
-		VisualSandbox box = new VisualSandbox(expert, agent, TestConfiguration.MAP_LOCATION[0], true);
+		VisualSandbox box = new VisualSandbox(expert, agent, TestConfiguration.MAP_LOCATION[RUN_NUMBER - 1], true);
 		box.runSimulation(1000);
 	}
 	
@@ -113,7 +120,7 @@ public class VisualSandbox {
 	}
 	
 	private void buildView(boolean splitView){
-		frame = new JFrame("Expert | Agent");
+		frame = new JFrame("Expert | Agent | Time : -1");
 		
 		frame.setSize(1200, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,7 +143,7 @@ public class VisualSandbox {
 			Case c = new Case(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
-//			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
+			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
 			if (!splitView){
 				sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
 			}else{
@@ -145,6 +152,7 @@ public class VisualSandbox {
 			}
 			try {
 				Thread.sleep(1000);
+				frame.setTitle("Expert | Agent | Time : " + i);
 				frame.repaint();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
