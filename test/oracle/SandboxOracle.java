@@ -31,6 +31,8 @@ import sandbox.sensor.Sensor;
 import agent.AbstractSandboxAgent;
 import agent.SandboxAction;
 import agent.backtracking.SandboxFeatureInput;
+import agent.lfo.expert.SmartStraightLineExpert;
+import agent.lfo.expert.ZigZagExpert;
 
 public class SandboxOracle extends JLOAFOracle{
 
@@ -133,6 +135,13 @@ public class SandboxOracle extends JLOAFOracle{
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
 //			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
 			sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
+			if (this.testAgent instanceof SmartStraightLineExpert){
+				SmartStraightLineExpert ee = (SmartStraightLineExpert)this.testAgent;
+				ee.resetDirection(Direction.convertActToDir(MovementAction.values()[(int) sandboxAction.getFeature().getValue()]));
+			}else if (this.testAgent instanceof ZigZagExpert){
+				ZigZagExpert ee = (ZigZagExpert)this.testAgent;
+				ee.resetDirection(Direction.convertActToDir(MovementAction.values()[(int) sandboxAction.getFeature().getValue()]));
+			}
 		}
 		collectStats(stat);
 	}

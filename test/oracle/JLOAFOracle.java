@@ -1,6 +1,7 @@
 package oracle;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.jLOAF.action.Action;
@@ -80,6 +81,35 @@ public class JLOAFOracle {
 		info += agentName + " Simulation Matrix Accuracy : " + wrapper.getClassificationAccuracy() + "\n";
 		info += agentName + " Simulation Global F1 : " + wrapper.getGlobalF1();
 		return info;
+	}
+	
+	public String getConfusionMatrixString(String agentName){
+		String s = "";
+		String header = "|          |";
+		boolean firstIndex = true; 
+		HashSet<String> titles = new HashSet<String>();
+		titles.addAll(confusionMatrix.keySet());
+		for (String s1 : confusionMatrix.keySet()){
+			titles.addAll(confusionMatrix.get(s1).keySet());
+		}
+		for (String s1 : titles){
+			s += "|" + String.format("%-10s", s1) + "|";
+			for (String s2 : titles){
+				if (firstIndex){
+					header += String.format("%-10s", s2) + "|";
+				}
+				if (!confusionMatrix.containsKey(s1) || !confusionMatrix.get(s1).containsKey(s2)){
+					s += String.format("%-10d", 0) + "|";
+				}else{
+					s += String.format("%-10d", confusionMatrix.get(s1).get(s2)) + "|";
+				}
+			}
+			s += "\n";
+			firstIndex = false;
+		}
+		s = s.substring(0, s.length() - 1);
+		String label = "|" + String.format("%-" + (header.length() - 2) + "s", agentName + " Confusion Matrix") + "|";
+		return label + "\n" + header + "\n" + s;
 	}
 	
 	private int getSimulationSize(){

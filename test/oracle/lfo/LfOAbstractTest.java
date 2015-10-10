@@ -134,7 +134,8 @@ public abstract class LfOAbstractTest {
 		long endTime = (System.currentTimeMillis() - initTime) / 1000;
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, oracle.getSimulationResultsSimple(getOutputTestName()));
-		System.out.println(oracle.getSimulationResultsSimple(getOutputTestName()));
+		System.out.println(oracle.getSimulationResults(getOutputTestName()));
+		System.out.println(oracle.getConfusionMatrixString(getOutputTestName()));
 		System.out.println(getOutputTestName() + " Simulation Time : " + endTime);
 		
 	}
