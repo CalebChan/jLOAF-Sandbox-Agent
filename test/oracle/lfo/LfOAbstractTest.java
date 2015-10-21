@@ -11,7 +11,6 @@ import org.jLOAF.action.AtomicAction;
 import org.jLOAF.action.ComplexAction;
 import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.CaseBase;
-import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.reasoning.BacktrackingReasoning;
 import org.jLOAF.reasoning.BestRunReasoning;
@@ -19,15 +18,15 @@ import org.jLOAF.reasoning.KNNBacktracking;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.SequenceRetrieval;
 import org.jLOAF.sim.atomic.ActionEquality;
-import org.jLOAF.sim.atomic.InputEquality;
 import org.jLOAF.sim.complex.ActionMean;
 import org.jLOAF.sim.complex.InputMean;
 import org.jLOAF.tools.LeaveOneOut;
 import org.jLOAF.tools.TestingTrainingPair;
 import org.jLOAF.util.JLOAFLogger;
 import org.jLOAF.util.JLOAFLogger.Level;
+
 import agent.backtracking.SandboxFeatureInput;
-import agent.backtracking.SandboxSimilarity;
+import agent.backtracking.SandboxSequenceSimilarity;
 import util.ParameterList;
 import util.ParameterNameEnum;
 
@@ -103,8 +102,9 @@ public abstract class LfOAbstractTest {
 		r.setCurrentRun(agent.getCurrentRun());
 		
 		ComplexInput.setClassStrategy(new InputMean());
-		AtomicInput.setClassStrategy(new InputEquality());
-		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
+		//AtomicInput.setClassStrategy(new InputEquality());
+		//SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
+		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSequenceSimilarity());
 		AtomicAction.setClassStrategy(new ActionEquality());
 		ComplexAction.setClassStrategy(new ActionMean());
 		

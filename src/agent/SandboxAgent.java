@@ -19,6 +19,7 @@ import agent.backtracking.SandboxFeatureInput;
 import agent.backtracking.BacktrackingPerception;
 import agent.backtracking.SandboxSimilarity;
 
+@Deprecated
 public class SandboxAgent extends Agent{
 	protected CaseRun curRun;
 	
