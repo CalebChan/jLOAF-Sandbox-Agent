@@ -15,6 +15,7 @@ import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.reasoning.BacktrackingReasoning;
 import org.jLOAF.reasoning.BestRunReasoning;
 import org.jLOAF.reasoning.EditDistanceReasoning;
+import org.jLOAF.reasoning.JaccardDistanceReasoning;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.SequenceRetrieval;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
@@ -27,7 +28,6 @@ import org.jLOAF.util.JLOAFLogger;
 import org.jLOAF.util.JLOAFLogger.Level;
 
 import agent.backtracking.SandboxFeatureInput;
-import agent.backtracking.SandboxSequenceSimilarity;
 import agent.backtracking.SandboxSimilarity;
 import util.ParameterList;
 import util.ParameterNameEnum;
@@ -83,8 +83,6 @@ public abstract class LfOAbstractTest {
 	}
 	
 	protected RunAgent createAgent(CaseBase cb){
-		int kValue = list.getIntParam(ParameterNameEnum.K_VALUE.name());
-		boolean randomKNN = list.getBoolParam(ParameterNameEnum.USE_RANDOM_KNN.name());
 		BacktrackingReasoning r = null;
 		
 		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("KNN")){
@@ -101,10 +99,12 @@ public abstract class LfOAbstractTest {
 				SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.RETRIEVAL.name());
 				r = new SequentialReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, null, retrieval);
 			}else{
-				r = new SequentialReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, null, new SequenceRetrieval());
+				r = new SequentialReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, null);
 			}
 		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("EDIT")){
 			r = new EditDistanceReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD);
+		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("JACCARD")){
+			r = new JaccardDistanceReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, TestConfiguration.DEFAULT_EQUAL_THRESHOLD);
 		}
 		
 		RunAgent agent = new RunAgent(r, cb);
