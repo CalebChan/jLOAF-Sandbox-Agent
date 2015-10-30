@@ -6,7 +6,6 @@ import oracle.lfo.expert.LfOSmartRandomTest;
 import oracle.lfo.expert.LfOSmartStraightLineTest;
 import oracle.lfo.expert.LfOZigZagTest;
 
-import org.jLOAF.retrieve.kNNUtil;
 import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.jLOAF.retrieve.sequence.weight.DecayWeightFunction;
 import org.jLOAF.retrieve.sequence.weight.FixedWeightFunction;
@@ -735,7 +734,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 //						w = new TimeVaryingWeightFunction(Double.parseDouble((String)table.getValueAt(0, 1)));
 					}
 					
-					kNNUtil.setWeightFunction(w);
+					//kNNUtil.setWeightFunction(w);
 					if(randomKNN == true){
 						System.out.println("Random, k : " + diffKValue.getSelectedItem() + " Iter " + iterNum.getText());
 					}
@@ -825,7 +824,9 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 									}
 								}
 								for (WeightFunction w : selectedWeights) {
-									kNNUtil.setWeightFunction(w);
+									//kNNUtil.setWeightFunction(w);
+									list.addParameter(ParameterNameEnum.WEIGHT_FUNCTION.name(), w);
+									
 									if (randomKNN == true) {
 										System.out.println("Random, k : " + intKValues[l[j]] + " Iter " + (i + 1));
 									} else {

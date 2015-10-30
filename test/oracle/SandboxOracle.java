@@ -9,8 +9,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jLOAF.action.Action;
 import org.jLOAF.agent.RunAgent;
+import org.jLOAF.casebase.AtomicCase;
 import org.jLOAF.casebase.Case;
-import org.jLOAF.casebase.CaseRun;
+import org.jLOAF.casebase.ComplexCase;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Feature;
 import org.jLOAF.inputs.Input;
@@ -120,7 +121,7 @@ public class SandboxOracle extends JLOAFOracle{
 	}
 	
 	@Override
-	public void runSimulation(CaseRun testingData){
+	public void runSimulation(ComplexCase testingData){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 //		System.out.println("Name : " + this.testAgent.getClass().getSimpleName());
 		for (int i = 0; i < Config.DEFAULT_LENGTH; i++){
@@ -130,7 +131,7 @@ public class SandboxOracle extends JLOAFOracle{
 			
 			MovementAction correctMovementAction = this.testAgent.testAction(this.testAgent.getCreature());
 			Action correctAction = new SandboxAction(correctMovementAction);
-			Case c = new Case(input, correctAction);
+			Case c = new AtomicCase(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
 //			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());

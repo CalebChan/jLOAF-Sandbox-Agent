@@ -1,12 +1,12 @@
 package agent.lfo;
 
+import org.jLOAF.casebase.AtomicCase;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.inputs.Feature;
 
 import common.Config;
-
 import sandbox.Direction;
 import sandbox.MovementAction;
 import agent.ExpertTraceParser;
@@ -36,7 +36,7 @@ public class LfOTraceParser extends ExpertTraceParser{
 		int actionIndex = (int) Double.parseDouble(tokens[index]) - 1;
 		MovementAction action = MovementAction.values()[actionIndex];
 		SandboxAction a = new SandboxAction(action);
-		return new Case(ci, a, c);
+		return new AtomicCase(ci, a);
 	}
 
 }

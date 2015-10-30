@@ -16,6 +16,7 @@ import org.jLOAF.action.Action;
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.action.ComplexAction;
 import org.jLOAF.agent.RunAgent;
+import org.jLOAF.casebase.AtomicCase;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.inputs.AtomicInput;
@@ -27,8 +28,6 @@ import org.jLOAF.performance.StatisticsWrapper;
 import org.jLOAF.performance.actionestimation.LastActionEstimate;
 import org.jLOAF.reasoning.BacktrackingReasoning;
 import org.jLOAF.reasoning.BestRunReasoning;
-import org.jLOAF.reasoning.SequentialReasoning;
-import org.jLOAF.retrieve.kNNUtil;
 import org.jLOAF.retrieve.sequence.weight.LinearWeightFunction;
 import org.jLOAF.sim.atomic.ActionEquality;
 import org.jLOAF.sim.atomic.InputEquality;
@@ -55,8 +54,6 @@ import sandbox.creature.DirtBasedCreature;
 import sandbox.gui.EnvironmentPanel;
 import sandbox.sensor.Sensor;
 import util.expert.ExpertStrategy;
-import util.expert.lfo.SmartExplorerExpertStrategy;
-import util.expert.lfo.SmartRandomExpertStrategy;
 import util.expert.lfo.SmartStraightLineExpertStrategy;
 
 public class VisualSandbox {
@@ -88,7 +85,7 @@ public class VisualSandbox {
 		CaseBase cb = loo.get(0).getTraining();
 		
 		//BacktrackingReasoning r = new SequentialReasoning(cb, null, 4, false);
-		BacktrackingReasoning r = new BestRunReasoning(cb, 4, true);
+		BacktrackingReasoning r = new BestRunReasoning(cb, 0.75, new LinearWeightFunction(0.1));
 		RunAgent agent = new RunAgent(r, cb);
 		r.setCurrentRun(agent.getCurrentRun());
 		
@@ -97,8 +94,6 @@ public class VisualSandbox {
 		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
 		AtomicAction.setClassStrategy(new ActionEquality());
 		ComplexAction.setClassStrategy(new ActionMean());
-		
-		kNNUtil.setWeightFunction(new LinearWeightFunction(0.1));
 		
 		VisualSandbox box = new VisualSandbox(expert, agent, TestConfiguration.MAP_LOCATION[RUN_NUMBER - 1], true);
 		box.runSimulation(1000);
@@ -140,7 +135,7 @@ public class VisualSandbox {
 			
 			MovementAction correctMovementAction = this.testAgent.testAction(this.testAgent.getCreature());
 			Action correctAction = new SandboxAction(correctMovementAction);
-			Case c = new Case(input, correctAction);
+			Case c = new AtomicCase(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
 			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());

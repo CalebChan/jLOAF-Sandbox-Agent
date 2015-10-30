@@ -3,24 +3,28 @@ package util;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jLOAF.action.AtomicAction;
 import org.jLOAF.casebase.Case;
-import org.jLOAF.casebase.CaseRun;
+import org.jLOAF.casebase.ComplexCase;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 
 import agent.lfo.DirtBasedAgentSenseConfig;
-
 import sandbox.Direction;
 
 public class CaseRunExporter {
-	public static void expertCaseRun(CaseRun run, String file){
+	public static void expertCaseRun(ComplexCase run, String file){
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			List<Case> cases = new ArrayList<Case>();
+			cases.add(run.getCurrentCase());
+			cases.addAll(run.getPastCases());
 			
-			for (int i = run.getRunLength() - 1; i >= 0; i--){
-				Case c = run.getCasePastOffset(i);
+			for (int i = cases.size() - 1; i >= 0; i--){
+				Case c = cases.get(i);
 				String s = "";
 				ComplexInput inputs = (ComplexInput)c.getInput();
 				for (Direction d : Direction.values()){

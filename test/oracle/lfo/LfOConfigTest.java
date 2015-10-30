@@ -1,11 +1,11 @@
 package oracle.lfo;
 
-import oracle.Config;
 import oracle.SandboxOracle;
 
 import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.reasoning.SequentialReasoning;
+import org.jLOAF.retrieve.SequenceRetrieval;
 import org.jLOAF.tools.CaseBaseIO;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class LfOConfigTest {
 		
 		CaseBase cb = CaseBaseIO.loadCaseBase("casebase3.cb");
 //		SandboxAgent agent = new SandboxAgent(cb, true, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
-		SequentialReasoning r = new SequentialReasoning(cb, null, Config.K_VALUE, Config.DEFAULT_USE_RANDOM_KNN);
+		SequentialReasoning r = new SequentialReasoning(cb, 0.0, null, new SequenceRetrieval());
 		RunAgent agent = new RunAgent(r, cb);
 		r.setCurrentRun(agent.getCurrentRun());
 		

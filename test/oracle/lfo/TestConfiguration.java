@@ -49,13 +49,16 @@ public class TestConfiguration {
 	public static final String REASONINGS[] = {
 		"SEQ",
 		"KNN",
-		"BEST"
+		"BEST",
+		"EDIT",
+		
 	};
 	
 	public static final String MAP_NAMES[] = {
 		,
 	};
 	
+	public static final double DEFAULT_THRESHOLD = 0.75;
 	public static final boolean USE_MAPS = true;
 	public static final boolean USE_PREGEN_TRACE = true;
 	

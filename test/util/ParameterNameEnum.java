@@ -9,4 +9,5 @@ public enum ParameterNameEnum {
 	ITER_NUM,
 	RETRIEVAL,
 	REASONING,
+	WEIGHT_FUNCTION,
 }

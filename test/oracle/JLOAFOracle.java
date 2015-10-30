@@ -1,13 +1,15 @@
 package oracle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.jLOAF.action.Action;
 import org.jLOAF.agent.RunAgent;
 import org.jLOAF.casebase.Case;
-import org.jLOAF.casebase.CaseRun;
+import org.jLOAF.casebase.ComplexCase;
 import org.jLOAF.inputs.AtomicInput;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.performance.ClassificationStatisticsWrapper;
@@ -158,11 +160,16 @@ public class JLOAFOracle {
 		this.confusionMatrix.clear();
 	}
 	
-	public void runSimulation(CaseRun testingData){
+	public void runSimulation(ComplexCase testingData){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 		log.logMessage(Level.EXPORT, this.getClass(), LOG_SIM_START,"");
-		for (int i = testingData.getRunLength() - 1; i >= 0 ; i--){
-			Case c = testingData.getCasePastOffset(i);
+		
+		List<Case> testing = new ArrayList<Case>();
+		testing.add(testingData.getCurrentCase());
+		testing.addAll(testingData.getPastCases());
+		
+		for (int i = testing.size() - 1; i >= 0 ; i--){
+			Case c = testing.get(i);
 			boolean result = testAgent(stat, c);
 			if (!result){
 				this.agent.learn(c);

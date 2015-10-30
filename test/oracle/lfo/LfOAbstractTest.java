@@ -14,9 +14,10 @@ import org.jLOAF.casebase.CaseBase;
 import org.jLOAF.inputs.ComplexInput;
 import org.jLOAF.reasoning.BacktrackingReasoning;
 import org.jLOAF.reasoning.BestRunReasoning;
-import org.jLOAF.reasoning.KNNBacktracking;
+import org.jLOAF.reasoning.EditDistanceReasoning;
 import org.jLOAF.reasoning.SequentialReasoning;
 import org.jLOAF.retrieve.SequenceRetrieval;
+import org.jLOAF.retrieve.sequence.weight.WeightFunction;
 import org.jLOAF.sim.atomic.ActionEquality;
 import org.jLOAF.sim.complex.ActionMean;
 import org.jLOAF.sim.complex.InputMean;
@@ -86,16 +87,23 @@ public abstract class LfOAbstractTest {
 		BacktrackingReasoning r = null;
 		
 		if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("KNN")){
-			r = new KNNBacktracking(cb, null, kValue, randomKNN, randomKNN);
+			//r = new KNNBacktracking(cb, null, kValue, randomKNN, randomKNN);
 		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("BEST")){
-			r = new BestRunReasoning(cb, kValue, randomKNN);
+			WeightFunction f = (WeightFunction)list.getParam(ParameterNameEnum.WEIGHT_FUNCTION.name());
+			if (f != null){
+				r = new BestRunReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, f);
+			}else{
+				r = new BestRunReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD);
+			}
 		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("SEQ")){
 			if(list.containsParam(ParameterNameEnum.RETRIEVAL.name()) && list.getParam(ParameterNameEnum.RETRIEVAL.name()) != null){
 				SequenceRetrieval retrieval = (SequenceRetrieval)list.getParam(ParameterNameEnum.RETRIEVAL.name());
-				r = new SequentialReasoning(cb, null, kValue, randomKNN, retrieval);
+				r = new SequentialReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, null, retrieval);
 			}else{
-				r = new SequentialReasoning(cb, null, kValue, randomKNN);
+				r = new SequentialReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD, null, new SequenceRetrieval());
 			}
+		}else if (list.containsParam(ParameterNameEnum.REASONING.name()) && list.getParam(ParameterNameEnum.REASONING.name()).equals("EDIT")){
+			r = new EditDistanceReasoning(cb, TestConfiguration.DEFAULT_THRESHOLD);
 		}
 		
 		RunAgent agent = new RunAgent(r, cb);

@@ -1,7 +1,9 @@
 package agent.backtracking;
 
+import org.jLOAF.casebase.AtomicCase;
 import org.jLOAF.casebase.Case;
 import org.jLOAF.inputs.Feature;
+
 import agent.ExpertTraceParser;
 import agent.SandboxAction;
 import sandbox.MovementAction;
@@ -27,6 +29,6 @@ public class BackForthAgent extends ExpertTraceParser{
 		
 		MovementAction action = MovementAction.valueOf(tokens[3]);
 		SandboxAction a = new SandboxAction(action);
-		return new Case(input, a, c);
+		return new AtomicCase(input, a);
 	}
 }
