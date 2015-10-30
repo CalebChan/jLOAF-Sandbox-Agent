@@ -58,7 +58,7 @@ public class TestConfiguration {
 		,
 	};
 	
-	public static final double DEFAULT_THRESHOLD = 0.8;
+	public static final double DEFAULT_THRESHOLD = 0.99;
 	public static final boolean USE_MAPS = true;
 	public static final boolean USE_PREGEN_TRACE = true;
 	

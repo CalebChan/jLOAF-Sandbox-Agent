@@ -134,9 +134,9 @@ public class SandboxOracle extends JLOAFOracle{
 			Case c = new AtomicCase(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
-			if (i % 100 == 0){
-				System.out.println("Test No : " + i);
-			}
+//			if (i % 100 == 0){
+//				System.out.println("Test No : " + i);
+//			}
 //			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
 			sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
 			if (this.testAgent instanceof SmartStraightLineExpert){

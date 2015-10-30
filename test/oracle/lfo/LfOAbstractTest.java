@@ -28,6 +28,7 @@ import org.jLOAF.util.JLOAFLogger.Level;
 
 import agent.backtracking.SandboxFeatureInput;
 import agent.backtracking.SandboxSequenceSimilarity;
+import agent.backtracking.SandboxSimilarity;
 import util.ParameterList;
 import util.ParameterNameEnum;
 
@@ -111,8 +112,8 @@ public abstract class LfOAbstractTest {
 		
 		ComplexInput.setClassStrategy(new InputMean());
 		//AtomicInput.setClassStrategy(new InputEquality());
-		//SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
-		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSequenceSimilarity());
+		SandboxFeatureInput.setClassSimilarityMetric(new SandboxSimilarity());
+		//SandboxFeatureInput.setClassSimilarityMetric(new SandboxSequenceSimilarity());
 		AtomicAction.setClassStrategy(new ActionEquality());
 		ComplexAction.setClassStrategy(new ActionMean());
 		
