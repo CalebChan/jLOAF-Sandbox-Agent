@@ -123,7 +123,8 @@ public abstract class LfOAbstractTest {
 		long initTime = System.currentTimeMillis();
 		oracle.resetOracleStats();
 		
-		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){			
+		for (int i = 0; i < Config.DEFAULT_NUM_OF_SIMULATIONS - 1; i++){
+			System.out.println("Fold : " + i);
 			oracle.runSimulation(loo.get(testNo).getTesting());
 			
 			testNo++;
@@ -137,7 +138,7 @@ public abstract class LfOAbstractTest {
 			oracle.setAgent(agent);
 			
 		}
-		
+		System.out.println("Fold : " + (Config.DEFAULT_NUM_OF_SIMULATIONS - 1));
 		oracle.runSimulation(loo.get(testNo).getTesting());
 		long endTime = (System.currentTimeMillis() - initTime) / 1000;
 		log.logMessage(Level.INFO, getClass(), LOG_TEST_RESULT, getOutputTestName() + " Simulation Average Accuracy : " + oracle.getGlobalAccuracyAvg());
