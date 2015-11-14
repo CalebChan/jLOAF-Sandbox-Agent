@@ -320,28 +320,28 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 		
 		line = new String[3];
 		line[0] = "Gaussian Weight Function";
-		line[1] = "0.15";
-		line[2] = "0";
+		line[2] = "0.15";
+		line[1] = "0";
 		tableModel.addRow(line);
 		line = new String[3];
 		line[0] = "Gaussian Weight Function";
-		line[1] = "0.15";
-		line[2] = "1";
+		line[2] = "0.15";
+		line[1] = "1";
 		tableModel.addRow(line);
 		line = new String[3];
 		line[0] = "Gaussian Weight Function";
-		line[1] = "0.15";
-		line[2] = "2";
+		line[2] = "0.15";
+		line[1] = "2";
 		tableModel.addRow(line);
 		line = new String[3];
 		line[0] = "Gaussian Weight Function";
-		line[1] = "0.15";
-		line[2] = "5";
+		line[2] = "0.15";
+		line[1] = "5";
 		tableModel.addRow(line);
 		line = new String[3];
 		line[0] = "Gaussian Weight Function";
-		line[1] = "0.15";
-		line[2] = "10";
+		line[2] = "0.15";
+		line[1] = "10";
 		tableModel.addRow(line);
 		
 		scroll5 = new JScrollPane(table);
@@ -759,7 +759,7 @@ public class LFOTestRunner implements ItemListener, ActionListener, PropertyChan
 				for (int m = 0; m < r.length; m++) {
 					System.out.println("Reasoning Method : " + TestConfiguration.REASONINGS[r[m]]);
 					for (int j = 0; j < l.length; j++) {
-						for (int i = 0; i < Integer.parseInt(maxRuns.getText()); i++) {
+						for (int i = Integer.parseInt(maxRuns.getText()) - 1; i >= 0; i--) {
 							ParameterList list = new ParameterList();
 
 							list.addParameter(ParameterNameEnum.RUN_NUMBER.name(), i + 1);

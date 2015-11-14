@@ -130,15 +130,19 @@ public class SandboxOracle extends JLOAFOracle{
 			Input input = convertSensorToInput(s);
 			
 			MovementAction correctMovementAction = this.testAgent.testAction(this.testAgent.getCreature());
+			if (correctMovementAction.equals(MovementAction.STAND)){
+				System.out.println();
+			}
 			Action correctAction = new SandboxAction(correctMovementAction);
 			Case c = new AtomicCase(input, correctAction);
 			Action guessAction = stat.senseEnvironment(c);
 			SandboxAction sandboxAction = (SandboxAction)guessAction;
+			
 //			if (i % 100 == 0){
 //				System.out.println("Test No : " + i);
 //			}
 //			System.out.println("Guess : " + guessAction.toString() + ", Actual : " + correctAction.toString());
-			sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
+			boolean move = sandbox.makeMove(MovementAction.values()[(int) sandboxAction.getFeature().getValue()], this.testAgent.getCreature());
 			if (this.testAgent instanceof SmartStraightLineExpert){
 				SmartStraightLineExpert ee = (SmartStraightLineExpert)this.testAgent;
 				ee.resetDirection(Direction.convertActToDir(MovementAction.values()[(int) sandboxAction.getFeature().getValue()]));

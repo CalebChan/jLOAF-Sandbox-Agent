@@ -59,7 +59,7 @@ public class TestConfiguration {
 	};
 	
 	public static final double DEFAULT_THRESHOLD = 0.99;
-	public static final double DEFAULT_EQUAL_THRESHOLD = 0.75;
+	public static final double DEFAULT_EQUAL_THRESHOLD = 0.99;
 	
 	
 	public static final boolean USE_MAPS = true;
@@ -73,7 +73,7 @@ public class TestConfiguration {
 			new LfOSmartExplorerTest()
 			};
 	
-	private static final String BASE_MAP_DIR = "C:/Users/Caleb/Desktop/Stuff/LFOsimulator/maps/";
+	private static final String BASE_MAP_DIR = "C:/Users/calebchan/Desktop/Stuff/workspace/LFOsimulator/maps/";
 	
 	public static final String MAP_LOCATION[] = {
 		BASE_MAP_DIR + "discreet-8x8.xml",
