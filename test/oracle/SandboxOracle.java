@@ -124,7 +124,9 @@ public class SandboxOracle extends JLOAFOracle{
 	public void runSimulation(ComplexCase testingData){
 		StatisticsWrapper stat = new ClassificationStatisticsWrapper(agent, new LastActionEstimate());
 //		System.out.println("Name : " + this.testAgent.getClass().getSimpleName());
+		long systemTime = 0;
 		for (int i = 0; i < Config.DEFAULT_LENGTH; i++){
+			long tmpTime = System.currentTimeMillis();
 			sandbox.updateSensor(this.testAgent.getCreature());
 			Sensor s = this.testAgent.getCreature().getSensor();
 			Input input = convertSensorToInput(s);
@@ -150,7 +152,9 @@ public class SandboxOracle extends JLOAFOracle{
 				ZigZagExpert ee = (ZigZagExpert)this.testAgent;
 				ee.resetDirection(Direction.convertActToDir(MovementAction.values()[(int) sandboxAction.getFeature().getValue()]));
 			}
+			systemTime += (System.currentTimeMillis() - tmpTime);
 		}
+		System.out.println("Run Time : " + (systemTime / (Config.DEFAULT_LENGTH * 1.0)));
 		collectStats(stat);
 	}
 	
